@@ -15,5 +15,16 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+server.get('/', (req, res) => {
+
+});
+
+server.get('/guess', (req, res) => {
+  
+})
+
+server.post('/guess', (req, res) => {
+
+});
 
 server.listen(3000);
