@@ -25,8 +25,22 @@ of the game "Hangman" which can be played by making HTTP requests! - OKAY √
 
       added 271 packages in 25.08s
   ```
+
 - Install `nodemon` via `npm install -g nodemon`. `nodemon` will keep your
-  server running and automatically restart it if you change anything.
+  server running and automatically restart it if you change anything. - DONE √
+  ```console
+  $  npm i -g nodemon
+      /usr/local/bin/nodemon -> /usr/local/lib/node_modules/nodemon/bin/nodemon.js
+
+      > fsevents@1.1.2 install /usr/local/lib/node_modules/nodemon/node_modules/fsevents
+      > node install
+
+      [fsevents] Success: "/usr/local/lib/node_modules/nodemon/node_modules/fsevents/lib/
+      binding/Release/node-v57-darwin-x64/fse.node" already installed
+      Pass --update-binary to reinstall or --build-from-source to recompile
+      + nodemon@1.11.0
+      added 255 packages in 17.804s
+  ```
 - Install [Postman](https://www.getpostman.com/) so you can make requests and
   examine responses.
 - Run `npm start` to start the server.
