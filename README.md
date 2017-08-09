@@ -43,12 +43,12 @@ of the game "Hangman" which can be played by making HTTP requests! - OKAY √
   ```
 - Install [Postman](https://www.getpostman.com/) so you can make requests and
   examine responses. - DONE √
-- Run `npm start` to start the server.
-- Implement hangman in `src/app.js` as per the instructions below.
+- Run `npm start` to start the server. - DONE √
+- Implement hangman in `src/app.js` as per the instructions below. - OKAY √
 - To test your application at any point, run `npm start` to start the server.
   Then, you can make requests to `http://localhost:3000` in Postman or in your
   browser! To make POST requests, you'll need to use Postman. Craft the
-  corrrect requests to play hangman and test your implementation!
+  corrrect requests to play hangman and test your implementation! - OKAY√
 
 ## Instructions
 You'll develop a version of Hangman that can be played by making HTTP requests!
