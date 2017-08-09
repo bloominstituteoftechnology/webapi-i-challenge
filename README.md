@@ -9,12 +9,22 @@ Topics:
 
 ## Description
 You've been focusing on client-side JavaScript thus far, but now you'll make the
-transition to server-side. The goal here is to handle requests from the client
-and deliver back responses. In the mini project, you'll write an implementation
-of the game hangman that can be played by making HTTP requests!
+transition to server-side. **The goal here is to handle requests from the client
+and deliver back responses.** In the mini project, you'll write an implementation
+of the game "Hangman" which can be played by making HTTP requests! - OKAY √
 
 ## Running the Project
-- Run `npm install` to download the dependencies.
+- Run `npm install` to download the dependencies. - DONE √
+  ```console
+  $  npm install
+      npm notice created a lockfile as package-lock.json. You should commit this file.
+      npm WARN eslint-config-airbnb@14.1.0 requires a peer of eslint-plugin-jsx-a11y@^3.0.2 || ^4.0.0 but none was instal
+      led.
+      npm WARN eslint-config-airbnb@14.1.0 requires a peer of eslint-plugin-react@^6.9.0 but none was installed.
+      npm WARN node-express-mini@0.0.1 No repository field.
+
+      added 271 packages in 25.08s
+  ```
 - Install `nodemon` via `npm install -g nodemon`. `nodemon` will keep your
   server running and automatically restart it if you change anything.
 - Install [Postman](https://www.getpostman.com/) so you can make requests and
