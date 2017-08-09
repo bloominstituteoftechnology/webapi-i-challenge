@@ -50,12 +50,12 @@ of the game "Hangman" which can be played by making HTTP requests! - OKAY √
   browser! To make POST requests, you'll need to use Postman. Craft the
   corrrect requests to play hangman and test your implementation! - OKAY√
 
-## Instructions
+## Instructions - OKAY √
 You'll develop a version of Hangman that can be played by making HTTP requests!
 First, some terminology:
 
-- Final word: the final, correct word that the user is aiming to guess.
-- Word so far: the word that the user currently sees based off his/her guesses.
+- `Final word`: the final, correct word that the user is aiming to guess.
+- `Word so far`: the word that the user currently sees based off his/her guesses.
   This is the final word with all non-guessed characters replaced by a dash
   `'-'`. For instance, if the final word is `'hello'` and the user has guessed
   `'a'`, `'e'`, and `'i'`, the word so far would be `'-e---'`.
@@ -68,7 +68,7 @@ and the game will restart.
 
 Now, you'll need to implement two routes:
 
-### `POST /guess`
+### `POST /guess` - OKAY √
 When the client makes a `POST` request to `/guess`:
 
 - Ensure that the client provides `letter` in the request body. `letter` should
@@ -85,7 +85,7 @@ When the client makes a `POST` request to `/guess`:
   the word so far. Think carefully about what data structure you'd like to use
   here to make the computation easy.
 
-### `GET /`
+### `GET /` - OKAY √
 When the client makes a `GET` request to `/guess`:
 
 - Compute the word so far by replacing each letter in the final word that hasn't
@@ -98,14 +98,14 @@ When the client makes a `GET` request to `/guess`:
   gives the user information about the current state of the game so he/she can
   formulate his/her next guess.
 
-### Play!
+### Play! - OKAY √
 Now, you can play hangman by cycling through the requests above. Make a `POST
 /guess` request in Postman, passing in a `letter` in the request body. You can
 then see whether you guessed correctly, what the word so far is, and the list
 of guessed letters by requesting `GET /`. Keep guessing until you can figure out
 the word!
 
-## Extras
+## Extras - OKAY, unlikely but OKAY √
 If you'd like an extra challenge (albeit not related to node/express), think
 about how you'd write a program to guess the word for you. Given the dictionary
 of words, how would you go about correctly guessing the final word? It's easy to
