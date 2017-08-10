@@ -18,10 +18,11 @@ const readWords = () => {
 server.get('/', (req, res) => {
   const guess = req.query.guess;
   if(!guess) {
+    res.status(STATUS_USER_ERROR);
     res.json({ error: 'Must make a guess!' })
     return;
   }
-  res.send(`${guess}`);
+  res.send(`You guessed: ${guess}`);
 });
 
 server.post('/guess', (req, res) => {
