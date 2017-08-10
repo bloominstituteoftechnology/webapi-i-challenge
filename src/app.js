@@ -17,6 +17,10 @@ const readWords = () => {
 // TODO: your code to handle requests
 server.get('/', (req, res) => {
   const guess = req.query.guess;
+  if(!guess) {
+    res.json({ error: 'Must make a guess!' })
+    return;
+  }
   res.send(`${guess}`);
 });
 
