@@ -54,8 +54,8 @@ of the game "Hangman" which can be played by making HTTP requests! - OKAY √
 You'll develop a version of Hangman that can be played by making HTTP requests!
 First, some terminology:
 
-- `Final word`: the final, correct word that the user is aiming to guess.
-- `Word so far`: the word that the user currently sees based off his/her guesses.
+- **Final word**: the final, correct word that the user is aiming to guess.
+- **Word so far**: the word that the user currently sees based off his/her guesses.
   This is the final word with all non-guessed characters replaced by a dash
   `'-'`. For instance, if the final word is `'hello'` and the user has guessed
   `'a'`, `'e'`, and `'i'`, the word so far would be `'-e---'`.

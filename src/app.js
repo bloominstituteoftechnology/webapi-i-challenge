@@ -19,10 +19,6 @@ server.get('/', (req, res) => {
 
 });
 
-server.get('/guess', (req, res) => {
-  
-})
-
 server.post('/guess', (req, res) => {
 
 });
