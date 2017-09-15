@@ -15,5 +15,19 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+const index = Math.floor(Math.random() * 100);
+const finalWord = readWords()[index];
+const wordSoFar = finalWord.split('').map((letter) => {
+  return letter = '-';
+}).join('');
+
+
+server.get('/', (req, res) => {
+  res.json(wordSoFar);
+});
+
+server.post('/guess', (req, res) => {
+});
+
 
 server.listen(3000);
