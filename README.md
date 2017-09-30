@@ -105,7 +105,7 @@ then see whether you guessed correctly, what the word so far is, and the list
 of guessed letters by requesting `GET /`. Keep guessing until you can figure out
 the word!
 
-## Extras - OKAY, unlikely but OKAY √
+## Extras - OKAY, unlikely :joy: but OKAY √
 If you'd like an extra challenge (albeit not related to node/express), think
 about how you'd write a program to guess the word for you. Given the dictionary
 of words, how would you go about correctly guessing the final word? It's easy to
