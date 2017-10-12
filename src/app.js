@@ -66,7 +66,7 @@ server.post('/guess', (req, res) => {
     });
   }
 
-  return res.json({ success: 'Nice Guess' });
+  return res.json({ success: 'Nice Guess', guessedLetters });
 });
 
 server.listen(PORT, (err) => {
