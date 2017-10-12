@@ -54,17 +54,10 @@ server.post('/guess', (req, res) => {
   }
   letter = letter.toLowerCase();
   guessedLetters.push(letter);
-  if (finalWord.includes(letter)) {
-    let pos = finalWord.indexOf(letter);
-    while (pos !== -1) {
-      letterPositions.push(pos);
-      pos = finalWord.indexOf(letter, pos + 1);
-    }
 
-    letterPositions.forEach((idx) => {
-      wordSoFar[idx] = letter;
-    });
-  }
+  finalWord.split('').forEach((finalLet, idx, word) => {
+    if (finalLet === letter) wordSoFar[idx] = letter;
+  });
 
   return res.json({ success: 'Nice Guess', guessedLetters });
 });
