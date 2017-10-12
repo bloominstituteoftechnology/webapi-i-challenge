@@ -23,19 +23,18 @@ let wordSoFar = '';
 for (let i = 0; i < word.length; i++) {
   wordSoFar += '-';
 }
-console.log(word + '\n' + wordSoFar);
-}
+
 server.get('/', (req, res) => {
   if (guesses.length === 0) { // If we haven't made a guess yet.
-    res.json({error: 'No guesses yet.'});
+    res.json({ error: 'No guesses yet.' });
     return;
   }
 
   if (wordSoFar === word) { // If the user has already won.
-    res.json({Victory: `Wow! You won! The word was '${word}'.`});
+    res.json({ Victory: `Wow! You won! The word was '${word}'.` });
     return;
   }
-  res.json({wordSoFar, guesses});
+  res.json({ wordSoFar, guesses });
 });
 
 server.post('/guess', (req, res) => {
@@ -43,28 +42,24 @@ server.post('/guess', (req, res) => {
 
   if (!guess) { // If there was no guess sent.
     res.status(STATUS_USER_ERROR);
-    res.json({error: 'Please enter a guess.'});
+    res.json({ error: 'Please enter a guess.' });
     return;
   }
 
   if (guess.length !== 1) { // If the guess was longer than one letter.
     res.status(STATUS_USER_ERROR);
-    res.json({error: 'One-letter guesses only, Please.'});
+    res.json({ error: 'One-letter guesses only, Please.' });
     return;
   }
 
   if (guesses.indexOf(guess) !== -1) {  // If we've already guessed that letter.
     res.status(STATUS_USER_ERROR);
-    res.json({error: "Whoops, you already guessed that!"});
+    res.json({ error: 'Whoops, you already guessed that!' });
     return;
   }
 
- 
   guesses.push(guess);
   hangman(guess);
-  res.json({wordSoFar, guesses});
+  res.json({ wordSoFar, guesses });
 });
-
 server.listen(3000);
-
-
