@@ -27,7 +27,7 @@ for (let k = 0; k < finalWord.length; k++) {
 server.post('/guess', (req, res) => {
 	const { letter } = req.body;
 	const newLetter = { letter };
-	if (!letter) {
+	if (!letter || letter.length > 1) {
 		res.status(STATUS_USER_ERROR);
 		res.send({ error: 'Must provide a letter' });
 		return;
@@ -46,11 +46,7 @@ server.get('/guess', (req, res) => {
 	const finalLetters = finalWord.split('');
 	for (let i = 0; i < finalLetters.length; i++) {
 		if (guesses.includes(finalLetters[i])) {
-			if (lettersSoFar[i] === '-') {
-				lettersSoFar.splice(i, 1, finalLetters[i]);
-			}
-		} else if (lettersSoFar[i] !== '-') {
-			lettersSoFar.splice(i, 1, '-');
+			lettersSoFar.splice(i, 1, finalLetters[i]);
 		}
 	}
 	wordSoFar = lettersSoFar.join('');
