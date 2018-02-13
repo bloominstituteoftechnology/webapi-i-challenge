@@ -15,7 +15,10 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
-const letters = [];
+const guesses = [];
+const words = readWords();
+const finalWord = words[Math.floor(Math.random() * words.length)];
+let wordSoFar = finalWord;
 
 server.post('/guess', (req, res) => {
 	const { letter } = req.body;
@@ -27,13 +30,38 @@ server.post('/guess', (req, res) => {
 	const findLetter = obj => {
 		return obj.letter === letter;
 	};
-	if (letters.find(findLetter)) {
+	if (guesses.find(findLetter)) {
 		res.status(STATUS_USER_ERROR);
 		res.send({ error: `You already tried guessing this letter! (${letter})` });
 	}
-	letters.push(newLetter);
+	guesses.push(newLetter);
 	res.send
+});
+
+server.get('/guess', (req, res) => {
+	let lettersSoFar = wordSoFar.split('');
+	const finalLetters = finalWord.split('');
+	for (let i = 0; i < finalLetters; i++) {
+		if (guesses.includes(finalLetters[i])) {
+			if (lettersSoFar[i] === '-') {
+				lettersSoFar.splice(i, 1, finalLetters[i]);
+			}
+		} else if (lettersSoFar[i] !== '-') {
+			lettersSoFar.splice(i, 1, '-');
+		}
+	}
+	wordSoFar = lettersSoFar.join('');
+	res.send({ wordSoFar: wordSoFar, guesses: guesses });
 });
 
 
 server.listen(3000);
+
+
+
+
+
+
+
+
+
