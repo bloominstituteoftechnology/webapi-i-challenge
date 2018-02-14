@@ -18,6 +18,13 @@ const finalWord = readWords()[
   Math.floor(Math.random() * Math.floor(readWords().length - 1))
 ];
 
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* 4debug ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+const debug = true;
+const help = true;
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+
 const validLetters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 const guesses = [];
@@ -33,8 +40,36 @@ const generateWordSoFar = () => {
 };
 
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
-/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* 4debug ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
-const debug = true;
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* 4helpe ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+let allWords = [];
+
+if (help) {
+  allWords = readWords();
+  allWords = allWords.filter(
+    word => word.length === generateWordSoFar().length,
+  );
+
+  console.log('# of possibilities:', allWords.length);
+  if (allWords.length < 100) console.log(allWords);
+}
+
+const invokeHelper = () => {
+  const generatedWordArr = generateWordSoFar().split('');
+
+  for (let i = 0; i < generatedWordArr.length; i++) {
+    const letter = generatedWordArr[i];
+
+    allWords = allWords.filter((word, k) => {
+      if (letter !== '-') {
+        return word[i] === letter;
+      }
+      return true;
+    });
+  }
+
+  console.log('# of possibilities:', allWords.length);
+  if (allWords.length < 100) console.log(allWords);
+};
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
 
@@ -82,6 +117,14 @@ server.post('/guess', (req, res) => {
           .join(''),
         guesses,
       });
+
+      /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+      /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~* 4helpe ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+      if (help) {
+        invokeHelper();
+      }
+      /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+      /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
       return;
     }
   }
@@ -145,6 +188,14 @@ server.post('/guess', (req, res) => {
 
     res.status(STATUS_USER_ERROR).json({ error });
   }
+
+  /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+  /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* 4helpe ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+  if (help) {
+    invokeHelper();
+  }
+  /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
+  /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~* */
 });
 
 server.listen(3000);
