@@ -23,12 +23,12 @@ const guesses = {};
 // TODO: your code to handle requests
 hangman.get('/', (req, res) => {
   // console.log(Object.keys(guesses));
-  let wordSoFar = "-".repeat(finalWord.length).split('');
+  const wordSoFar = '-'.repeat(finalWord.length).split('');
 
-  Object.keys(guesses).forEach(guess => {
-    // return finalWord.includes(guess) ? wordSoFar[finalWord.indexOf(guess)] = guess : '';
+  Object.keys(guesses).forEach((guess) => {
     let guessIndex = finalWord.indexOf(guess);
-    let correctGuessIndices = [];
+    const correctGuessIndices = [];
+
     while (guessIndex !== -1) {
       correctGuessIndices.push(guessIndex);
       guessIndex = finalWord.indexOf(guess, guessIndex + 1);
@@ -40,7 +40,7 @@ hangman.get('/', (req, res) => {
   });
   console.log(wordSoFar);
 
-  if (wordSoFar.join('') === finalWord) res.send('CONGRATULATION YOU FIGURED OUT THE WORD:');
+  if (wordSoFar.join('') === finalWord) res.send(`You guessed correctly the word is ${finalWord}`);
 
   res.json({ wordSoFar, guesses });
 });
@@ -52,6 +52,7 @@ hangman.get('/', (req, res) => {
 // { "letter" : "b"}
 // { "a" : true, "b" : true } => guesses
 
+// TODO keep track of guesses and provide that number in get response
 hangman.post('/guess', (req, res) => {
   // no letter provided for guess
   if (!req.body.letter) {
