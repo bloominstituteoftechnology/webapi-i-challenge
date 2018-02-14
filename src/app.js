@@ -1,18 +1,5 @@
-/* const bodyParser = require('body-parser');
-const express = require('express');
-const fs = require('fs');
-
-const STATUS_USER_ERROR = 422;
-
-const server = express();
-// to enable parsing of json bodies for post requests
-server.use(bodyParser.json());
-
-/* Returns a list of dictionary words from the words.txt file.
-const readWords = () => {
-  const contents = fs.readFileSync('words.txt', 'utf8');
-  return contents.split('\n');
-};
+/*
+//
 
 const wordsList = readWords();
 const index = Math.floor(Math.random() * wordsList.length);
@@ -93,13 +80,14 @@ server.get('/', (req, res) => {
 });
 
 server.post('/guess', (req, res) => {
-  const letter = req.body.letter;
+  const { letter } = req.body/* letter */;
 
   if (!letter) {
     res.status(STATUS_USER_ERROR);
     res.json({ error: 'Must provide a letter' });
     return;
   }
+  /* res.json({ letter });}); */
   if (letter.length !== 1) {
     res.status(STATUS_USER_ERROR);
     res.json({ error: 'Must guess a single letter' });
@@ -115,4 +103,6 @@ server.post('/guess', (req, res) => {
   res.json({ guesses });
 });
 
-server.listen(3000);
+server.listen(3000, () => {
+  console.log('server is running on port 3000');
+});
