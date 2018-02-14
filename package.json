@@ -12,6 +12,10 @@
     "eslint": "^3.17.1",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "express": "^4.15.4"
+  },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.5.1"
   }
 }
