@@ -36,9 +36,9 @@ hangman.get('/', (req, res) => {
         wordSoFar[i] = guess;
       });
     }
-    console.log(guess, correctGuessIndices);
+    // console.log(guess, correctGuessIndices);
   });
-  console.log(wordSoFar);
+  // console.log(wordSoFar);
 
   if (wordSoFar.join('') === finalWord) res.send(`You guessed correctly the word is ${finalWord}`);
 
@@ -52,14 +52,14 @@ hangman.get('/', (req, res) => {
 // { "letter" : "b"}
 // { "a" : true, "b" : true } => guesses
 
-// TODO keep track of guesses and provide that number in get response
+// TODO keep track of guesses and provide that number in get response (length of guesses.keys or values)
 hangman.post('/guess', (req, res) => {
   // no letter provided for guess
   if (!req.body.letter) {
     res.status(STATUS_USER_ERROR).json({ error: 'Must provide a letter in the request body' });
     return;
   }
-  console.log(req.body.letter.length);
+  // console.log(req.body.letter.length);
   // must guess a single letter
   if (req.body.letter.length > 1) {
     res.status(STATUS_USER_ERROR).json({ error: 'Only guess one letter at a time' });
@@ -73,8 +73,8 @@ hangman.post('/guess', (req, res) => {
   }
 
   guesses[req.body.letter] = true;
-  console.log(guesses);
-  console.log(finalWord);
+  // console.log(guesses);
+  // console.log(finalWord);
   res.json(guesses);
 });
 
