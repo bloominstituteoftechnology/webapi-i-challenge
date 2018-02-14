@@ -15,5 +15,52 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+const guesses = [];
+const words = readWords();
+const finalWord = words[Math.floor(Math.random() * words.length)];
+console.log('finalWord', finalWord);
+let wordSoFar = '';
+for (let k = 0; k < finalWord.length; k++) {
+	wordSoFar += '-';
+}
+
+server.post('/guess', (req, res) => {
+	const { letter } = req.body;
+	const newLetter = { letter };
+	if (!letter || letter.length > 1) {
+		res.status(STATUS_USER_ERROR);
+		res.send({ error: 'Must provide a letter' });
+		return;
+	}
+	if (guesses.includes(letter)) {
+		res.status(STATUS_USER_ERROR);
+		res.send({ error: `You already tried guessing this letter! (${letter})` });
+		return;
+	}
+	guesses.push(newLetter.letter);
+	res.send({ letter: letter });
+});
+
+server.get('/guess', (req, res) => {
+	let lettersSoFar = wordSoFar.split('');
+	const finalLetters = finalWord.split('');
+	for (let i = 0; i < finalLetters.length; i++) {
+		if (guesses.includes(finalLetters[i])) {
+			lettersSoFar.splice(i, 1, finalLetters[i]);
+		}
+	}
+	wordSoFar = lettersSoFar.join('');
+	res.send({ wordSoFar: wordSoFar, guesses: guesses });
+});
+
 
 server.listen(3000);
+
+
+
+
+
+
+
+
+
