@@ -27,7 +27,7 @@ const dashWord = randomWordArray.map(letter => letter = '-');
 const guessLetters = () => randomWordArray.map((letter, index) => {
   for (let i = 0; i < guesses.length; i++) {
     if (letter === guesses[i].toLowerCase()) {
-      dashWord[index] = guesses[i];
+      dashWord[index] = guesses[i].toLowerCase();
     }
   }
 });
