@@ -15,5 +15,17 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+const words = readWords();
+const index = Math.floor(Math.random() * words.length);
+
+server.post('/guess', (req, res) => {
+  // const letter = req.body.guess;
+  // if (STATUS_USER_ERROR) return { error: 'Error message'};
+});
+
+server.get('/guess', (req, res) => {
+  // const letter = req.body.guess;
+  // if (STATUS_USER_ERROR) return { error: 'Error message'};
+});
 
 server.listen(3000);
