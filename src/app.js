@@ -14,6 +14,14 @@ const readWords = () => {
   return contents.split('\n');
 };
 
-// TODO: your code to handle requests
+server.post("/guess", (req, res, err) => {
+  let clientProvided = {
+    letter : "k",
+  }
+  if ((clientProvided.letter).length != 1) {
+    res.status(STATUS_USER_ERROR);
+    res.send({ error: "Error message" })
+  }
+})
 
 server.listen(3000);
