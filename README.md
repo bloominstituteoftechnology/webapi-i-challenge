@@ -75,8 +75,8 @@ When the client makes a `GET` request to `/guess`:
   formulate his/her next guess.
 
 ### Play!
-Now, you can play hangman by cycling through the requests above. Make a `POST
-/guess` request in Postman, passing in a `letter` in the request body. You can
+Now, you can play hangman by cycling through the requests above. Make a `POST /guess` 
+request in Postman, passing in a `letter` in the request body. You can
 then see whether you guessed correctly, what the word so far is, and the list
 of guessed letters by requesting `GET /`. Keep guessing until you can figure out
 the word!
