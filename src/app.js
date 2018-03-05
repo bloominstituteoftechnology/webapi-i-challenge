@@ -14,6 +14,11 @@ const readWords = () => {
   return contents.split('\n');
 };
 
+const wordsList = readWords();
+
+const finalWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+console.log(finalWord);
+
 // TODO: your code to handle requests
 
 server.listen(3000);
