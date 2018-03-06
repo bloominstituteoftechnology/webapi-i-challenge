@@ -14,6 +14,14 @@ const readWords = () => {
   return contents.split('\n');
 };
 
+const len = readWords().length;
+const randomInt = Math.floor(Math.random() * len) + 1;
+
+const word = readWords()[randomInt].split('');
+
+const guessedWord = word.map((element) => {
+  return '-';
+});
 // TODO: your code to handle requests
 
 server.listen(3000);
