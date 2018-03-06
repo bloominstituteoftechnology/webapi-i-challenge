@@ -41,16 +41,18 @@ server.post('/guess', (req, res) => {
   	}
 
   	for(let i = 0; i < finalWord.length; i++){
-  		// if the index of finalWord is equal to letter
+  		// if the letter is found in finalWord
   		if(finalWord[i] === letter){
-  			// assign letter to wordSoFar's index
+  			//replace the index position of the wordSoFar with the letter
   			wordSoFar = wordSoFar.substr(0, i) + letter + wordSoFar.substr(i + 1);
   		}
   	}
+  	// response back an object with property wordSoFar and guesses
   res.send({ wordSoFar, guesses });
 });
 
 server.get('/guess', (req, res) => {
+	// response back an object with property wordSoFar and guesses
   res.send({ wordSoFar, guesses });
 });
 
