@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, {Component} from 'react';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import hangman1 from './images/hangman1.jpg';
 import hangman2 from './images/hangman2.jpg';
 import hangman3 from './images/hangman3.jpg';
@@ -14,61 +14,81 @@ import axios from 'axios';
 
 
 class App extends Component {
-  state = {
-    wordSoFar: [],
-    guesses: [],
-    mistakes: 0,
-    finalWord: '',
-    gallows: [
-      { stage: 0,
-        image: hangman1
-      },
-      { stage: 1,
-        image: hangman2
-      },
-      { stage: 2,
-        image: hangman3
-      },
-      { stage: 3,
-        image: hangman4
-      },
-      { stage: 4,
-        image: hangman5
-      },
-      { stage: 5,
-        image: hangman6
-      },
-      { stage: 6,
-        image: hangman7
-      },
-      { stage: 7,
-        image: hangman8
-      },
-    ]
-  }
-  componentDidMount() {
-    let response = axios
-    .get('http://localhost:5000/guess')
-    .then(response => {
-      console.log('response: ', response)
-    })
-    .catch(error => console.log('error message: ', error));
-        // this.setState({})
-  }
-  render() {
-      return (
-        <Router>
-          <div className="app">
-            <Route path="/" render={state =>
-              <Word state={this.state} />
-            }/>
-            <Route path="/:stage" render={state => {
-              <Gallows state={this.state} />
-            }}/>
-          </div>
-        </Router>
-    );
-  }
+    state = {
+        wordSoFar: [],
+        guesses: [],
+        mistakes: 0,
+        finalWord: '',
+        gallows: [
+            {
+                stage: 0,
+                image: hangman1
+            },
+            {
+                stage: 1,
+                image: hangman2
+            },
+            {
+                stage: 2,
+                image: hangman3
+            },
+            {
+                stage: 3,
+                image: hangman4
+            },
+            {
+                stage: 4,
+                image: hangman5
+            },
+            {
+                stage: 5,
+                image: hangman6
+            },
+            {
+                stage: 6,
+                image: hangman7
+            },
+            {
+                stage: 7,
+                image: hangman8
+            },
+        ]
+    }
+
+    componentDidMount() {
+
+        axios.get('http://localhost:5000/guess')
+            .then(response => {
+
+                console.log('response: ', response)
+                const data = response.data
+                this.setState({
+                    wordSoFar:data.wordSoFar,
+                    mistakes: data.mistakes,
+                    finalWord:data.finalWord,
+                })
+
+            }).catch(error => {
+
+                console.log('error message: ', error)
+
+            });
+    }
+
+    render() {
+        return (
+            <Router>
+                <div className="app">
+                    <Route path="/" render={state =>
+                        <Word state={this.state}/>
+                    }/>
+                    <Route path="/:stage" render={state => {
+                        <Gallows state={this.state}/>
+                    }}/>
+                </div>
+            </Router>
+        );
+    }
 }
 
 export default App;
