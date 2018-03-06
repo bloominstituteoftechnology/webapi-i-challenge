@@ -2,6 +2,11 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const fs = require('fs');
 
+let wordSoFar = '';
+const guesses = [];
+let finalWord = '';
+
+const STATUS_SUCCESS = 200;
 const STATUS_USER_ERROR = 422;
 
 const server = express();
@@ -14,6 +19,42 @@ const readWords = () => {
   return contents.split('\n');
 };
 
-// TODO: your code to handle requests
+const getWord = () => {
+  const wordsLength = readWords().length;
+  const wordList = readWords();
+  const random = Math.floor(Math.random() * wordsLength);
+  finalWord = wordList[random].trim();
+  wordSoFar = new Array(finalWord.length + 1).join('-');
+};
+
+const update = (letter) => {
+  const finalSplit = finalWord.split('');
+  const soFarSplit = wordSoFar.split('');
+  for (let i = 0; i < finalSplit.length; i++) {
+    if (finalSplit[i] === letter) {
+      soFarSplit[i] = letter;
+    }
+  }
+  wordSoFar = soFarSplit.join('');
+};
+
+getWord();
+
+server.post('/guess', (req, res) => {
+  const { letter } = req.body;
+  if (letter.length !== 1 || typeof letter !== 'string' || guesses.includes(letter)) {
+    res.status(STATUS_USER_ERROR);
+    res.send({ error: 'Error' });
+  } else {
+    guesses.push(letter);
+    update(letter);
+    res.status(STATUS_SUCCESS);
+    res.send({
+      wordSoFar,
+      guesses,
+      finalWord,
+    });
+  }
+});
 
 server.listen(3000);
