@@ -20,9 +20,25 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+function createShownWord(word) {
+  let shownWord = '';
+  for (let i = 0; i < word.length - 1; i++){ // the -1 is because there's a '\r' at the end of the 'string'
+    shownWord += '-';
+  }
+  return shownWord;
+}
+
+// function checkIfExist(word) {
+//   let arrWord = word.split('').forEach(() => {
+//
+//   })
+// }
+
 const arrayDictionary = readWords();
 const finWord = arrayDictionary[getRandomInt(arrayDictionary.length)];
+let shownWord = createShownWord(finWord); // copy
 console.log(finWord);
+console.log(shownWord);
 // TODO: your code to handle requests
 
 server.post('/guess', (req, res) => {
