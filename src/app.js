@@ -52,6 +52,18 @@ const alphabet = {
   z: false,
 };
 
+const guessLetter = (letter) => {
+  if (alphabet[letter] === true) {
+    return 'Already Guessed, guess again.';
+  }
+  const index = word.forEach((wordLetter, i) => {
+    if (letter === wordLetter) {
+      guessedWord[i] = word[i];
+    }
+  });
+  alphabet[letter] = true;
+  return guessedWord.join('');
+};
 // TODO: your code to handle requests
 
 server.listen(3000);
