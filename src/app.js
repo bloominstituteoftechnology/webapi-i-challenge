@@ -19,9 +19,7 @@ const finalWord = readWords()[Math.floor(Math.random()*readWords().length)];
 
 const guesses = [];
 server.post("/guess", (req, res, err) => {
-  let clientProvided = {
-    letter : "k",
-  }
+  let clientProvided = req.body;
   if (guesses.includes(clientProvided.letter)) {
     res.status(STATUS_USER_ERROR);
     res.send({ error: "Error message, letter already chosen." })
@@ -31,8 +29,8 @@ server.post("/guess", (req, res, err) => {
   } else {
     guesses.push(clientProvided.letter);
     res.status(STATUS_SUCCESS);
+    res.send("Guesses so far: " + guesses);
   }
-
 })
 
 server.listen(3000);
