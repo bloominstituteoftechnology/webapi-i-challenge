@@ -29,11 +29,18 @@ server.get('/guess', (req, res) => {
 
 //returns guesses = null???
 server.post('/guess', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { letter } = req.body;
-  guesses.push(letter);
-  res.status(200);
-  res.json({ guesses: guesses });
+  if (letter) {
+    guesses.forEach(guess => {
+      if (guess === letter) {
+        res.json({ error: "Error message" });
+      } else {
+        guesses.push(letter);
+        res.json({ guesses });
+      }
+    });
+  }
 });
 
 server.listen(3000);
