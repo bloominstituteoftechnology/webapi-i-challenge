@@ -29,13 +29,11 @@ server.post('/guess', (req, res) => {
   } else {
     guesses.push(clientProvided.letter);
     res.status(STATUS_SUCCESS);
-    res.send(guesses);
+    res.send({ guesses });
   }
 });
 
 server.get('/guess', (req, res) => {
-  console.log(finalWord);
-  console.log(finalWord.slice(0, -1).split(''));
   const wordSoFar = finalWord.slice(0, -1).split('').map((letter) => {
     if (guesses.includes(letter)) {
       return letter;
@@ -44,7 +42,7 @@ server.get('/guess', (req, res) => {
   })
   .join('');
   res.status(STATUS_SUCCESS);
-  res.send({wordSoFar, guesses});
+  res.send({ wordSoFar, guesses });
 });
 
 server.listen(3000);
