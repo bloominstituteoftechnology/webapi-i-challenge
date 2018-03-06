@@ -15,5 +15,10 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+const words = readWords();
+const getRandomWord = function () {
+  return words[Math.floor(Math.random() * words.length)];
+};
+console.log(getRandomWord());
 
 server.listen(3000);
