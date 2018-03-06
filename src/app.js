@@ -5,8 +5,16 @@ const fs = require('fs');
 const STATUS_USER_ERROR = 422;
 
 const server = express();
+
+
 // to enable parsing of json bodies for post requests
 server.use(bodyParser.json());
+
+server.get('/', (req, res) => {
+  const guess = req.query.guess;
+  res.send(`${guess}`);
+});
+
 
 /* Returns a list of dictionary words from the words.txt file. */
 const readWords = () => {
