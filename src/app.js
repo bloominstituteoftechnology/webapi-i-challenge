@@ -23,7 +23,7 @@ const getWord = () => {
   const wordsLength = readWords().length;
   const wordList = readWords();
   const random = Math.floor(Math.random() * wordsLength);
-  finalWord = wordList[random].trim();
+  finalWord = wordList[random].trim(); // trim removes carriage return that appears
   wordSoFar = new Array(finalWord.length + 1).join('-');
 };
 
@@ -38,8 +38,6 @@ const update = (letter) => {
   wordSoFar = soFarSplit.join('');
 };
 
-getWord();
-
 server.post('/guess', (req, res) => {
   const { letter } = req.body;
   if (letter.length !== 1 || typeof letter !== 'string' || guesses.includes(letter)) {
@@ -49,12 +47,18 @@ server.post('/guess', (req, res) => {
     guesses.push(letter);
     update(letter);
     res.status(STATUS_SUCCESS);
-    res.send({
-      wordSoFar,
-      guesses,
-      finalWord,
-    });
+    res.send({ status: 'success' });
   }
 });
 
+server.get('/guess', (req, res) => {
+  res.status(STATUS_SUCCESS);
+  res.send({
+    wordSoFar,
+    guesses,
+    finalWord,
+  });
+});
+
+getWord();
 server.listen(3000);
