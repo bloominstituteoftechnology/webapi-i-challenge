@@ -1,18 +1,14 @@
 import React from 'react';
 
 
-class Gallows extends React.Component {
-  state = {
-    mistakes: 7
-  }
-  render() {
-    console.log('Gallows props: ', this.props)
+const Gallows = (props) => {
+    console.log('Gallows props: ', props)
     return (
       <div className='gallows-pic'>
-        <img className='gallows-pic__image'src={this.props.state.gallows[this.state.mistakes].image} alt="Current Stage of Hangman"/>
+        <img className='gallows-pic__image'src={props.state.gallows[props.state.mistakes].image} alt="Current Stage of Hangman"/>
       </div>
     )
   } 
-}
+
 
 export default Gallows;
