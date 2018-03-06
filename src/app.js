@@ -8,41 +8,50 @@ const server = express();
 // to enable parsing of json bodies for post requests
 server.use(bodyParser.json());
 
-const guesses = [];
-
 /* Returns a list of dictionary words from the words.txt file. */
 const readWords = () => {
   const contents = fs.readFileSync('words.txt', 'utf8');
   return contents.split('\n');
 };
+
+const guesses = [];
+//list of words from txt file
 const wordList = readWords();
+// random number
 const random = Math.floor(Math.random() * wordList.length);
-let wordSoFar = '';
+// finalWord - random word
 const finalWord = wordList[random].toLowerCase();
 
-server.post('/guess', (req, res) => {
-  let { letter } = req.body;
-  guesses.push(letter);
+let wordSoFar = '';
 
+console.log(finalWord);
+
+server.post('/guess', (req, res) => {
+	// letter from post request
+  let { letter } = req.body;
+  // push letter to guesses array
+  guesses.push(letter);
+  	// wordSoFar is empty
   	if(wordSoFar === ''){
-  		for(let i =0; i<finalWord.length; i++){
-  			wordSoFar = '-';
+  		// add dash to wordSoFar 
+  		// if finalWrod length is 10 then wordSofar should have 10 dashes
+  		for(let i = 0; i < finalWord.length; i++){
+  			wordSoFar += '-';
   		}
   	}
 
   	for(let i = 0; i < finalWord.length; i++){
-	  	if(wordSoFar[i] === '-') {
-	  		if(finalWord[i] === letter){
-	  			// assign letter to wordSoFar's index
-	  		}
-	  	}
+  		// if the index of finalWord is equal to letter
+  		if(finalWord[i] === letter){
+  			// assign letter to wordSoFar's index
+  			wordSoFar = wordSoFar.substr(0, i) + letter + wordSoFar.substr(i + 1);
+  		}
   	}
-
   res.send({ wordSoFar, guesses });
 });
 
 server.get('/guess', (req, res) => {
-  //res.send({ wordSoFar, guesses });
+  res.send({ wordSoFar, guesses });
 });
 
 server.listen(3000);
