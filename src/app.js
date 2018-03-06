@@ -29,8 +29,6 @@ const hangmanWord = (guesses, solution) => {
 
 // TODO: your code to handle requests
 server.post('/guess', (req, res) => {
-  // { letter: r }
-
   if (req.body.letter.length !== 1)
     return res
       .status(STATUS_USER_ERROR)
