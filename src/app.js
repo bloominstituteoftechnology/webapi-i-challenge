@@ -17,7 +17,7 @@ const readWords = () => {
   return wordsArr[Math.floor(Math.random() * wordsArr.length)];
 };
 
-const finalWord = readWords();
+const finalWord = readWords().toLowerCase();
 const finalWordArr = finalWord.split('');
 console.log('finalArr', finalWordArr);
 
@@ -26,28 +26,46 @@ const wordSoFar = finalWordArr.map((element) => {
 });
 console.log('wordsofar', wordSoFar);
 
+const letterGuess = [];
 
-`ourDog["bark"] = "bow-wow";`
-
-const letterGuess = ['a','b','c'];
 const responseObj = {
-  wordsSoFar: "skldfjkl",
+  wordSoFar: wordSoFar.join(''),
   guesses: letterGuess.join(','),
+}
+
+const errorObj = {
+  error: "Error message"
+}
+
+const repeatError = {
+  error: "Already Guessed This Letter!"
+}
+
+const victory = {
+  success: `You won! The word you guessed was ${finalWord}.`
 }
 // TODO: your code to handle requests
 server.post('/guess', (req, res) => {
   const letter = req.body.letter;
+  if (letterGuess.indexOf(letter) !== -1) {
+    res.send(repeatError);
+  }
   if (letter) {
     letterGuess.push(letter);
-    // for (let i = 0; i < finalWordArr.length; i++) {
-    //   if (letter === finalWordArr[i]) {
-    //     wordSoFar[i] = letter;
-    //   }
-    // }
     responseObj["guesses"] = letterGuess.join(',');
+      for (let i = 0; i < finalWordArr.length; i++) {
+        if (letter === finalWordArr[i]) {
+          wordSoFar[i] = letter;
+          responseObj["wordSoFar"] = wordSoFar.join('');
+          if(responseObj["wordSoFar"] === finalWord) {
+            res.send(victory);
+          }
+        }
+      }
     res.status(200);
-    res.send(letterGuess);
-    // res.send(wordSoFar.join(''));
+    res.send(responseObj);
+  } else {
+    res.send(errorObj);
   }
 });
 
