@@ -23,40 +23,45 @@ function getRandomInt(min, max) {
 }
 
 let randomWords = readWords();
-let randomIndex = getRandomInt(0, 10000);
-let gameWord = randomWords[randomIndex];
-let lettersGuessed = ''
-let wordSoFar = ''
+let randomIndex = getRandomInt(0, 235886);
+let finalWord = randomWords[randomIndex];
+let lettersGuessed = []
 const guesses = [];
 
-function convertToDashes(word) {
-  let result = ''
-  for (let i = 0; i < gameWord.length; i++) {
-    lettersGuessed.split().forEach((letter, i) => {
-      if (letter === gameWord[i]) {
-        result += gameWord[i];
-      } else {
-        result += '-';
-      }
-    })
-  }
-  return result;
+function convertToDashes(letters) {
+  let word = ''
+  finalWord.split('').forEach(letter => {
+    lettersGuessed.includes(letter) ? word += letter : word += '-'
+  })
+  return word;
 }
 
 server.post("/guess", (req, res) => {
   let letter = req.body.letter;
-  lettersGuessed += letter;
+  if (!req.body.letter) {
+    res.status(400);
+    res.send({ error: "Invalid guess" })
+  }
+  if (lettersGuessed.includes(letter)) {
+    res.status(400);
+    res.send({ error: "You already guessed that letter" })
+  }
+  lettersGuessed.push(letter);
   res.status(200);
   res.send(convertToDashes(lettersGuessed));
 })
 
 server.get("/", (req, res) => {
   res.status(200);
-  // res.send({ 
-  //   wordSofar: wordSoFar, 
-  //   guesses: guesses 
-  // })
-  res.send(gameWord);
+  res.send({ 
+    wordSofar: convertToDashes(lettersGuessed), 
+    guesses: lettersGuessed
+  })
+})
+
+server.get("/cheat", (req, res) => {
+  res.status(200);
+  res.send(finalWord);
 })
 
 
