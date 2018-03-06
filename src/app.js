@@ -15,22 +15,35 @@ const readWords = () => {
   return contents.split('\n');
 };
 
-const finalWord = readWords()[Math.floor(Math.random()*readWords().length)];
+const finalWord = readWords()[Math.floor(Math.random() * readWords().length)];
 
 const guesses = [];
-server.post("/guess", (req, res, err) => {
-  let clientProvided = req.body;
+server.post('/guess', (req, res) => {
+  const clientProvided = req.body;
   if (guesses.includes(clientProvided.letter)) {
     res.status(STATUS_USER_ERROR);
-    res.send({ error: "Error message, letter already chosen." })
-  } else if ((clientProvided.letter).length != 1) {
+    res.send({ error: 'Error message, letter already chosen.' });
+  } else if ((clientProvided.letter).length !== 1) {
     res.status(STATUS_USER_ERROR);
-    res.send({ error: "Error message, input not 1 char." })
+    res.send({ error: 'Error message, input not 1 char.' });
   } else {
     guesses.push(clientProvided.letter);
     res.status(STATUS_SUCCESS);
-    res.send("Guesses so far: " + guesses);
+    res.send('Guesses so far: ', guesses);
   }
+});
+
+server.get('/guess', (req, res) => {
+  let wordSoFar = finalWord.split('').map(letter => {
+    if (guesses.includes(letter)) {
+      return letter;
+    } else {
+      return '-';
+    }
+  })
+  .join('');
+  res.status(STATUS_SUCCESS);
+  res.send(wordSoFar);
 })
 
 server.listen(3000);
