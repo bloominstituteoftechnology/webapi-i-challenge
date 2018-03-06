@@ -20,6 +20,15 @@ const finalWord = readWords()[Math.floor(Math.random() * readWords().length)].to
 
 const guesses = [];
 
+// const hangman = [
+//   'head',
+//   'body',
+//   'left arm',
+//   'right arm',
+//   'left leg',
+//   'right leg'
+// ];
+
 const guessed = finalWord.split('').map(letter => letter = '-');
 
 const guessing = () => finalWord.split('').map((letter, index) => {
@@ -45,12 +54,14 @@ server.post('/guess', (req, res) => {
     res.status(STATUS_USER_ERROR).send({ error: 'You have already guessed this letter.' });
   } else if (!letter) {
     res.status(STATUS_USER_ERROR).send({ error: 'Error message' });
-  } else {
+  } else if (finalWord.includes(letter)) {
     guesses.push(letter);
     res.status(STATUS_SUCCESS).send('You guessed correctly!');
-  }
-  if (guesses === finalWord) {
+  } else if (guesses === finalWord) {
     res.status(STATUS_SUCCESS).send('Hoooorayy, you have won!');
+  } else {
+    guesses.push(letter);
+    res.send('Try guessing again!');
   }
 });
 
