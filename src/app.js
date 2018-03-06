@@ -84,3 +84,18 @@ server.post('/guess', (req, res) => {
 });
 
 server.listen(3000);
+
+// PSEUDOCODE for bot
+// analyze dictionary: for every word, iterate through --> 
+// in an object, count if a word contains a given letter
+
+// guess the letter with the highest probability that is not in the guessed letters object
+// add letter to a guessed letters object
+
+// shrink dictionary with the following methods
+// (1st time only) from result, narrow dictionary to words with the given length
+// if guessed letter is in word, then narrow dictionary with words with letter in shown index of the word
+// if guessed letter is not in the word, then narrow dictionary with words that do not have that letter
+
+// iterate counter that keeps track of how many turns it takes
+// repeat
