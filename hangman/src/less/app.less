@@ -1,0 +1,51 @@
+.app {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  .gallows-pic {
+    display: flex;
+    justify-content: center;
+    .gallows-pic__image {
+      height: 400px;
+    }
+  }
+  .heading__title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    padding: 50px;
+  }
+  .guess-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    .guess__input {
+      overflow: hidden;
+      resize: none;
+      width: 3%;
+      padding: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      text-align: center;
+      border-radius: 5px;
+    }
+    .currentStateOfWord {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 4rem;
+      border-radius: 5px;
+    }
+    .guess__button {
+      background: black;
+      color: white;
+      width: 15%;
+      padding: 10px;
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      border-radius: 5px;
+      margin: 10px;
+      
+    }
+  }
+}

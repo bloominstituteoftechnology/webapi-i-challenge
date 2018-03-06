@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import hangman1 from './images/hangman1.jpg';
 import hangman2 from './images/hangman2.jpg';
@@ -46,7 +45,7 @@ class App extends Component {
   render() {
       return (
         <Router>
-          <div>
+          <div className="app">
             <Route path="/" render={state =>
               <Word state={this.state} />
             }/>

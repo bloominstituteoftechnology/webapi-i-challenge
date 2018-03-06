@@ -9,7 +9,7 @@ class Gallows extends React.Component {
     console.log('Gallows props: ', this.props)
     return (
       <div className='gallows-pic'>
-        <img src={this.props.state.gallows[this.state.mistakes].image} alt="Current Stage of Hangman"/>
+        <img className='gallows-pic__image'src={this.props.state.gallows[this.state.mistakes].image} alt="Current Stage of Hangman"/>
       </div>
     )
   } 
