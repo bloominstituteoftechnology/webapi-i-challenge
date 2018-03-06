@@ -76,6 +76,16 @@ server.post('/guess', (req, res) => {
     res.send({ error: 'Bad guess, guess again.' });
   }
 });
+
+server.get('/guess', (req, res) => {
+  const guessed = guessedWord.join('');
+  res.status(200);
+  res.send({
+    wordSoFar: guessed,
+    guesses: alphabet
+  });
+});
+
 // TODO: your code to handle requests
 
 server.listen(3000);
