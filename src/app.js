@@ -64,6 +64,18 @@ const guessLetter = (letter) => {
   alphabet[letter] = true;
   return guessedWord.join('');
 };
+
+server.post('/guess', (req, res) => {
+  const { letter } = req.body;
+  if (letter) {
+    const anotherword = guessLetter(letter);
+    res.status(200);
+    res.send(anotherword);
+  } else {
+    res.status(404);
+    res.send({ error: 'Bad guess, guess again.' });
+  }
+});
 // TODO: your code to handle requests
 
 server.listen(3000);
