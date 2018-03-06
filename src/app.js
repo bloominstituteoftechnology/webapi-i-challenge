@@ -29,21 +29,20 @@ server.post('/guess', (req, res) => {
   } else {
     guesses.push(clientProvided.letter);
     res.status(STATUS_SUCCESS);
-    res.send('Guesses so far: ', guesses);
+    res.send(guesses);
   }
 });
 
 server.get('/guess', (req, res) => {
-  let wordSoFar = finalWord.split('').map(letter => {
+  const wordSoFar = finalWord.split('').map((letter) => {
     if (guesses.includes(letter)) {
       return letter;
-    } else {
-      return '-';
     }
+    return letter;
   })
   .join('');
   res.status(STATUS_SUCCESS);
   res.send(wordSoFar);
-})
+});
 
 server.listen(3000);
