@@ -18,7 +18,7 @@ const wordList = readWords();
 const finalWord = wordList[Math.floor(Math.random() * wordList.length)];
 let guesses = [];
 const hangmanWord = (guesses, solution) => {
-  let hangedWord = solution;
+  let hangedWord = solution.toLowerCase();
   hangedWord = hangedWord.split('');
   hangedWord = hangedWord.map(letter => {
     if (!guesses.includes(letter)) return '-';
@@ -29,24 +29,26 @@ const hangmanWord = (guesses, solution) => {
 
 // TODO: your code to handle requests
 server.post('/guess', (req, res) => {
-  if (req.body.letter.length !== 1)
-    return res
-      .status(STATUS_USER_ERROR)
-      .send({ error: 'Only send in one character' });
-  // if (req.body.letter.match(/[a-z]/i))
-  //   return res
-  //     .status(STATUS_USER_ERROR)
-  //     .send({ error: "You must send in a letter" });
   if (req.body.letter === undefined)
     return res
       .status(STATUS_USER_ERROR)
       .send({ error: "Provide 'letter' in request" });
+  if (req.body.letter.length !== 1)
+    return res
+      .status(STATUS_USER_ERROR)
+      .send({ error: 'Only send in one character' });
+  if (!req.body.letter.match(/[a-z]/i))
+    return res
+      .status(STATUS_USER_ERROR)
+      .send({ error: 'You must send in a letter' });
   if (guesses.includes(req.body.letter))
     return res
       .status(STATUS_USER_ERROR)
       .send({ error: 'You already guessed that letter' });
 
-  guesses.push(req.body.letter);
+  guesses.push(req.body.letter.toLowerCase());
+  const wordSoFar = hangmanWord(guesses, finalWord);
+  if (wordSoFar === finalWord.toLowerCase()) return res.send('You win!!!');
   res.send(guesses);
 });
 
