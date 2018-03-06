@@ -10,11 +10,15 @@ import hangman7 from './images/hangman7.jpg';
 import hangman8 from './images/hangman8.jpg';
 import Word from './Word';
 import Gallows from './Gallows';
+import axios from 'axios';
 
 
 class App extends Component {
   state = {
-    currentStateOfWord: '-----',
+    wordSoFar: [],
+    guesses: [],
+    mistakes: 0,
+    finalWord: '',
     gallows: [
       { stage: 0,
         image: hangman1
@@ -41,6 +45,15 @@ class App extends Component {
         image: hangman8
       },
     ]
+  }
+  componentDidMount() {
+    let response = axios
+    .get('http://localhost:5000/guess')
+    .then(response => {
+      console.log('response: ', response)
+    })
+    .catch(error => console.log('error message: ', error));
+        // this.setState({})
   }
   render() {
       return (

@@ -3,7 +3,7 @@ import React from 'react';
 
 class Gallows extends React.Component {
   state = {
-    mistakes: 0
+    mistakes: 7
   }
   render() {
     console.log('Gallows props: ', this.props)

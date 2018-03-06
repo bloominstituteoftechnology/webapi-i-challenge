@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const port = 3000;
+const port = 5000;
 const fs = require('fs');
 
 const server = express();
@@ -9,7 +9,7 @@ const noLetterMsg = { error: "Please provide a letter." };
 const alreadyGuessedMsg = { error: "Already try that letter." };
 const successMsg = { success: 'You won'};
 const finalWord = readWords()[getRandomInt(readWords().length)];
-// const finalWord = 'german';
+// const finalWord = 'germana';
 let mistakes = 0;
 const wordSoFar = Array(finalWord.length).fill('-');
 const guesses = [];
@@ -37,13 +37,13 @@ server.post('/guess', (req, res) => {
 
     letter = letter.toLowerCase();
     guesses.push(letter);
-    
+
     if (finalWord.includes(letter)) {
 
-        let val = finalWord.indexOf(letter);
-        while (val !== -1) {
-            positions.push(val);
-            val = finalWord.indexOf(letter, val + 1);
+        let index = finalWord.indexOf(letter);
+        while (index !== -1) {
+            positions.push(index);
+            index = finalWord.indexOf(letter, index + 1);
         }
 
         positions.forEach((index) => {
