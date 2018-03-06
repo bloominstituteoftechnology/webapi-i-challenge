@@ -23,7 +23,7 @@ function getRandomInt(min, max) {
 }
 
 const randomWords = readWords();
-const randomIndex = getRandomInt(0, 1000);
+const randomIndex = getRandomInt(0, 235866);
 const finalWord = randomWords[randomIndex];
 const lettersGuessed = [];
 const guesses = [];
