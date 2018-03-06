@@ -19,7 +19,7 @@ const guesses = [];
 
 // TODO: your code to handle requests
 const words = readWords();
-const finalWord = words[Math.floor(Math.random() * words.length)];
+const finalWord = words[Math.floor(Math.random() * words.length)].toLowerCase();
 console.log(finalWord);
 
 server.get('/guess', (req, res) => {
@@ -27,11 +27,13 @@ server.get('/guess', (req, res) => {
   res.send(wordSoFar);
 });
 
+//returns guesses = null???
 server.post('/guess', (req, res) => {
+  console.log(req.body);
   const { letter } = req.body;
-  console.log(letter);
+  guesses.push(letter);
   res.status(200);
-  res.json(req.body);
+  res.json({ guesses: guesses });
 });
 
 server.listen(3000);
