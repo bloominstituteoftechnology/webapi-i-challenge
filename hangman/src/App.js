@@ -19,6 +19,7 @@ class App extends Component {
         guesses: [],
         mistakes: 0,
         finalWord: '',
+        letter: '',
         gallows: [
             {
                 stage: 0,
