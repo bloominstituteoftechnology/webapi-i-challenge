@@ -28,7 +28,7 @@ const getWord = () => {
 };
 
 const update = (letter) => {
-  const finalSplit = finalWord.split('');
+  const finalSplit = finalWord.toLowerCase().split('');
   const soFarSplit = wordSoFar.split('');
   for (let i = 0; i < finalSplit.length; i++) {
     if (finalSplit[i] === letter) {
@@ -39,10 +39,20 @@ const update = (letter) => {
 };
 
 server.post('/guess', (req, res) => {
-  const { letter } = req.body;
-  if (letter.length !== 1 || typeof letter !== 'string' || guesses.includes(letter)) {
+  let { letter } = req.body;
+  letter = letter.toLowerCase();
+  if (!letter) {
     res.status(STATUS_USER_ERROR);
-    res.send({ error: 'Error' });
+    res.json({ error: 'User must provide a letter.' });
+  } else if (letter.length !== 1) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: 'User must provide single letter only.' });
+  } else if (typeof letter !== 'string') {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: 'Letter must be a string.' });
+  } else if (guesses.includes(letter)) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: `The letter ${letter} was already guessed!` });
   } else {
     guesses.push(letter);
     update(letter);
