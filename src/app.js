@@ -34,15 +34,17 @@ server.post('/guess', (req, res) => {
 });
 
 server.get('/guess', (req, res) => {
-  const wordSoFar = finalWord.split('').map((letter) => {
+  console.log(finalWord);
+  console.log(finalWord.slice(0, -1).split(''));
+  const wordSoFar = finalWord.slice(0, -1).split('').map((letter) => {
     if (guesses.includes(letter)) {
       return letter;
     }
-    return letter;
+    return '-';
   })
   .join('');
   res.status(STATUS_SUCCESS);
-  res.send(wordSoFar);
+  res.send({wordSoFar, guesses});
 });
 
 server.listen(3000);
