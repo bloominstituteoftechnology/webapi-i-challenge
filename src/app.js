@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 
 const STATUS_USER_ERROR = 422;
+const STATUS_SUCCESS = 200;
 
 const server = express();
 // to enable parsing of json bodies for post requests
@@ -32,7 +33,25 @@ const guessing = () => finalWord.split('').map((letter, index) => {
 server.get('/guess', (req, res) => {
   guessing();
   const wordSoFar = guessed.join('');
-  res.jason({ guesses, wordSoFar });
+  res.send({ guesses, wordSoFar });
+});
+
+server.post('/guess', (req, res) => {
+  const {
+    letter
+  } = req.body;
+
+  if (guesses.includes(letter)) {
+    res.status(STATUS_USER_ERROR).send({ error: 'You have already guessed this letter.' });
+  } else if (!letter) {
+    res.status(STATUS_USER_ERROR).send({ error: 'Error message' });
+  } else {
+    guesses.push(letter);
+    res.status(STATUS_SUCCESS).send('You guessed correctly!');
+  }
+  if (guesses === finalWord) {
+    res.status(STATUS_SUCCESS).send('Hoooorayy, you have won!');
+  }
 });
 
 server.listen(3000);
