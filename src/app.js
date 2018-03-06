@@ -16,6 +16,13 @@ const readWords = () => {
   return contents.split('\n');
 };
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+const arrayDictionary = readWords();
+const finWord = arrayDictionary[getRandomInt(arrayDictionary.length)];
+console.log(finWord);
 // TODO: your code to handle requests
 
 server.post('/guess', (req, res) => {
@@ -28,11 +35,11 @@ server.post('/guess', (req, res) => {
       res.status(200);
       res.send({ letter });
     } else {
-      res.status(500);
+      res.status(STATUS_USER_ERROR);
       res.send({ error: 'Error message' });
     }
   } else {
-    res.status(500);
+    res.status(STATUS_USER_ERROR);
     res.send({ error: 'Error message' });
   }
   // res.send(req.body);
@@ -40,5 +47,9 @@ server.post('/guess', (req, res) => {
   console.log(dataStructure);
   // if ()
 });
+
+server.get('/guess', (req, res) => {
+  console.log(readWords());
+})
 
 server.listen(3000);
