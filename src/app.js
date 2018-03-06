@@ -16,10 +16,7 @@ const readWords = () => {
 
 const words = readWords();
 const randomWord = words[Math.floor(Math.random() * words.length)];
-const dashWord = [];
-randomWord.split('').forEach((letter) => {
-  dashWord.push('-');
-});
+const guesses = [];
 
 // TODO: your code to handle requests
 server.get('/', (req, res) => {
@@ -27,7 +24,23 @@ server.get('/', (req, res) => {
 });
 
 server.get('/guess', (req, res) => {
+  const dashWord = [];
+  randomWord.split('').forEach((letter) => {
+    if (guesses.find(guessedLetter => { guessedLetter === letter})) {
+      dashWord.push(letter);
+    } else {
+      dashWord.push('-');
+    }
+  });
 
+  const guessedResponse = {
+    wordSoFar: dashWord,
+    guesses,
+  };
+
+  res.send(`Word so far: ${guessedResponse.wordSoFar}
+            Guesses: ${guessedResponse.guesses}`
+          );
 });
 
 server.listen(3000);
