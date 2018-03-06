@@ -27,7 +27,6 @@ const wordSoFar = finalWordArr.map((element) => {
 console.log('wordsofar', wordSoFar);
 
 const letterGuess = [];
-
 const responseObj = {
   wordSoFar: wordSoFar.join(''),
   guesses: letterGuess.join(','),
@@ -36,20 +35,24 @@ const responseObj = {
 const errorObj = {
   error: "Error message"
 }
-
 const repeatError = {
   error: "Already Guessed This Letter!"
 }
-
 const victory = {
   success: `You won! The word you guessed was ${finalWord}.`
 }
+
 // TODO: your code to handle requests
 server.post('/guess', (req, res) => {
   const letter = req.body.letter;
+  // if letter has already been guessed, return errror
   if (letterGuess.indexOf(letter) !== -1) {
     res.send(repeatError);
   }
+  // if letter is guessed, update guesses array and response object
+  // check if the guessed letter matches any leters in our final word
+  // if there is a match, replace all "-"s with the letter in the wordSoFar
+  // if the entire wordSoFar matches final word, send victory message 
   if (letter) {
     letterGuess.push(letter);
     responseObj["guesses"] = letterGuess.join(',');
