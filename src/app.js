@@ -14,11 +14,20 @@ const readWords = () => {
   return contents.split('\n');
 };
 
+const words = readWords();
+const randomWord = words[Math.floor(Math.random() * words.length)];
+const dashWord = [];
+randomWord.split('').forEach((letter) => {
+  dashWord.push('-');
+});
+
 // TODO: your code to handle requests
 server.get('/', (req, res) => {
-  const words = readWords();
-  const randomWord = words[Math.floor(Math.random() * words.length)];
-  res.send(randomWord);
+  res.send(dashWord.join(''));
+});
+
+server.get('/guess', (req, res) => {
+
 });
 
 server.listen(3000);
