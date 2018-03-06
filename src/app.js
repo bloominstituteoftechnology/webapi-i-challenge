@@ -12,12 +12,12 @@ server.use(bodyParser.json());
 /* Returns a list of dictionary words from the words.txt file. */
 const readWords = () => {
   const contents = fs.readFileSync('words.txt', 'utf8');
-  return contents.split('\r\n');
+  return contents.split('\n');
 };
 const randomWords = readWords();
-// const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-const randomWord = 'test';
+const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
 let guessingWord = '';
+const numOfGuesses = 8;
 
 for (let i = 0; i < randomWord.length; i++) {
   guessingWord += '-';
@@ -25,30 +25,45 @@ for (let i = 0; i < randomWord.length; i++) {
 
 const output = {
   wordSoFar: guessingWord,
-  guesses: {},
+  guesses: [],
 };
 
-server.post('/guess', (req, res) => {
-  const { letter } = req.body;
+server.get('/guess', (req, res) => {
+  res.status(STATUS_SUCCESS);
+  res.send(output);
+});
 
-  if (randomWord.includes(letter)) {
-    let out = output.wordSoFar.split('');
-    for (let i = randomWord.indexOf(letter); i < randomWord.length; i++ ) {
-      if (randomWord[i] === letter) {
-        out.splice(i, 1, letter);
+server.post('/guess', (req, res) => {
+  let { letter } = req.body;
+  letter = String(letter);
+  if (letter.match("^[a-zA-Z\(\)]+$") && letter.length === 1) {
+    output.guesses.push(letter);
+    if (randomWord.includes(letter)) {
+      let out = output.wordSoFar.split('');
+      for (let i = randomWord.indexOf(letter); i < randomWord.length; i++) {
+        if (randomWord[i] === letter) {
+          out.splice(i, 1, letter);
+        }
       }
-    }
-    out = out.join('');
-    output.wordSoFar = out;
-    res.status(STATUS_SUCCESS);
-    if (out === randomWord) {
-      res.send(`Congrats you've won: ${out}`);
+      out = out.join('');
+      output.wordSoFar = out;
+      res.status(STATUS_SUCCESS);
+      if (out === randomWord) {
+        res.send(`Congrats you've won: ${out}`);
+      } else {
+        res.send(`Nice this is what the word looks like now: ${out}`);
+      }
     } else {
-      res.send(`Nice this is what the word looks like now: ${out}`);
+      res.status(STATUS_USER_ERROR);
+      if (output.guesses.length === numOfGuesses) {
+        res.send({ error: "You've used up your guesses!" });
+      } else {
+        res.send({ error: `Error message: Letter ${letter} Was Not Found; word so far is ${output.wordSoFar}` });
+      }
     }
   } else {
     res.status(STATUS_USER_ERROR);
-    res.send({ error: `Error message: Letter ${letter} Was Not Found` });
+    res.send({ error: `${letter} is not a single alphabetical letter` });
   }
 });
 
