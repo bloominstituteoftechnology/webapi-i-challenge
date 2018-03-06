@@ -19,50 +19,54 @@ const readWords = () => {
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
-let randomWords = readWords();
-let randomIndex = getRandomInt(0, 235886);
-let finalWord = randomWords[randomIndex];
-let lettersGuessed = []
+const randomWords = readWords();
+const randomIndex = getRandomInt(0, 1000);
+const finalWord = randomWords[randomIndex];
+const lettersGuessed = [];
 const guesses = [];
 
 function convertToDashes(letters) {
-  let word = ''
-  finalWord.split('').forEach(letter => {
-    lettersGuessed.includes(letter) ? word += letter : word += '-'
-  })
+  let word = '';
+  finalWord.split('').forEach((letter) => {
+    if (lettersGuessed.includes(letter)) {
+      word += letter;
+    } else {
+      word += '-';
+    }
+  });
   return word;
 }
 
-server.post("/guess", (req, res) => {
-  let letter = req.body.letter;
+server.post('/guess', (req, res) => {
+  const letter = req.body.letter;
   if (!req.body.letter) {
     res.status(400);
-    res.send({ error: "Invalid guess" })
+    res.send({ error: 'Invalid guess' });
   }
   if (lettersGuessed.includes(letter)) {
     res.status(400);
-    res.send({ error: "You already guessed that letter" })
+    res.send({ error: 'You already guessed that letter' });
   }
   lettersGuessed.push(letter);
   res.status(200);
   res.send(convertToDashes(lettersGuessed));
-})
+});
 
-server.get("/", (req, res) => {
+server.get('/', (req, res) => {
   res.status(200);
-  res.send({ 
-    wordSofar: convertToDashes(lettersGuessed), 
+  res.send({
+    wordSofar: convertToDashes(lettersGuessed),
     guesses: lettersGuessed
-  })
-})
+  });
+});
 
-server.get("/cheat", (req, res) => {
+server.get('/cheat', (req, res) => {
   res.status(200);
   res.send(finalWord);
-})
+});
 
 
 server.listen(3000);
