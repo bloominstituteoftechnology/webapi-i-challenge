@@ -15,5 +15,24 @@ const readWords = () => {
 };
 
 // TODO: your code to handle requests
+const finalWord = readWords()[Math.floor(Math.random() * readWords().length)].toLowerCase();
+
+const guesses = [];
+
+const guessed = finalWord.split('').map(letter => letter = '-');
+
+const guessing = () => finalWord.split('').map((letter, index) => {
+  for (let i = 0; i < guesses.length; i++) {
+    if (letter === guesses[i].toLowerCase()) {
+      guessed[index] = guesses[i].toLowerCase();
+    }
+  }
+});
+
+server.get('/guess', (req, res) => {
+  guessing();
+  const wordSoFar = guessed.join('');
+  res.jason({ guesses, wordSoFar });
+});
 
 server.listen(3000);
