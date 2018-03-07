@@ -22,13 +22,36 @@ const word = words[index];
 const guesses = {};
 
 server.post('/guess', (req, res) => {
-   // const letter = req.body.guess;
-  // if (STATUS_USER_ERROR) return { error: 'Error message'};
+  const { letter } = req.body;
+  if (!letter) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: 'Must provide a letter' });
+  }
+  if (letter.length !== 1) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: 'Must guess a single letter' });
+    return;
+  }
+  if (guesses[letter]) {
+    res.status(STATUS_USER_ERROR);
+    res.json({ error: `You've already guessed ${letter}!` });
+    return;
+  }
+
+  guesses[letter] = true;
+  res.json({ guesses });
 });
 
-server.get('/guess', (req, res) => {
-  // const letter = req.body.guess;
-  // if (STATUS_USER_ERROR) return { error: 'Error message'};
+server.get('/', (req, res) => {
+  const wordSoFar = word.split('')
+  .map((letter) => {
+    if (guesses[letter]) {
+      return letter;
+    }
+    return '-';
+  })
+  .join('');
+  res.json({ wordSoFar, guesses });
 });
 
 server.listen(3000);
