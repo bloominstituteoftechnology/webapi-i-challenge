@@ -18,8 +18,11 @@ const readWords = () => {
 const words = readWords();
 const index = Math.floor(Math.random() * words.length);
 
+const word = words[index];
+const guesses = {};
+
 server.post('/guess', (req, res) => {
-  // const letter = req.body.guess;
+   // const letter = req.body.guess;
   // if (STATUS_USER_ERROR) return { error: 'Error message'};
 });
 
