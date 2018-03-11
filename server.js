@@ -24,13 +24,13 @@ server.post('/guess', (req, res) => {
 
 
     if (!letter || !isLetter(letter)) {
-        res.status(402)
+        res.status(422)
             .json(noLetterMsg);
         return;
     }
 
     if (guesses.includes(letter)) {
-        res.status(402)
+        res.status(422)
             .json(alreadyGuessedMsg);
         return;
     }
@@ -70,7 +70,7 @@ server.get('/guess', (req, res) => {
         return res.json(successMsg);
     }
 
-    res.status(400)
+    res.status(200)
         .json({"wordSoFar":wordSoFar,
             "guesses":guesses,
             "mistakes":mistakes,

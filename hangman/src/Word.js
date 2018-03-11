@@ -4,39 +4,42 @@ import axios from 'axios';
 
 
 class Word extends React.Component {
-    state= {
-        letter: ''
+  state= {
+    letter: ''
     }
-    guessChangeHandler = (event) => {
-        let { name, value } = event.target;
-        this.setState({ [name]: value });
-        console.log(this)
+  guessChangeHandler = (event) => {
+    let { name, value } = event.target;
+    this.setState({ [name]: value });
     }
-    handleClick = () => {
-        axios
-        .post(
-            this.setState({guesses: this.props.state.guesses.push(this.state.letter)})
-        )
-        console.log('clicked');
+  handleClick = () => {
+    console.log('response: ', JSON.stringify({"letter": `${this.state.letter}`}));
+    axios.post('http://localhost:5000/guess', () => {
+        return JSON.stringify({"letter": `${this.state.letter}`})
+      }
+      )
+      .catch(function (error) {
+        console.log(error);
+      });
     }
-    render() {
-        console.log('Word props: ', this.props);
+  render() {
+      console.log('this: ', this, ', props: ', this.props, ', state: ', this.state)
+    return (
+      <div className="Word">
+        <h1 className="heading__title">Let's Play Hangman</h1>
+          <div className="guess-container">
+            <textarea 
+              onChange={this.guessChangeHandler} 
+              placeholder="?" 
+              className="guess__input" 
+              name="letter"
+              value={this.state.letter} 
+              cols="1" 
+              rows="1"
+            />
+            <div className="guess__button" onClick={() =>{this.handleClick()}}>Guess</div>
 
-        return (
-            <div className="Word">
-            <h1 className="heading__title">Let's Play Hangman</h1>
-            <div className="guess-container">
-                <textarea 
-                  onChange={this.guessChangeHandler} 
-                  placeholder="?" 
-                  className="guess__input" 
-                  name="letter"
-                  value={this.state.letter} 
-                  cols="1" 
-                  rows="1"/>
-                <div className="guess__button" onClick={() =>{this.handleClick()}}>Guess</div>
-                <div className="currentStateOfWord">{this.props.state.wordSoFar.toString()}</div>
-            </div>
+            <div className="currentStateOfWord">{this.props.state.wordSoFar.join('')}</div>
+          </div>
             <Gallows state={this.props.state}/>
         </div>
     )

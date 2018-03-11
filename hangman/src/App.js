@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+// import {BrowserRouter as Router, Route} from 'react-router-dom';
 import hangman1 from './images/hangman1.jpg';
 import hangman2 from './images/hangman2.jpg';
 import hangman3 from './images/hangman3.jpg';
@@ -76,20 +76,14 @@ class App extends Component {
             });
     }
 
-    render() {
-        return (
-            <Router>
-                <div className="app">
-                    <Route path="/" render={state =>
-                        <Word state={this.state}/>
-                    }/>
-                    <Route path="/:stage" render={state => {
-                        <Gallows state={this.state}/>
-                    }}/>
-                </div>
-            </Router>
-        );
-    }
+  render() {
+    return (
+      <div className="app">
+        <Word state={this.state}/>
+        <Gallows state={this.state}/>
+      </div>
+    );
+  }
 }
 
 export default App;
