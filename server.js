@@ -57,7 +57,8 @@ server.post('/guess', (req, res) => {
     }
 
     res.status(400)
-        .json({"wordSoFar":wordSoFar,
+        .json({ "letter":'',
+                "wordSoFar":wordSoFar,
                 "guesses":guesses,
                 "mistakes":mistakes
         });

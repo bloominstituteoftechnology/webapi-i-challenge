@@ -13,9 +13,8 @@ class Word extends React.Component {
     }
   handleClick = () => {
     console.log('response: ', JSON.stringify({"letter": `${this.state.letter}`}));
-    axios.post('http://localhost:5000/guess', () => {
-        return JSON.stringify({"letter": `${this.state.letter}`})
-      }
+    axios.post('http://localhost:5000/guess', 
+        JSON.stringify({"letter": `${this.state.letter}`})
       )
       .catch(function (error) {
         console.log(error);
