@@ -79,7 +79,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <Word state={this.state}/>
+        <Word state={this.state} reMounter={() =>{this.componentDidMount()}}/>
         <Gallows state={this.state}/>
       </div>
     );

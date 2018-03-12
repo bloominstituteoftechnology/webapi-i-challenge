@@ -1,24 +1,25 @@
 import React from 'react';
-import Gallows from './Gallows';
 import axios from 'axios';
 
 
-class Word extends React.Component {
-  state= {
+class Word extends React.Component { 
+  state = {
     letter: ''
-    }
+  }
   guessChangeHandler = (event) => {
     let { name, value } = event.target;
     this.setState({ [name]: value });
     }
   handleClick = () => {
-    console.log('response: ', JSON.stringify({"letter": `${this.state.letter}`}));
-    axios.post('http://localhost:5000/guess', 
-        JSON.stringify({"letter": `${this.state.letter}`})
-      )
+    axios.post('http://localhost:5000/guess', {
+      letter: this.state.letter
+    }, )
+    .then(
+      this.props.reMounter)
       .catch(function (error) {
         console.log(error);
       });
+      this.setState({ letter: '' });
     }
   render() {
       console.log('this: ', this, ', props: ', this.props, ', state: ', this.state)
@@ -36,10 +37,11 @@ class Word extends React.Component {
               rows="1"
             />
             <div className="guess__button" onClick={() =>{this.handleClick()}}>Guess</div>
-
-            <div className="currentStateOfWord">{this.props.state.wordSoFar.join('')}</div>
+            <div className="currentStateOfWord">{this.props.state.wordSoFar.join('') !== this.props.state.finalWord
+              ? this.props.state.wordSoFar.join('')
+              : 'You Won!'}
+            </div>
           </div>
-            <Gallows state={this.props.state}/>
         </div>
     )
 }

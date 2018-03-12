@@ -30,7 +30,7 @@ server.post('/guess', (req, res) => {
     }
 
     if (guesses.includes(letter)) {
-        res.status(422)
+        res.status(200)
             .json(alreadyGuessedMsg);
         return;
     }
@@ -52,11 +52,11 @@ server.post('/guess', (req, res) => {
 
     }else{++mistakes}
 
-    if (finalWord === wordSoFar.join("")) {
-        return res.json(successMsg);
-    }
+    // if (finalWord === wordSoFar.join("")) {
+    //     return res.json(successMsg);
+    // }
 
-    res.status(400)
+    res.status(200)
         .json({ "letter":'',
                 "wordSoFar":wordSoFar,
                 "guesses":guesses,
@@ -67,9 +67,9 @@ server.post('/guess', (req, res) => {
 
 server.get('/guess', (req, res) => {
 
-    if (finalWord === wordSoFar.join('')) {
-        return res.json(successMsg);
-    }
+    // if (finalWord === wordSoFar.join('')) {
+    //     return res.json(successMsg);
+    // }
 
     res.status(200)
         .json({"wordSoFar":wordSoFar,
