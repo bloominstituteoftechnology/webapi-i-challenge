@@ -1,6 +1,6 @@
 // use require instead of import
 const express = require('express'); //libraries
-const bodyParser = require('body-parser');
+// not needed if using express middleware || const bodyParser = require('body-parser');
 const db = require('./data/db.js'); // local code
 const server = express();
 const morgan = require('morgan');
@@ -62,7 +62,6 @@ server.post('/api/users', function(req, res) {
         res.status(500).json(error);
     });
 });
-
 
 server.get('/api/users/:id', (req, res) => {
     const { id } = req.params;
@@ -132,7 +131,6 @@ server.delete('/api/users/:id', (req, res) => {
     res.status(500).json(error);
 })
 });
-
 
 const port = 5000;
 server.listen(port, () => console.log('API Running on port 5000'));
