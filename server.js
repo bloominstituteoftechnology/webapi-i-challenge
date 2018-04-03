@@ -26,6 +26,18 @@ server.get('/api/users', function(req, res) {
     });
 });
 
+server.get('/api/users/search', (req, res) => {
+    const { userid } = req.query;
+//  console.log('id', userid);
+    db.findById(userid)
+    .then(users => {
+        res.json(users[0]);
+    })
+    .catch(error => {
+        res.status(500).json(error);
+    });
+});
+
 // server.post('/api/users', function(req, res) {
 //     const user = req.body;
 //     db
