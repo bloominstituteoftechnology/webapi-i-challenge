@@ -9,6 +9,7 @@ const helmet = require('helmet');
 // middleware
 server.use(morgan('dev'));
 server.use(helmet());
+server.use(express.json());
 
 server.get('/', function(req, res) {
     res.send({ api: 'Running...' });
@@ -25,17 +26,31 @@ server.get('/api/users', function(req, res) {
     });
 });
 
+// server.post('/api/users', function(req, res) {
+//     const user = req.body;
+//     db
+//     .insert(user)
+//     .then(users => {
+//         res.json(users);
+//     })
+//     .catch(error => {
+//         res.status(500).json(error);
+//     });
+// });
+
+// new POST
 server.post('/api/users', function(req, res) {
     const user = req.body;
     db
     .insert(user)
-    .then(users => {
-        res.json(users);
+    .then(response => {
+        res.status(201).json(response);
     })
     .catch(error => {
         res.status(500).json(error);
     });
 });
+
 
 server.get('/api/users/:id', (req, res) => {
     const { id } = req.params;
@@ -63,17 +78,38 @@ server.put('/api/users/:id', (req, res) => {
     });
 });
 
+// server.delete('/api/users/:id', (req, res) => {
+//     const { id } = req.params;
+
+//     db
+//     .remove(id)
+//     .then(users => {
+//         res.json(users[0]);
+//     })
+//     .catch(error => {
+//         res.status(500).json(error);
+//     });
+// });
+
 server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params;
-
+    let user;
+    db
+    .findById(id)
+    .then(response => {
+        user = { ...response[0] };
     db
     .remove(id)
-    .then(users => {
-        res.json(users[0]);
+    .then(response => {
+        res.status(200).json(user);
     })
     .catch(error => {
         res.status(500).json(error);
     });
+})
+.catch(error => {
+    res.status(500).json(error);
+})
 });
 
 
