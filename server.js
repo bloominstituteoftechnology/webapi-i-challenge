@@ -7,7 +7,7 @@ app.use(bodyParser.json())
 
 app.get('/api/users/', (req, res) => {
   db.find()
-    .then(response => res.send(response))
+    .then(response => res.status(200).send(response))
     .catch(error => res.status(500).send({ error: "The users information could not be retrieved" }))
 })
 
@@ -35,7 +35,7 @@ app.get('/api/users/:id', (req, res) => {
       if (response.length === 0) {
         res.status(404).send({ message: "The user with the specified ID does not exist" })
       } else {
-      res.status(201).send(response)
+        res.status(200).send(response)
       }
     })
     .catch(error => res.status(500).send({ error: "The user information could not be retrieved" }))
@@ -48,10 +48,30 @@ app.delete('/api/users/:id', (req, res) => {
       if (response == 0) {
         res.status(404).send({ message: "The user with the specified ID does not exist" })
       } else {
-        res.status(201).send({ message: `User with id ${id} deleted` })
+        res.status(200).send({ message: `User with id ${id} deleted` })
       }
     })
     .catch(error => res.status(500).send({ error: "The user could not be removed" }))
+})
+
+app.put('/api/users/:id', (req, res) => {
+  var id = req.params.id
+  var user = req.body
+  if (user && (user.name || user.bio)) {
+    db.update(id, user)
+      .then(response => {
+        if (response == 0) {
+          res.status(404).send({ message: "The user with the specified ID does not exist" })
+        } else {
+          db.findById(id)
+            .then(response => {
+              res.status(200).send(response)
+            })
+        }
+      })
+  } else {
+    res.status(400).send({ error: "Please provide name and bio for the user" })
+  }
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
