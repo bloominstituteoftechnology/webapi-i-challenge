@@ -41,8 +41,17 @@ app.get('/api/users/:id', (req, res) => {
     .catch(error => res.status(500).send({ error: "The user information could not be retrieved" }))
 })
 
-app.delete('api/users/:id', (req, res) => {
-
+app.delete('/api/users/:id', (req, res) => {
+  var id = req.params.id
+  db.remove(id)
+    .then(response => {
+      if (response == 0) {
+        res.status(404).send({ message: "The user with the specified ID does not exist" })
+      } else {
+        res.status(201).send({ message: `User with id ${id} deleted` })
+      }
+    })
+    .catch(error => res.status(500).send({ error: "The user could not be removed" }))
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
