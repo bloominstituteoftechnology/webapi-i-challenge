@@ -31,7 +31,13 @@ app.post('/api/users/', (req, res) => {
 app.get('/api/users/:id', (req, res) => {
   var id = req.params.id
   db.findById(id)
-    .then(response => res.status(201).send(response))
+    .then(response => {
+      if (response.length === 0) {
+        res.status(404).send({ message: "The user with the specified ID does not exist" })
+      } else {
+      res.status(201).send(response)
+      }
+    })
     .catch(error => res.status(500).send({ error: "The user information could not be retrieved" }))
 })
 
