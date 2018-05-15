@@ -1,8 +1,15 @@
 const express = require('express');
 const db = require('./data/db');
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const port = 5000;
 
+
+
+app.use(bodyParser.json());
+
+app.use(cors());
 
 app.get('/api/users', (req, res) => {
     db.find()
