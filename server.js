@@ -17,7 +17,18 @@ server.get('/api/users', (req, res) => {
           res.status(200).json({users});
       })
       .catch( err => {
-          res.status(500).json({error: 'PROBLEM WITH RETREIVING DATA'});
+          res.status(500).json({error: 'PROBLEM WITH RETRIEVING DATA'});
       })
 })
 
+server.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    db.findById(userId)
+      .then( user => {
+          res.json({ user });
+      })
+      .catch( err => {
+          res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
+      })
+})
