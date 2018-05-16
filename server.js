@@ -17,25 +17,30 @@ server.get('/', (req, res) => {
 })
 
 server.get('/api/users', (req, res) => {
-    // the find is going to return a promise 
-    db.find();
-      .then(users => {
-        res.status(200).json({ users }); // or we can say we want to send json
-    })
-        .catch(err => { 
+    // the find is going to return a promise (asynch stuff that I don't fully grasp yet)
+    db.find()
+        // if the promise is resolved, then we can send something back to the client
+        .then(users => {
+            res.status(200).json({ users }); // or we can say we want to send json
+        })
+        // if the promise is not resolved, then we can send an error code and other stuff
+        .catch(err => {
             // status allows us to send a status code
             res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
         })
 })
 
+// finally we learn to use parameters on our endpoints
 server.get('/api/users/:id', (req, res) => {
-    const userId = req.params.id;
-
+    // and we are able to get those parameters off that request object 
+    const userId = req.params.id; 
+    // we can then use those params to find a specific user in the database
     db.findById(userId)
         .then(user => {
-            res.json({ user });
+            res.json({ user }); // and send that back if we get it
         })
         .catch(err => {
+            // or an error if we get that
             res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
         })
 })
