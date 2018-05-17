@@ -44,3 +44,4 @@ server.get('/api/users/:id', (req, res) => {
             res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
         })
 })
+
