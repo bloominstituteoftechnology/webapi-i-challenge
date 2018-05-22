@@ -1,38 +1,15 @@
 const express = require('express');
-const db = require('./data/db');
-const app = express();
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const serverRouter = require('./serverRoutes');
+const { logger } = require('./middleWare');
+
+const app = express();
 const port = 5000;
-
-
-
-app.use(bodyParser.json());
 
 app.use(cors());
 
-app.get('/api/users', (req, res) => {
-    db.find()
-        .then( users => {
-            res.status(200).send({ users });
-        })
-        .catch( error => {
-            res.status(500).send({ msg: 'Server error' });
-        })
-})
-
-
-app.get('/api/users/:id', (req, res) => {
-    const { id } = req.params; 
-
-    db.findById(id)
-        .then( users => {
-            res.status(200).send({ users });
-        })
-        .catch(error => {
-            res.status(500).send({ msg: 'Server error' });
-        })
-})
+app.use(logger);
+app.use('/api/users', serverRouter);
 
 
 app.listen(port, () => {
