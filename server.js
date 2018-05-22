@@ -3,7 +3,9 @@ const helmet = require('helmet');
 const cors = require('cors');
 const db = require('./data/db');
 // anything that is served data is a client
+const userRouter = require('./usersRoutes');
 const server = express();
+
 
 server.listen(5000, () => {
     console.log('===SERVER RUNNING ON PORT 5000===');
