@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     res.send('<h2>GET REQUEST RECEIVED</h2>');
 })
 
-router.get('/api/users', (req, res) => {
+router.get('/:id', (req, res) => {
     db.find()
         .then(posts => {
             res.status(200).json({ posts })
@@ -34,7 +34,7 @@ router.get('/api/users/:id', (req, res) => {
         })
 })
 
-router.delete('/api/users/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
     let post;
     db.findById(id)
@@ -48,7 +48,7 @@ router.delete('/api/users/:id', (req, res) => {
         .catch(err => response.status(500).json({ err }))
 })
 
-router.post('/api/users', (req, res) => {
+router.post('/', (req, res) => {
     console.log(req);
     if (!req.body.title || !req.body.contents) {
         return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
@@ -60,7 +60,7 @@ router.post('/api/users', (req, res) => {
         .catch(err => response.status(500).json({ err }));
 })
 
-router.put('/api/users/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     if (!req.body.title || !req.body.contents) {
         return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
     }
