@@ -1,47 +1,85 @@
-const express = require('express'); // how we import the express server
-const db = require('./data/db'); // here is our database that will persist some data for us
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const db = require('./data/db');
+// anything that is served data is a client
+const server = express();
 
-const server = express(); // create a server by calling the express function that automatically 
-// creates a server for us
-server.listen(5000, () => { // we now use that server to listen to a certain port
-    console.log(' === APP running on port 5000 === '); // any requests that come in...
-}) // the server can listen for those requests and handle them as we write code for it
+server.listen(5000, () => {
+    console.log('===SERVER RUNNING ON PORT 5000===');
+})
 
+server.use(helmet());
+server.use(cors());
+server.use(express.json());
 
-// here is the code for a simple get request
-// a get request takes the address or the end point and a callback as parameters
-// that callback will always take at least two parameters => reques and response req & res homies
+// okay now, just like in the lecture video, let's make our server routes:
+
 server.get('/', (req, res) => {
-    // we can use a method on res called send to send some data back
-    res.send('<h2>GET REQUEST RECIEVED</h2>');
+    res.send('<h2>GET REQUEST RECEIVED</h2>');
 })
 
 server.get('/api/users', (req, res) => {
-    // the find is going to return a promise (asynch stuff that I don't fully grasp yet)
     db.find()
-        // if the promise is resolved, then we can send something back to the client
-        .then(users => {
-            res.status(200).json({ users }); // or we can say we want to send json
+        .then(posts => {
+            res.status(200).json({ posts })
         })
-        // if the promise is not resolved, then we can send an error code and other stuff
         .catch(err => {
-            // status allows us to send a status code
-            res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
+            res.status(500).json({ error: "The posts informations could not be retrieved." })
         })
 })
 
-// finally we learn to use parameters on our endpoints
 server.get('/api/users/:id', (req, res) => {
-    // and we are able to get those parameters off that request object 
-    const userId = req.params.id; 
-    // we can then use those params to find a specific user in the database
-    db.findById(userId)
-        .then(user => {
-            res.json({ user }); // and send that back if we get it
+    const postId = req.params.id;
+
+    db.findById(postId)
+        .then(post => {
+            res.json({ post });
         })
         .catch(err => {
-            // or an error if we get that
-            res.status(500).json({ error: 'PROBLEM WITH RETRIEVING DATA' });
+            res.status(404).json({ error: "The post with the specified ID does not exist." })
         })
 })
 
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    let post;
+    db.findById(id)
+        .then(foundPost => {
+            if (foundPost.length === 0) return res.status(404).json({ message: "The post with the specified ID does not exist." });
+            db.remove(id)
+                .then(response => {
+                    res.status(200).json({ message: "===POST DELETED===" })
+                })
+        })
+        .catch(err => response.status(500).json({ err }))
+})
+
+server.post('/api/users', (req, res) => {
+    console.log(req);
+    if (!req.body.title || !req.body.contents) {
+        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    }
+    db.insert(req.body)
+        .then(response => {
+            res.status(201).json({ ...req.body, ...response });
+        })
+        .catch(err => response.status(500).json({ err }));
+})
+
+server.put('/api/users/:id', (req, res) => {
+    if (!req.body.title || !req.body.contents) {
+        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    }
+    db.update(req.params.id, req.body)
+        .then(response => {
+            if (response === 0) return res.status(404).json({ message: `The post with the specified ID ${req.params.id} does not exist.` });
+            // res.status(200).json(req.body);
+            db.findById(req.params.id)
+              .then(response => {
+                  res.json(response);
+              })
+              .catch(err => res.status(404).json({ err }))
+        })
+        .catch(err => response.status(500).json({ error: "The post information could not be modified." }));
+})
