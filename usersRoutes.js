@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
 
 const memCache = {};
 
-router.get('/api/users/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     const postId = req.params.id;
     if (memCache[id] !== undefined) {
         res.status(200).json({ user: memCache[id] });
