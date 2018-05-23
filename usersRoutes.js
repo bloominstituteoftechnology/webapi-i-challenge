@@ -3,11 +3,12 @@ const db = require('./data/db');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+/* router.get('/', (req, res) => {
     res.send('<h2>GET REQUEST RECEIVED</h2>');
 })
+*/
 
-router.get('/:id', (req, res) => {
+router.get('/', (req, res) => {
     db.find()
         .then(posts => {
             res.status(200).json({ posts })
@@ -21,8 +22,8 @@ const memCache = {};
 
 router.get('/:id', (req, res) => {
     const postId = req.params.id;
-    if (memCache[id] !== undefined) {
-        res.status(200).json({ user: memCache[id] });
+    if (memCache[postId] !== undefined) {
+        res.status(200).json({ user: memCache[postId] });
     }
 
     db.findById(postId)

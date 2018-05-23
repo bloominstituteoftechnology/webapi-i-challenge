@@ -16,5 +16,6 @@ server.use(cors());
 server.use(express.json());
 
 server.use('/api/users', userRouter);
+
 // okay now, just like in the lecture video, let's make our server routes:
 
