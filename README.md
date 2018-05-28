@@ -24,7 +24,7 @@ Database access will be done using the `db.js` file included inside the `data` f
 * findById: this method expects an _id_ as it's only parameter and returns the user corresponding to the _id_ provided or an empty array if no user with that _id_ is found.
 * insert: calling insert passing it a user object will add it to the database and return an object with the id of the inserted user. The object looks like this: `{ id: 123 }`.
 * update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
-* remove: the remove method accepts an id as it's first parameter and upon successfully deleting the user from the database it returns the number of records deleted.
+* remove: the remove method accepts an id as it's first parameter and upon successfully deleting the user from the database it returns the number of records yarn deleted.
 
 Now that we have a way to add, update, remove and retrieve data from the provided databse, it is time to work on the API.
 
@@ -79,6 +79,8 @@ When the client makes a `POST` request to `/api/users`:
   * cancel the request.
   * respond with HTTP status code `500` (Server Error).
   * return the following JSON object: `{ error: "There was an error while saving the user to the database" }`.
+
+**Done - Ron**
 
 When the client makes a `GET` request to `/api/users`:
 
