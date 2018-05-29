@@ -16,11 +16,17 @@ server.post('/api/users', (req, res) => {
     db
       .insert(req.body)
       .then(response => {
-        res.send(response);
+        res.status(201);
+        db.findById(response.id)
+          .then(user => {
+            res.json({ user });
+          });
+
       })
       .catch(error => {
-        res.json(error);
-      })
+        res.status(500);
+        res.json({ error: "There was an error while saving the user to the database" });
+      });
   }
 });
 
@@ -29,19 +35,27 @@ server.get('/api/users', (req, res) => {
   db.find().then(users => {
     res.json({ users });
   })
-    .catch(error => {
-      res.json({ error });
-    });
+  .catch(error => {
+    res.status(500);
+    res.json({ error: "The users information could not be retrieved." });
+  });
 });
 
 server.get('/api/users/:id', (req, res) => {
   db
     .findById(req.params.id)
     .then(users => {
-      res.json({ users });
+      if (users.length > 0) {
+        res.json({ users });
+      }
+      else {
+        res.status(404);
+        res.json({ message: "The user with the specified ID does not exist." });
+      }
     })
     .catch(error => {
-      res.json(error);
+      res.status(500);
+      res.json({ error: "The user information could not be retrieved." });
     })
 });
 
