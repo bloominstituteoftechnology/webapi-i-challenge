@@ -22,6 +22,7 @@ function insert(user) {
   return db('users')
     .insert(user)
     .then(ids => ({ id: ids[0] }));
+    // .then('users')
 }
 
 function update(id, user) {
