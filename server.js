@@ -15,7 +15,9 @@ server.post('/api/users', (req,res) => {
         res.send(response)
     })
     .catch(error => {
-        res.json(error);
+        res.json({
+          error: "Please provide name and bio for the user."
+        });
     })
 })
 
@@ -24,7 +26,7 @@ server.get('/api/users', (req,res) => {
         res.json({ users });
     })
     .catch(error => {
-        res.json({ error })
+        res.json({ error: "The users information could not be retrieved." })
     })
 })
 
@@ -37,7 +39,7 @@ server.get("/api/users/:id", (req, res) => {
       res.json({ user });
     })
     .catch(error => {
-      res.json({ error });
+      res.json({ error: "The users information could not be retrieved." });
     });
 });
 
