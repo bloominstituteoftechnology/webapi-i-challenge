@@ -93,21 +93,27 @@ server.post("/api/users", (req, res) => {
 server.delete("/api/users/:id", (req, res) => {
   console.log(req.params);
   const { id } = req.params;
-  db.findById(id).then(response => {
-    console.log("response", response);
-    !response.length &&
-      res
-        .status(404)
-        .json({ "message": "The user with the specified ID does not exist." });
-    // Remove fro the Data Base and return the promise generate by 'db.remove()'
-    return db.remove(id);
-  })
-  .then(response => {
-    console.log("response", response);
-    res.status(200).json({"message": "User deleted"});
-  }).catch(e => {
-    console.log("error", e);
-  });
+  db
+    .findById(id)
+    .then(response => {
+      console.log("response", response);
+
+      // If there are no match in the DataBase --> then:
+      !response.length &&
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      // Remove fro the Data Base and return the promise generate by 'db.remove()'
+      return db.remove(id);
+    })
+    .then(response => {
+      console.log("response", response);
+      res.status(200).json({ message: "User deleted" });
+    })
+    .catch(e => {
+      console.log("error", e);
+      res.status(500).json({ error: "The user could not be removed" });
+    });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
