@@ -126,6 +126,7 @@ server.put("/api/users/:id", (req, res) => {
   console.log(req.params);
   const { id } = req.params;
   const { name, bio } = req.body;
+  let updated;
 
   // If the 'name' or 'bio' are missing
   (!name || !bio) &&
@@ -134,22 +135,49 @@ server.put("/api/users/:id", (req, res) => {
       .json({ errorMessage: "Please provide name and bio for the user." });
 
   /**
-   * ID found: update user!
-   *    
    * ID no found: catch.
+   *
+   * ID found: update user!
    */
   db
     .findById(id)
     .then(response => {
       // Id not found
-      if (!response.length) { return Promise.reject("Id no found");}
-      
+      if (!response.length) {
+        return Promise.reject("Id no found");
+      }
+
+      // Id found -> then:
+      return db
+        .update(id, { name, bio })
+        .then(response => {
+          console.log("response", response);
+          /**
+           * Response could be either 0 or 1
+           */
+          if (!response) {
+            //  response is === 0
+            return new Promise.reject("Something went wrong");
+          } else {
+            // response === 1
+            db
+              // fetch the user updated
+              .findById(id)
+              .then(user => (updated = user))
+              // SEND response with updated-user
+              .then(_ => res.status(200).json(updated));
+          }
+        })
+        .catch(e => {
+          console.log("error", e);
+        });
     })
     .catch(e => {
       console.log("error", e);
-      res.status(404).json({ message: "The user with the specified ID does not exist." });
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist." });
     });
-
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
