@@ -57,7 +57,8 @@ server.post(`/api/users`, (req, res) => {
     console.log(`userInfo`, userInfo);
 
     db
-        .insert(userInfo).then(response => {
+        .insert(userInfo)
+        .then(response => {
             res.status(201).json(response);
         } )
         .catch(err => {
@@ -65,12 +66,63 @@ server.post(`/api/users`, (req, res) => {
         });
 });
 
-server.put(`/api/users/:id`, (req, res) => {
-    const userInfo = req.params.id;
-    console.log(`userInfo`, userInfo);
+
+// quiry string as parameter example below:
+    // http://foo.com?search=bar&sort=asc
+        // req.query === { search: 'bar', sort: 'asc' }
+
+// http://Localhost:5000/api/users?id=1 // just to use req.query
+
+// server.delete(`/api/users`, (req, res) => {
+//     const { id } = req.query;
+//     let user;
+
+//     db
+//     .findById(id)
+//     .then( foundUser => {
+//         user = { ...foundUser }; //...foundUser is shallow copy
+    
+//        db.remove(id)
+//         .then(response => {
+//             res.status(200).json(user);
+//          })
+//         })
+//         .catch(err => {
+//         res.status(500).json({ error: err});
+//     })
+// })
 
 
+// Delete written using a URL paramenter instead /api/users/:id
+
+server.delete(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    let user;
+
+    db
+    .findById(id)
+    .then( foundUser => {
+        user = { ...foundUser }; //...foundUser is shallow copy
+    
+       db.remove(id)
+        .then(response => {
+            res.status(204).json(user);
+         })
+        })
+        .catch(err => {
+        res.status(500).json({ error: err});
+    })
 })
+
+
+
+
+// server.put(`/api/users/:id`, (req, res) => {
+//     const userInfo = req.params.id;
+//     console.log(`userInfo`, userInfo);
+
+
+// })
 
 // server object: we have inialized it with our express server
 server.listen(port, () => console.log('Server running on port ${port}'));
