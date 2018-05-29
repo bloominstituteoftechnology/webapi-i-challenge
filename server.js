@@ -60,14 +60,31 @@ server.get('/api/users/:id', (req, res) => {
 
 
 server.put('/api/users/:id', (req, res) => {
-  db
-    .update(req.params.id, req.body)
-    .then(success => {
-      res.json({ success });
-    })
-    .catch(error => {
-      res.json(error);
-    })
+  if (!req.body.name || !req.body.bio) {
+    res.status(400);
+    res.json({ errorMessage: "Please provide name and bio for the user." });
+  }
+  else {
+    db
+      .update(req.params.id, req.body)
+      .then(success => {
+        if (success) {
+          res.status(200);
+          db.findById(req.params.id)
+            .then(user => {
+              res.json({ user });
+            });
+        }
+        else {
+          res.status(404);
+          res.json({ message: "The user with the specified ID does not exist." });
+        }
+      })
+      .catch(error => {
+        res.status(500);
+        res.json({ error: "The user information could not be retrieved." });
+      })
+  }
 });
 
 server.delete('/api/users/:id', (req, res) => {
