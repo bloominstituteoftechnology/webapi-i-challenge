@@ -44,8 +44,14 @@ server.get(`/api/users/:id`, (req, res) => {
     const id = req.params.id;
     console.log(`params`, req.params.id)
 
-    db.findById(id).then(user => {
-            res.json(user);
+    db
+        .findById(id)
+        .then(users => {
+            if (users.length === 0) {
+                res.status(404).json({ message: 'user not found' });
+            } else {
+                res.json(users[0]);
+            }
         })
         .catch(err => {
             res.status(500).json({ error: err });
@@ -62,7 +68,11 @@ server.post(`/api/users`, (req, res) => {
             res.status(201).json(response);
         } )
         .catch(err => {
-            res.status(500).json({ error: err});
+            if (err.errno === 19) {
+                res.status(400).json({ msg: 'Please provide all required fields.'})
+            } else {
+                res.status(500).json({ error: err});
+            }
         });
 });
 
@@ -114,15 +124,21 @@ server.delete(`/api/users/:id`, (req, res) => {
     })
 })
 
+server.put(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    const updateInfo = req.body;
 
-
-
-// server.put(`/api/users/:id`, (req, res) => {
-//     const userInfo = req.params.id;
-//     console.log(`userInfo`, userInfo);
-
-
-// })
+    db.update(id, updateInfo)
+        .then(count => {
+            if (count > 0) {
+                res.status(200).json({msg: 'Updated Successfully'})
+            } else {
+                res.status(404).json({msg: 'User Not Found'})
+            }
+        }).catch(err => {
+            res.status(500).json(err);
+        })
+})
 
 // server object: we have inialized it with our express server
 server.listen(port, () => console.log('Server running on port ${port}'));
