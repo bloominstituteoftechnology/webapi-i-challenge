@@ -132,6 +132,24 @@ server.put("/api/users/:id", (req, res) => {
     res
       .status(400)
       .json({ errorMessage: "Please provide name and bio for the user." });
+
+  /**
+   * ID found: update user!
+   *    
+   * ID no found: catch.
+   */
+  db
+    .findById(id)
+    .then(response => {
+      // Id not found
+      if (!response.length) { return Promise.reject("Id no found");}
+      
+    })
+    .catch(e => {
+      console.log("error", e);
+      res.status(404).json({ message: "The user with the specified ID does not exist." });
+    });
+
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
