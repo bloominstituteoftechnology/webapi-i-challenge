@@ -2,7 +2,12 @@ const express = require('express')
 const db = require('./data/db')
 const port = 5000;
 const server = express()
+const cors = require('cors')
 
+
+// Middleware
+
+server.use(cors());
 server.use(express.json())
 server.get('/', (req, res) => {
     // 1st arg: route where a resource can be interacted with
