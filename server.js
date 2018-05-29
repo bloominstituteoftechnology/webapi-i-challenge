@@ -168,8 +168,10 @@ server.put("/api/users/:id", (req, res) => {
               .then(_ => res.status(200).json(updated));
           }
         })
+        // Id something went worng updating the user
         .catch(e => {
           console.log("error", e);
+          res.status(500).json({ error: "The user information could not be modified." });
         });
     })
     .catch(e => {
