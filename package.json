@@ -6,10 +6,7 @@
   "scripts": {
     "start": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LambdaSchool/node-express-mini.git"
-  },
+  "repository": "git+https://github.com/LambdaSchool/node-express-mini.git",
   "keywords": [],
   "author": "Lambda School",
   "license": "ISC",
