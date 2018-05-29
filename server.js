@@ -14,8 +14,16 @@ server.use(express.json());
  * res: response
  */
 server.get("/", (req, res) => {
-  // res.send("Hello from express");
-  // res.json("Hello from express");
+  /**
+   * from: https://stackoverflow.com/questions/35198208/handling-cancelled-request-with-express-node-js-and-angular?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+   */
+  req.on('close', err => {
+    res.send("Request cancelled");
+  })
+
+  /**
+   * GET: users-form-db.then(send to client)
+   */
   db
     .find()
     .then(response => {
@@ -25,6 +33,7 @@ server.get("/", (req, res) => {
     })
     .catch(e => {
       console.log("error", e);
+      res.json({ error: "The users information could not be retrieved." });
     });
 });
 
