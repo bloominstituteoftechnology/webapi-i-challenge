@@ -29,8 +29,16 @@ server.get('/api/users', (req,res) => {
 })
 
 server.get("/api/users/:id", (req, res) => {
-
-    
+  const { id } = req.params; // pull id off of req.params;
+  db
+    .findById(id) // invoke proper db.method(id) passing it the id.
+    .then(user => {
+      // handle the promise like
+      res.json({ user });
+    })
+    .catch(error => {
+      res.json({ error });
+    });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
