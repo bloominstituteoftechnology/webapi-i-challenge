@@ -35,7 +35,7 @@ server.get('/api/users', (req, res) => {
   db
     .find()
     .then(users => {
-      res.json(users);
+      res.status(200).json(users);
     })
     .catch(error => {
       res.status(500).json({ error: 'The users information could not be retrieved.' });
@@ -49,7 +49,7 @@ server.get('/api/users/:id', (req, res) => {
     .findById(id)
     .then(user => {
       if (user.length > 0) {
-        res.json(user);
+        res.status(200).json(user);
       } else {
         res.status(404).json({ error: 'The user with the specified ID does not exist.' });
       }
@@ -99,7 +99,7 @@ server.delete('/api/users/:id', (req, res) => {
           .remove(id)
           .then(records => {
             if (records > 0) {
-              res.json(user[0]);
+              res.status(200).json(user[0]);
             } else {
               res.status(500).json({ error: 'The user could not be removed.' });
             }
