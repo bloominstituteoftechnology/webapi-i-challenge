@@ -35,16 +35,18 @@ server.get('/api/users/:id', (req, res) => {
 	// pull id off of req.params;
 	// invoke proper db.method(id) passing it the id.
 	// handle the promise like above
-	db.findById().then(users => {
+	const { id } = req.params
+	db.findById(req.params.id).then(users => {
 		res.json({ users });
 	})
 		.catch(error => {
 			res.json(error);
-		})
+	})
 });
 
 server.delete('/api/users/:id', (req, res) => {
-	db.remove(id).then(users => {
+	const { id } = req.params
+	db.remove(req.params.id).then(users => {
 		res.json({ users });
 	})
 		.catch(error => {
@@ -53,8 +55,10 @@ server.delete('/api/users/:id', (req, res) => {
 });
 
 server.put('/api/users/:id', (req, res) => {
-	db.update(id).then(users => {
-		res.json({ users });
+	const { id } = req.params
+	const { name } = req.body.name
+	db.update(req.params.id, req.body).then(success => {
+		res.json({ success });
 	})
 		.catch(error=> {
 			res.json(error);
