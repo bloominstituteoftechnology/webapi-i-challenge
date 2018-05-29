@@ -58,4 +58,21 @@ server.delete("/api/users/:id", (req, res) => {
 });
 
 
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, bio } = req.body
+  db
+    .update(id, { name, bio })
+    .then(user => {
+      res.json({ user });
+    })
+    .catch(message => {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+    });
+});
+
+
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
