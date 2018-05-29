@@ -19,7 +19,9 @@ server.get('/', (req, res) => {
 *************************/
 // get
 server.get('/api/users', (req, res) => {
-  db.find().then(users => res.json({ users }));
+  db.find()
+    .then(users => res.json({ users }))
+    .catch(err => res.status(500).json(err));
 })
 
 // post
@@ -31,9 +33,8 @@ server.post('/api/users', (req, res) => {
       .end();
   }
   else {
-    console.log('still going');
     db.insert({ name, bio })
-      .then(data => res.status(201).send(data))
+      .then(data => res.status(201).json(data))
       .catch(err => res.json(err));
   }
 })
@@ -45,7 +46,13 @@ server.post('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
   db.findById(id)
-    .then(data => res.json(data));
+    .then(data => {
+      if (data.length === 0) {
+        return res.status(404).json({ "message": "The user with the specified ID does not exist." });
+      }
+      return res.status(200).json(data);
+    })
+    .catch(err => res.json(err));
 });
 
 // delete
