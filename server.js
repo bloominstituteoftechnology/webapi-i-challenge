@@ -45,6 +45,7 @@ server.get('/api/users/:id', (req, res) => {
     .findById(req.params.id)
     .then(users => {
       if (users.length > 0) {
+        res.status(200);
         res.json({ users });
       }
       else {
