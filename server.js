@@ -55,20 +55,26 @@ server.delete('/api/users/:id', (req , res) => {
     const {id} = req.params;
     db.remove(id)
         .then(user => {
-            res.json(user);
+            res.json({user});
         })
         .catch(error => {
-            res.json(error);
+            res.json({error});
         });
 });
 
 server.put('/api/users/:id', (req, res) => {
     const { name, bio } = req.body;
-    db.update(id, user) { 
-        .then()
+    const {id} = req.params;
+    db.update(id, {name: 'Harrison', bio: 'Carpenter'}) 
+        .then(response =>{
+            res.json({name, bio})
+        })
+        .catch(error => {
+            res.json({error})
+        })
 
-    }
-})
+    });
+
 
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
