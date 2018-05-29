@@ -35,12 +35,12 @@ server.get('/api/users', (req, res) => {
 
             db
                 .findById(id)
-                .then(user => {
+                .then(users => {
                     res.json(users[0]);
                 })
                 .catch(error => {
                     //do something with error
-                    res.status(500).json(response);
+                    res.status(500).json(error);
                 });
         });
         //removes the user with the specified id and returns
