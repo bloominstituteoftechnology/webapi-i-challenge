@@ -103,17 +103,35 @@ server.delete("/api/users/:id", (req, res) => {
         res
           .status(404)
           .json({ message: "The user with the specified ID does not exist." });
+
       // Remove fro the Data Base and return the promise generate by 'db.remove()'
       return db.remove(id);
     })
     .then(response => {
       console.log("response", response);
       res.status(200).json({ message: "User deleted" });
+
+      /**
+       * SIMULATE: an error with db.delett(...) method.
+       */
+      // return Promise.reject("");
     })
     .catch(e => {
       console.log("error", e);
       res.status(500).json({ error: "The user could not be removed" });
     });
+});
+
+server.put("/api/users/:id", (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  const { name, bio } = req.body;
+
+  // If the 'name' or 'bio' are missing
+  (!name || !bio) &&
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
