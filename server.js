@@ -66,7 +66,11 @@ server.get('/api/users/:id/', (req, res) => {
 });
 
 server.put('/api/users/:id/', (req, res) => {
-	if (!req.body.name || !req.body.bio) {
+	if (req.body.name && req.body.bio) {
+		res.status(200);
+		res.json({ user });
+	}
+	else if (!req.body.name || !req.body.bio) {
 		res.status(400);
 		res.json({ errorMessage: "Please provide name and bio for the user." })
 	}
@@ -85,7 +89,7 @@ server.put('/api/users/:id/', (req, res) => {
 		)		
 			.catch(error=> {
 				res.status(500);
-				res.json({ error: "The user information could not be found." 			     });
+				res.json({ error: "The user information could not be found." });
 		})
 	}
 })
