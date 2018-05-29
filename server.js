@@ -21,7 +21,6 @@ server.post('/api/users', (req, res) => {
           .then(user => {
             res.json({ user });
           });
-
       })
       .catch(error => {
         res.status(500);
@@ -75,10 +74,18 @@ server.delete('/api/users/:id', (req, res) => {
   db
     .remove(req.params.id)
     .then(success => {
-      res.json({ success })
+      if (success) {
+        res.status(200);
+        res.json({ success });
+      }
+      else {
+        res.status(404);
+        res.json({ message: "The user with the specified ID does not exist." });
+      }
     })
     .catch(error => {
-      res.json(error);
+      res.status(500);
+      res.json({ error: "The user could not be removed" });
     })
 });
 
