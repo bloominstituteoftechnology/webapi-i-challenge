@@ -31,4 +31,15 @@ server.post('/api/users', (req, res) => {
   }
 });
 
+server.get('/api/users', (req, res) => {
+  db
+    .find()
+    .then(users => {
+      res.json(users);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'The users information could not be retrieved.' });
+    });
+});
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
