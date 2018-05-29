@@ -1,0 +1,56 @@
+#Back End journey
+
+npm init --y
+nodemonserver.js
+yarn add nodemon --dev 
+
+*Build a Restful API using Express and Node.js
+*Persist API Datat to a Daabase
+*secure an API
+*Test, Package and Deploy an API
+*Full Stack Project
+
+## build a restful Api using EXpress And node.js
+
+*Http(Theory)
+hyper text transfer protcal(HTTP)
+*methods
+*POST, GET, PUT, DELETE
+*CRUD=Create, Retrieve, Update and Delete.
+*status codes.
+*200(ok),201(create),400 (Bad request), 404 (NOT Found), 500 (Server error)
+*200 -299 : Success
+*300-399: redirects
+*400-499: User/Clien t error
+*500-599: server error
+*REST(THEORY)
+*REpresentational state transfer
+*resource thinking/anything in your server you have to manage
+*endpoint design /API/CREATEUSER/UPDATEUSER.** single endpooint per resource.
+
+*Node (Theroy and practice) node is a way to   run javascript outside the browser 
+*advantages
+*no content switching
+*same paradign
+single threaded
+*disadvantages
+single threaded
+Express {Theory and Practice}web application framework 
+advantages
+-minimalistic
+disadvantages
+-minimalistic
+*core parts
+-routing
+-middleware
+-sub-application
+*code!!
+Postman (Tooling)
+*why
+*how(demo)
+
+server.js
+const express = require('express');
+
+const server = express();
+server.listen(5000, () => console.log('Server running on port 5000'));
