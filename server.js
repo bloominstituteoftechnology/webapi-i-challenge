@@ -4,8 +4,10 @@ const server = express();
 /* Middleware Dependencies */
 const db = require('./data/db')
 const helmet = require('helmet');
+const cors = require('cors');
 
 /* --- Middleware --- */
+server.use(cors());
 server.use(helmet());
 server.use(express.json());
 
@@ -110,4 +112,5 @@ server.put('/api/users/:id', (req, res) => {
 })
 
 /* --- Server START!!! --- */
-server.listen(5000, () => console.log('\n=== API is running ==='));
+const port = 5000;
+server.listen(port, () => console.log(`\n=== API is running on port ${port} ===`));
