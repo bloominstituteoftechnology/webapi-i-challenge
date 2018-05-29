@@ -33,7 +33,7 @@ server.post('/api/users', (req, res) => {
   else {
     console.log('still going');
     db.insert({ name, bio })
-      .then(data => res.send(data))
+      .then(data => res.status(200).send(data))
       .catch(err => res.json(err));
   }
 })
