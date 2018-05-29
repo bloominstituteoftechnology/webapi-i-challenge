@@ -39,7 +39,8 @@ server.get('/api/users/', (req, res) => {
 		res.json({ users });
 	})
 		.catch(error => {
-			res.json(error);
+			res.status(500);
+			res.json({ error: "The user information could not be retrieved." });
 		})
 });
 
@@ -50,23 +51,44 @@ server.get('/api/users/:id/', (req, res) => {
 	// handle the promise like above
 	const { id } = req.params
 	db.findById(req.params.id).then(users => {
+		if (users.length > 0) {
 		res.json({ users });
+		}
+		else {
+			res.status(404);
+			res.json({ message: "The user with the specified ID does not exist." });
+		}
 	})
 		.catch(error => {
-			res.json(error);
+			res.status(500);
+			res.json({ error: "The user information could not be retrieved." });
 	})
 });
 
 server.put('/api/users/:id/', (req, res) => {
-	const { id } = req.params
-	const { name, bio } = req.body
-	db.update(id, { name, bio }).then(res => {
-		res.json(res);
-	})
-		.catch(error=> {
-			res.json(error);
+	if (!req.body.name || !req.body.bio) {
+		res.status(400);
+		res.json({ errorMessage: "Please provide name and bio for the user." })
+	}
+	else {
+		const { id } = req.params
+		const { name, bio } = req.body
+		db.update(id, { name, bio }).then(success => {
+			if (users.length > 0) {
+				res.json({ success });
+			}
+			else {
+				res.status(404);
+				res.json({ message: "The user with the specified ID does not exist." });
+			}
+		}
+		)		
+			.catch(error=> {
+				res.status(500);
+				res.json({ error: "The user information could not be found." 			     });
 		})
-});
+	}
+})
 
 
 server.delete('/api/users/:id/', (req, res) => {
