@@ -6,26 +6,16 @@ const db = require('./data/db');
 const port = 5000;
 const server = express();
 server.use(express.json());
-                 //homies
+        //get is requesting the information         //homies
 server.get('/', (req, res) => {
 // 1st arg: route where a resource can be interacted with
   // 2nd arg: callback to deal with sending responses, and handling incoming data.
     res.send('Hello from express');
 });
+//post is the method //post is to create
 
-server.post('/api/users', (req, res) => {
-    const { name, bio } = req.body;
-    db
-        .insert({ name, bio })
-        .then(response => {
-            res.send(response);
-        })
-        .catch(error => {
-            res.json({ error });
-        });
-    //do something with
-});
-    server.get('/api/users', (req, res) =>{
+server.get('/api/users', (req, res) => {
+        //get yhe users
         db
         .find()
                 .then(users => {
@@ -35,10 +25,12 @@ server.post('/api/users', (req, res) => {
                     res.json({ error });
                     //do something with error
             });
+        
+        // get returns the user object with a specified id
         server.get('/api/users/:id', (req, res) => {
             //grab the id fromurl parameters
             const id = req.params.id;
-            
+
             db
                 .findById(id)
                 .then(user => {
@@ -47,7 +39,25 @@ server.post('/api/users', (req, res) => {
                 .catch(err => {
                     //do something with error
                 });
-        })
+        });
+        //removes the user with the specified id and returns
+    server.post('/api/users', (req, res) => {
+        const user = req.body;
+        db
+            .insert(user)
+            .then(response => {
+                res.status(201).json(response);
+            })
+            .catch(error => {
+                // something with error
+                res
+                    .status(500) 
+                    .json({
+                    error: 'There was an error while saving the wuser to the database',
+                        
+                });
+            });
+    });
         // function findById(id) {
         //     return db('users').where({ id: Number(id) });
        // }
