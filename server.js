@@ -39,7 +39,7 @@ server.get(`/api/users`, (req, res) => {
     });
 });
 
-server.get(`/api.users/:id`, (req, res) => {
+server.get(`/api/users/:id`, (req, res) => {
     //grab the id from URL parameters
     const id = req.params.id;
     console.log(`params`, req.params.id)
@@ -52,6 +52,25 @@ server.get(`/api.users/:id`, (req, res) => {
         })
 })
 
+server.post(`/api/users`, (req, res) => {
+    const userInfo = req.body;
+    console.log(`userInfo`, userInfo);
+
+    db
+        .insert(userInfo).then(response => {
+            res.status(201).json(response);
+        } )
+        .catch(err => {
+            res.status(500).json({ error: err});
+        });
+});
+
+server.put(`/api/users/:id`, (req, res) => {
+    const userInfo = req.params.id;
+    console.log(`userInfo`, userInfo);
+
+
+})
 
 // server object: we have inialized it with our express server
 server.listen(port, () => console.log('Server running on port ${port}'));
