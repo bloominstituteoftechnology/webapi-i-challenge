@@ -13,14 +13,18 @@ server.get('/', (req, res) => {
 
 server.post('/api/users/', (req, res) => {
     const { name, bio } = req.body;
-    db
-    .insert({ name, bio })
-    .then(response => {
-        res.send(response);
-    })
-    .catch(error => {
-        res.json(error)
-    });
+    if( !name || !bio ){
+        res.status(400).json(`{ errorMessage: "Please provide name and bio for the user." }`).end();
+    }else {
+        db
+        .insert({ name, bio })
+        .then(response => {
+            res.status(201).json(response);
+        })
+        .catch(error => {
+            res.json(error)
+        });
+    };
 });
 
 server.get('/api/users', (req, res) => {
@@ -30,7 +34,7 @@ server.get('/api/users', (req, res) => {
         res.json({ users });
     })
     .catch(error =>{
-        res.json(error)
+     res.status(500).json(error)
     })
 });
 
@@ -39,7 +43,10 @@ server.get('/api/users/:id', (req, res) =>{
     db
     .findById(id)
     .then(users => {
-        res.json( users );
+        if(users.length === 0){
+            return res.status(404).json({ message: "The user with the specified ID does not exist." })
+        }
+        res.status(200).json( users );
     })
     .catch(error => {
         res.json(error);
