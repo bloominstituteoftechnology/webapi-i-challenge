@@ -49,4 +49,35 @@ server.get('/api/users/:id', (req, res) => {
     })
 });
 
+server.delete('/api/users/:id', (req, res) => {
+    // pull id off of req.params;
+    const { id } = req.params
+    // invoke proper db.method(id) passing it the id.
+    // handle the promise like above
+    db
+      .remove(id)
+      .then( users => {
+          res.json({ users });
+      })
+      .catch(error => {
+          res.json({ error });
+      })
+  });
+
+  server.put('/api/users/:id', (req, res) => {
+    // pull id off of req.params;
+    const { id } = req.params
+    const { name, bio } = req.body;
+    db
+      .update(id, { name, bio })
+      .then(response => {
+        res.json(response);
+      })
+      .catch(error => {
+        res.json(error);
+      });
+  });
+  
+
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
