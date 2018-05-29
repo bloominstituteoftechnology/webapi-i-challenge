@@ -5,6 +5,8 @@ const db = require('./data/db');
 
 const port = 5000;
 const server = express();
+
+
 server.use(express.json());
         //get is requesting the information         //homies
 server.get('/', (req, res) => {
@@ -34,10 +36,11 @@ server.get('/api/users', (req, res) => {
             db
                 .findById(id)
                 .then(user => {
-                    res.json(user);
+                    res.json(users[0]);
                 })
-                .catch(err => {
+                .catch(error => {
                     //do something with error
+                    res.status(500).json(response);
                 });
         });
         //removes the user with the specified id and returns
@@ -49,33 +52,29 @@ server.get('/api/users', (req, res) => {
                 res.status(201).json(response);
             })
             .catch(error => {
-                // something with error
+                // something with erro r
                 res
                     .status(500) 
                     .json({
-                    error: 'There was an error while saving the wuser to the database',
+                    error: 'There wa s an error while saving the wuser to the database',
                         
                 });
             });
     });
-        // function findById(id) {
-        //     return db('users').where({ id: Number(id) });
-       // }
-        // function insert(user) {
-        //     return db('users')
-        //         .insert(user)
-        //    function update(id, user) {
-        //     return db('users')
-        //         .where('id', Number(id))
-        //         .update(user);
-        // }     .then(ids => ({ id: ids[0] }));
-        // }
-        // 
-        // function remove(id) {
-        //     return db('users')
-        //         .where('id', Number(id))
-        //         .del();
-        // }
+    
+    server.delete('/api/users/:id', (req, res) => {
+        //grab the id fromurl parameters
+        const{id}  = req.params;
+
+        db
+            .remove(id)
+            .then(users => {
+                res.json(user[0]);
+            })
+            .catch(err => {
+                //do something with error
+            });
+    });
 });
 // pull id off of req.params;
   // invoke proper db.method(id) passing it the id.
