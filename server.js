@@ -27,11 +27,11 @@ server.get("/users", (req, res) => {
   db
     .find()
     .then(response => {
-      console.log("response", response);
-      console.log(typeof response);
-
-      response && Array.isArray(response) ? res.json(response): res.status(500).json({ error: "The users information could not be retrieved." })
-
+      response && Array.isArray(response)
+        ? res.json(response)
+        : res
+            .status(500)
+            .json({ error: "The users information could not be retrieved." });
     })
     .catch(e => {
       console.log("error", e);
@@ -40,7 +40,17 @@ server.get("/users", (req, res) => {
 });
 
 server.get("/users/:id", (req, res) => {
-
+  const { id } = req.params;
+  db
+    .findById(id)
+    .then(response => {
+      console.log("response.data", response);
+      response.length === 0 ? res.status(404).json({ message: "The user with the specified ID does not exist." }) : res.json(response);;
+      
+    })
+    .catch(e => {
+      console.log("error", e);
+    });
 });
 
 server.post("/api/users", (req, res) => {
