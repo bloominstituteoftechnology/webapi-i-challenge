@@ -54,10 +54,10 @@ server.get('/api/users/:id', (req, res) => {
 server.delete('/api/users/:id', (req, res) => {
     db.remove(req.params.id)
         .then(response => {
-            if(response.length === 0){
+            if(response === 0){
                 return res.status(404).json({ message: "The user with the specified ID does not exist." })
             } else {
-                res.status(200).json(response[0])
+                return res.status(200).json(response[0])
             }
         })
         .catch(err => {
@@ -73,11 +73,15 @@ server.put('/api/users/:id', (req, res) => {
     } 
     db.update(req.params.id)
         .then(response => {
+            console.log(response);
             if(response.length === 0){
                 return res.status(404).json({ message: "The user with the specified ID does not exist." })
             } else{
                 return res.status(200).json(req.body);
             }
+        })
+        .catch(err => {
+            res.status(500).json({ error: "The user could not be removed"})
         })
 })
 
