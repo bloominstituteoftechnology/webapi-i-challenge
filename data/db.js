@@ -12,7 +12,7 @@ module.exports = {
 
 function find() {
   return db('users');
-}
+} 
 
 function findById(id) {
   return db('users').where({ id: Number(id) });
