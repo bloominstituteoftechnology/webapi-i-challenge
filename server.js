@@ -34,14 +34,41 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
      db
      .findById(id)
      .then(response => {
          res.json({response});
-
      })
      .catch(error => {
          res.json({error});
      });
 });
+
+server.put('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    const {name, bio } = req.body;
+     db
+     .update(id, {name, bio})
+     .then(response => {
+         res.json({response});
+     })
+     .catch(error => {
+         res.json({error});
+     });
+});
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    db
+    .remove(id)
+    .then( response => {
+        res.json({response});
+    })
+    .catch( error => {
+        res.json({error});
+    });
+});
+
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
