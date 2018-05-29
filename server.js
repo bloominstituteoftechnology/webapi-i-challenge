@@ -19,8 +19,8 @@ server.get('/', (req, res) => {
 *************************/
 // get
 server.get('/api/users', (req, res) => {
-  db.find()
-    .then(users => res.json({ users }))
+  return db.find()
+    .then(users => res.status(200).json({ users }))
     .catch(err => res.status(500).json(err));
 })
 
@@ -28,16 +28,13 @@ server.get('/api/users', (req, res) => {
 server.post('/api/users', (req, res) => {
   const { name, bio } = req.body;
   if (!name || !bio) {
-    res.status(400)
-      .json({ "errorMessage": "Please provide name and bio for the user." })
-      .end();
+    return res.status(400)
+      .json({ "errorMessage": "Please provide name and bio for the user." });
   }
-  else {
-    db.insert({ name, bio })
+    return db.insert({ name, bio })
       .then(data => res.status(201).json(data))
       .catch(err => res.json(err));
-  }
-})
+});
 
 /*************************
 ** route `/api/users/:id **
@@ -45,7 +42,7 @@ server.post('/api/users', (req, res) => {
 // get
 server.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
-  db.findById(id)
+  return db.findById(id)
     .then(data => {
       if (data.length === 0) {
         return res.status(404).json({ "message": "The user with the specified ID does not exist." });
@@ -58,7 +55,7 @@ server.get('/api/users/:id', (req, res) => {
 // delete
 server.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
-  db.remove(id)
+  return db.remove(id)
     .then(data => {
       if (data.length === 0) {
         return res.status(404).json({ "message": "The user with the specified ID does not exist." });
@@ -73,7 +70,7 @@ server.put('/api/users/:id', (req, res) => {
   const { name, bio } = req.body;
   const id            = req.params.id;
   const user          = { name, bio };
-  db.update(id, user)
+  return db.update(id, user)
     .then(data => {
       if (!data) {
         return res.status(404).json({ "message": "The user with the specified ID does not exist." });
@@ -81,7 +78,9 @@ server.put('/api/users/:id', (req, res) => {
       if (req.body.name === undefined || req.body.bio === undefined) {
         return res.status(400).json({ "errorMessage": "Please provide name and bio for the user." });
       }
-      return res.status(200).json(data);
+      return db.findById(id)
+        .then(data => res.status(200).json(data))
+        .catch(err => res.status(500).json(err));
     })
     .catch(err => res.status(500).json({ "error": "Error" }));
 });
