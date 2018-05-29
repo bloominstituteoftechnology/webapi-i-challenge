@@ -88,4 +88,32 @@ server.put('/api/users/:id', (req, res) => {
   }
 });
 
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+
+  db
+    .findById(id)
+    .then(user => {
+      if (user.length > 0) {
+        db
+          .remove(id)
+          .then(records => {
+            if (records > 0) {
+              res.json(user[0]);
+            } else {
+              res.status(500).json({ error: 'The user could not be removed.' });
+            }
+          })
+          .catch(error => {
+            res.status(500).json({ error: 'The user could not be removed.' })
+          });
+      } else {
+        res.status(404).json({ error: 'The user with the specified ID does not exist.' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'The user could not be removed.' })
+    });
+});
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
