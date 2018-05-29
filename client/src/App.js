@@ -19,6 +19,10 @@ class App extends Component {
   }
   
   render() {
+    if (this.state.users.length === 0) {
+      return <img src={ logo } alt='React Logo' className='App-logo' />;
+    }
+
     return (
       <div className="App">
         <Users users={ this.state.users }/>
