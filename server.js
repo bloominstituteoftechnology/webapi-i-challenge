@@ -51,18 +51,7 @@ server.post('/api/users', (req, res) => {
         res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
     }
 });
-    // server.post('/api/users', (req, res) => {
-    //     const { name, bio } = req.body;
-    //     db
-    //     .insert({ name, bio })
-    //     .then(response => {
-    //         res.send(response);
-    //     })
-    //     .catch(error => {
-    //         res.json(error);
-    //     })
-    // });
-
+    
 server.delete('/api/users/:id', (req, res) => {
     db.remove(req.params.id)
     .then(response => {
@@ -93,7 +82,7 @@ server.put('/api/users/:id', (req, res) => {
             res.status(500).json({ error: "The user information could not be modified." }); 
         }) 
     } else {
-        res.status(400).json({ error: "The user information could not be modified." })
+        res.status(400).json({ error: "The user information could not be modified." });
     }
 })
 
