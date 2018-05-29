@@ -13,7 +13,7 @@ server.use(express.json());
  * req: HTP request
  * res: response
  */
-server.get("/users", (req, res) => {
+server.get("/api/users", (req, res) => {
   /**
    * from: https://stackoverflow.com/questions/35198208/handling-cancelled-request-with-express-node-js-and-angular?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
    */
@@ -39,7 +39,7 @@ server.get("/users", (req, res) => {
     });
 });
 
-server.get("/users/:id", (req, res) => {
+server.get("/api/users/:id", (req, res) => {
   const { id } = req.params;
   db
     .findById(id)
@@ -59,7 +59,7 @@ server.get("/users/:id", (req, res) => {
     });
 });
 
-server.post("/users", (req, res) => {
+server.post("/api/users", (req, res) => {
   const { name, bio } = req.body;
   console.log(name, bio);
 
