@@ -10,7 +10,8 @@ class API {
     this.url = url
     this.endpoints = {}
     }
-  /**
+
+    /**
    * Create and store a single entity's endpoints
    * @param {A entity Object} entity
    */
@@ -21,7 +22,8 @@ class API {
     createEntities(arrayOfEntity) {
     arrayOfEntity.forEach(this.createEntity.bind(this))
     }
-  /**
+
+    /**
    * Create the basic endpoints handlers for CRUD operations
    * @param {A entity Object} entity
    */
