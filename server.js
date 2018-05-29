@@ -50,6 +50,7 @@ server.get("/users/:id", (req, res) => {
     })
     .catch(e => {
       console.log("error", e);
+      res.status(500).json({ error: "The user information could not be retrieved." });
     });
 });
 
