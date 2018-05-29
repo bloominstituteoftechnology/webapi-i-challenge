@@ -63,7 +63,10 @@ server.post("/api/users", (req, res) => {
   const { name, bio } = req.body;
   console.log(name, bio);
 
-    !name || !bio && res.status(404).json({ errorMessage: "Please provide name and bio for the user." });
+  (!name || !bio) &&
+    res
+      .status(404)
+      .json({ errorMessage: "Please provide name and bio for the user." });
 
   db
     .insert({ name, bio })
@@ -73,9 +76,7 @@ server.post("/api/users", (req, res) => {
     })
     .then(id => {
       // Get new user => return ths Promise that generates "db.findById".
-      return db
-        .findById(id)
-        
+      return db.findById(id);
     })
     .then(newUser => {
       console.log("response", newUser);
@@ -83,8 +84,30 @@ server.post("/api/users", (req, res) => {
     })
     .catch(e => {
       console.log("error", e);
-      res.status(500).json({ error: "There was an error while saving the user to the database" })
+      res.status(500).json({
+        error: "There was an error while saving the user to the database"
+      });
     });
+});
+
+server.delete("/api/users/:id", (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  db.findById(id).then(response => {
+    console.log("response", response);
+    !response.length &&
+      res
+        .status(404)
+        .json({ "message": "The user with the specified ID does not exist." });
+    // Remove fro the Data Base and return the promise generate by 'db.remove()'
+    return db.remove(id);
+  })
+  .then(response => {
+    console.log("response", response);
+    res.status(200).json({"message": "User deleted"});
+  }).catch(e => {
+    console.log("error", e);
+  });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
