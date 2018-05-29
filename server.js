@@ -83,6 +83,7 @@ server.post("/users", (req, res) => {
     })
     .catch(e => {
       console.log("error", e);
+      res.status(500).json({ error: "There was an error while saving the user to the database" })
     });
 });
 
