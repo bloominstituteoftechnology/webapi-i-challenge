@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
 import logo from './logo.svg';
 import './App.css';
 
+import Users from './components/Users/Users';
+
 class App extends Component {
+  state = {
+    users: []
+  };
+
+  componentDidMount() {
+    axios.get('http://localhost:5000/api/users')
+      .then(({ data }) => {
+        this.setState({ users: [ ...data.users ] });
+      });
+  }
+  
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Users users={ this.state.users }/>
       </div>
     );
   }
