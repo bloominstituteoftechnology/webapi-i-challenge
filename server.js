@@ -44,27 +44,27 @@ server.get('/api/users/:id', (req, res) => {
 	})
 });
 
-server.delete('/api/users/:id', (req, res) => {
-	const { id } = req.params
-	db.remove(req.params.id).then(users => {
-		res.json({ users });
-	})
-		.catch(error => {
-			res.json(error);
-		})
-});
-
 server.put('/api/users/:id', (req, res) => {
 	const { id } = req.params
-	const { name } = req.body.name
-	db.update(req.params.id, req.body).then(success => {
-		res.json({ success });
+	const { name, bio } = req.body
+	db.update(id, { name, bio }).then(res => {
+		res.json(res);
 	})
 		.catch(error=> {
 			res.json(error);
 		})
 });
 
+
+server.delete('/api/users/:id', (req, res) => {
+	const { id } = req.params
+	db.remove(id).then(users => {
+		res.json({ users });
+	})
+		.catch(error => {
+			res.json(error);
+		})
+});
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
 
