@@ -45,17 +45,42 @@ server.get("/users/:id", (req, res) => {
     .findById(id)
     .then(response => {
       console.log("response.data", response);
-      response.length === 0 ? res.status(404).json({ message: "The user with the specified ID does not exist." }) : res.json(response);;
-      
+      response.length === 0
+        ? res
+            .status(404)
+            .json({ message: "The user with the specified ID does not exist." })
+        : res.json(response);
     })
     .catch(e => {
       console.log("error", e);
-      res.status(500).json({ error: "The user information could not be retrieved." });
+      res
+        .status(500)
+        .json({ error: "The user information could not be retrieved." });
     });
 });
 
-server.post("/api/users", (req, res) => {
+server.post("/users", (req, res) => {
   const { name, bio } = req.body;
+  console.log(name, bio);
+  db
+    .insert({ name, bio })
+    .then(response => {
+      // retrieve new id
+      return response.id;
+    })
+    .then(id => {
+      // Get new user => return ths Promise that generates "db.findById".
+      return db
+        .findById(id)
+        
+    })
+    .then(newUser => {
+      console.log("response", newUser);
+      res.status(201).json(newUser);
+    })
+    .catch(e => {
+      console.log("error", e);
+    });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
