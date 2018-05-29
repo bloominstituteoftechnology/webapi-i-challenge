@@ -52,7 +52,7 @@ server.get('/api/users/:id', (req, res) => {
       }
       return res.status(200).json(data);
     })
-    .catch(err => res.json(err));
+    .catch(err => res.status(500).json({ "error": "The user information could not be retrieved." }));
 });
 
 // delete
