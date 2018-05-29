@@ -31,7 +31,7 @@ server.get('/api/users/', (req, res) => {
 });
 
 
-server.get('/api/users/:id', (req, res) => {
+server.get('/api/users/:id/', (req, res) => {
 	// pull id off of req.params;
 	// invoke proper db.method(id) passing it the id.
 	// handle the promise like above
@@ -44,7 +44,7 @@ server.get('/api/users/:id', (req, res) => {
 	})
 });
 
-server.put('/api/users/:id', (req, res) => {
+server.put('/api/users/:id/', (req, res) => {
 	const { id } = req.params
 	const { name, bio } = req.body
 	db.update(id, { name, bio }).then(res => {
@@ -56,7 +56,7 @@ server.put('/api/users/:id', (req, res) => {
 });
 
 
-server.delete('/api/users/:id', (req, res) => {
+server.delete('/api/users/:id/', (req, res) => {
 	const { id } = req.params
 	db.remove(id).then(users => {
 		res.json({ users });
