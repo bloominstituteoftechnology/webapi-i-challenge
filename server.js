@@ -39,7 +39,49 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
+    
+    const { id } = req.params;
 
+    db
+        .findById(id)
+        .then(response => {
+            if (!response) {
+                res.status(404);
+                res.json('The user with the specified ID does not exist.');
+            }
+            else {
+                res.json(response);
+            }
+        })
+        .catch(error => {
+            res.status(500);
+            res.json({ error: 'The user information could not be retrieved.' });
+        })
+})
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    db
+        .remove(id)
+        .then(response => {
+            res.json(response);
+        })
+        .catch(error => {
+            res.json(error);
+        });
+});
+
+server.put('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    const user = req.body;
+    db
+        .update(id, user)
+        .then(response => {
+            res.json(response);
+        })
+        .catch(error => {
+            res.json(error);
+        });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
