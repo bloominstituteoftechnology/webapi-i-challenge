@@ -62,6 +62,9 @@ server.get("/users/:id", (req, res) => {
 server.post("/users", (req, res) => {
   const { name, bio } = req.body;
   console.log(name, bio);
+
+    !name || !bio && res.status(404).json({ errorMessage: "Please provide name and bio for the user." });
+
   db
     .insert({ name, bio })
     .then(response => {
