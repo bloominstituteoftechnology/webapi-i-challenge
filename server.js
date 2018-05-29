@@ -71,13 +71,13 @@ server.put('/api/users/:id', (req, res) => {
         res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
         return;
     } 
-    db.update(req.params.id)
+    db.update(req.params.id, { name, bio })
         .then(response => {
             console.log(response);
             if(response.length === 0){
-                return res.status(404).json({ message: "The user with the specified ID does not exist." })
+                return res.status(404).json({message: "The user with the specified ID does not exist."});
             } else{
-                return res.status(200).json(req.body);
+                res.status(200).json({ response })
             }
         })
         .catch(err => {
