@@ -34,10 +34,43 @@ server.get('/api/users', (req, res) => {
         });
 });
 
+
+server.delete('/api/users', (req, res) => {
+    const { id } = req.query;
+    let user;
+
+    db
+        .findById(id)
+        .then(foundUser => {
+            user = { ...foundUser };
+        
+            db.remove(id).then(response => {
+                res.status(200).json(user);
+            });
+        })
+        .catch(err => {
+            res.status(500).json({ error: err });
+        });
+});
+
 server.get('/api/users/:id', (req, res) => {
     // pull id off of req.params;
     // invoke proper db.method(id) passing it the id.
     // handle the promise like above
+    const id = req.params.id;
+
+    db
+        .findById(id)
+        .then(users => {
+            if (users.length === 0) {
+                res.status(404).json({ mesage: 'user not found' });
+            } else {
+                res.json(users[0]);
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: err });
+        });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
