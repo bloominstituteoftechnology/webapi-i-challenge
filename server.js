@@ -28,5 +28,10 @@ server.get('/api/users/:id', (req, res) => {
   db.findById(id)
     .then(data => res.json(data));
 });
+server.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  db.remove(id)
+    .then(data => res.json(data));
+})
 
 server.listen(port, () => console.log(`Server running on port ${ port }`));
