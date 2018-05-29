@@ -3,6 +3,7 @@ import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 import UsersList from './components/UsersList';
+import AddUser from './components/AddUser';
 
 class App extends Component {
   constructor() {
@@ -34,6 +35,7 @@ class App extends Component {
         <p className="App-intro">
 
         </p>
+        <AddUser />
         <UsersList users={this.state.users}/>
       </div>
     );

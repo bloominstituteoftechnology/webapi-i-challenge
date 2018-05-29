@@ -15,6 +15,7 @@ server.post(`/api/users`, (req, res) => {
     db
     .insert({ name, bio })
     .then(response => {
+        console.log(response);
         res.send(response);
     })
     .catch(error => {
@@ -38,7 +39,7 @@ server.get(`/api/users/:id`, (req, res) => {
     db
     .findById(id)
     .then(user => {
-        res.json(user)
+        res.json(user[0])
     })
     .catch(error => {
         res.json({ error });
@@ -46,7 +47,7 @@ server.get(`/api/users/:id`, (req, res) => {
 });
 
 server.delete(`/api/users/:id`, (req, res) => {
-    const { id } = req.body.params;
+    const { id } = req.params;
     db
     .remove(id)
     .then(response => {
@@ -58,7 +59,7 @@ server.delete(`/api/users/:id`, (req, res) => {
 });
 
 server.put(`/api/users/:id`, (req, res) => {
-    const { id } = req.body.params;
+    const { id } = req.params;
     const { name, bio } = req.body;
     db
     .update(id, { name, bio })
@@ -69,5 +70,7 @@ server.put(`/api/users/:id`, (req, res) => {
         res.json({ error });
     })
 });
+
+
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
