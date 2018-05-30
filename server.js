@@ -28,8 +28,7 @@ server.post('/api/users', (req, res) => {
             res.status(201).json(response);
         })
         .catch(error => {
-            console.log(error);
-            res.json(error);
+            sendUserError(400, error, res);            
         });
 });
 
@@ -72,6 +71,39 @@ server.delete('/api/users/:id', (req, res) => {
         })
         .catch(error => {
             sendUserError(500, 'The user could not be removed', res);
+            return;
+        });
+});
+
+server.put(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+    if (!name || !bio) {
+      sendUserError(400, 'Must provide name and bio', res);
+      return;
+    }
+    db
+        .update(id, { name, bio })
+        .then(response => {
+            if(response === 0) {
+                sendUserError(404, `The user does not exist`, res);
+                return;
+            }
+            db
+                .findById(id)
+                .then(user => {
+                    if(user.length === 0) {
+                        sendUserError(404, `The user does not exist`, res);
+                        return;
+                    }
+                    res.json(user);
+                })
+                .catch(error => {
+                    sendUserError(500, 'Error while looking for user', res);
+                });
+        })
+        .catch(error => {
+            sendUserError(500, `Error with database`, res);
             return;
         });
 });
