@@ -5,7 +5,7 @@ const cors = require('cors')
 const port = 5000;
 const server = express();
 server.use(express.json());
-server.use(cors({origin: 'http://localhost:5000'}));
+server.use(cors({origin: 'http://localhost:5000/api/users'}));
 
 server.get('/', (req, res) => {
     //1st arg: route where a resource can be interactive with
