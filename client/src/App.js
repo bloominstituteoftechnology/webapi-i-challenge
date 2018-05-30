@@ -25,6 +25,20 @@ class App extends Component {
         console.log(error);
       });
   }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+        .post(`http://localhost:5000/api/users`, this.state)
+        .then(response => {
+            console.log("POST", response.data);
+            this.setState({ name: '', bio: '' })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
+
   render() {
     return (
       <div className="App">
@@ -35,7 +49,7 @@ class App extends Component {
         <p className="App-intro">
 
         </p>
-        <AddUser />
+        <AddUser handleSubmit={this.handleSubmit}/>
         <UsersList users={this.state.users}/>
       </div>
     );
