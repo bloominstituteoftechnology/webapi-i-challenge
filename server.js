@@ -40,4 +40,16 @@ server.get(`/api/users/:id`, (req, res) => {
         });
 });
 
+server.delete(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    db
+        .remove(id)
+        .then( response => {
+            res.send(response);
+        })
+        .catch( err => {
+            res.json(err)
+        });
+});
+
 server.listen(port, () => console.log(`Server running on port ${port}`));
