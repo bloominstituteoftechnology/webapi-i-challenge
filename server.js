@@ -4,7 +4,7 @@ const db = require('./data/db')
 const port = 5555;
 const server = express();
 server.use(express.json());
-server.use(cors());
+server.use(cors({ origin: 'http://localhost:3000' }));
 
 server.get('/', (req, res) => {
     // 1st argument: route where a resource can be interacted with 
@@ -22,9 +22,16 @@ server.post('/api/users/', (req, res) => {
     }
 
     db.insert({ name, bio })
-        .then(response => {
+        .then(() => {
             res.status(201);
-            res.json(response);
+            db.find()
+                .then(response => {
+                    res.json(response)
+                })
+                .catch(error => {
+                    res.status(500);
+                    res.json({ error: "The users information could not be retrieved." })
+                })
         })
         .catch(error => {
             res.status(500);
@@ -52,7 +59,7 @@ server.get('/api/users/:id', (req, res) => {
 
     db.findById(id)
         .then(response => {
-            if (!response) {
+            if (response.length === 0) {
                 res.status(404);
                 res.json({ message: "The user with the specified ID does not exist." });
             }
@@ -72,12 +79,19 @@ server.delete('/api/users/:id', (req, res) => {
 
     db.remove(id)
         .then(response => {
-            if (!response) {
+            if (response === 0) {
                 res.status(404);
                 res.json({ message: "The user with the specified ID does not exist." });
             }
             else {
-                res.json(response);
+                db.find()
+                    .then(response => {
+                        res.json(response)
+                    })
+                    .catch(error => {
+                        res.status(500);
+                        res.json({ error: "The users information could not be retrieved." });
+                    })
             }
         })
         .catch(error => {
@@ -99,15 +113,28 @@ server.put('/api/users/:id', (req, res) => {
         return;
     }
 
-    db.update(id)
+    db.update(id, { name, bio })
         .then(response => {
-            if (!response) {
+            if (response === 0) {
                 res.status(404);
                 res.json({ message: "The user with the specified ID does not exist." })
             }
             else {
                 res.status(200);
-                res.json(response);
+                db.findById(id)
+                    .then(response => {
+                        if (response.length === 0) {
+                            res.status(404);
+                            res.json({ message: "The user with the specified ID does not exist." });
+                        }
+                        else {
+                            res.json(response);
+                        }
+                    })
+                    .catch(error => {
+                        res.status(500);
+                        res.json({ error: "The user information could not be retrieved." });
+                    })
             }
         })
         .catch(error => {

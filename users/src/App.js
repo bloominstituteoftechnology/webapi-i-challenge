@@ -24,7 +24,7 @@ class App extends Component {
       .then(response => this.setState({ users: response.data }))
       .catch(err => console.log(err))
 
-    window.location.reload(); 
+    window.location.reload();
   }
 
   handleOnChange = (event) => {
@@ -33,10 +33,8 @@ class App extends Component {
 
   handleOnSubmit = () => {
     axios.post('http://localhost:5555/api/users', { name: this.state.name, bio: this.state.bio })
-      .then(response => console.log('Post Response Data', response.data))
-      .catch(err => console.log(err))
-
-    this.fetchUsers()
+      .then(response => this.setState({ users: response.data }))
+        .catch(err => console.log(err))
   }
 
   deleteUser = (id) => {
