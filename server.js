@@ -1,14 +1,28 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./data/db');
 
 const server = express();
 const port = 5000;
 server.use(express.json());
+server.use(cors({ origin: 'http://localhost:3000' }));
 
 const sendUserError = (status, message, res) => {
     res.status(status).json({ errorMessage: message});
     return;
-}
+};
+
+const customLogger = (req, res, next) => {
+    const ua = req.headers['user-agnet'];
+    const { path } = req;
+    const timeStamp = Date.now();
+    const log = {path, ua, timeStamp};
+    const stringLog = JSON.stringify(log);
+    console.log(stringLog);
+    next();
+};
+
+server.use(customLogger);
 
 server.get(`/api/users`, (req, res) => {
     db
