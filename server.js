@@ -13,13 +13,19 @@ server.get('/', (req, res) => {
 
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
+    if (!name || !bio) {
+        res.status(400).json({
+            error: "Please provide name and bio for the user."
+        });
+        return;
+    };
     db.insert({ name, bio })
         .then(response => {
-            res.send(response);
+            res.status(201).send(response);
         })
-        .catch(error => {
-            res.json({error: "Please provide name and bio for the user."});
-        });
+    .catch(error => {
+        res.json({ error: "Please provide name and bio for the user." });
+    });
 });
 
 server.get('/api/users', (req, res) => {
@@ -36,14 +42,19 @@ server.get('/api/users/:id', (req, res) => {
     const { id } = req.params; // pull id off of req.params;
     db.findById(id) // invoke proper db.method(id) passing it the id.
         .then(user => { // handle the promise like
-            res.json({ user });
+            if (user === 0) {
+                res.status(404).json({
+                    error: "The user with the specified ID does not exist."
+                })
+            } else {
+                res.json({ user });
+            }
         })
         .catch(error => {
             res.json({ error: "The user with the specified ID does not exist." });
         });
 });
 
-// If the user with the specified id is not found:
 server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params;
     db.remove(id)
@@ -69,7 +80,8 @@ server.put("/api/users/:id", (req, res) => {
     if ( !name || !bio ) {
         res.status(400).json({
             error: "Please provide name and bio for the user."
-        })
+        });
+        return;
     }
     db.update(id, { name, bio })
         .then(user => {
@@ -77,6 +89,7 @@ server.put("/api/users/:id", (req, res) => {
                 res.status(404).json({
                     error: "The user with the specified ID does not exist."
                 })
+                return;
             } else {
                 res.json({ user });
             }
