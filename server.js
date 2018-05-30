@@ -1,3 +1,4 @@
+//cb functions such as request handlers are also considered middleware and you can use as many middleware as you like
 const express = require ('express');
 const express = require('cors');
 const db = require('./data/db');
@@ -5,18 +6,31 @@ const db = require('./data/db');
 const port = 5555;
 const server = express();
 server.use(express.json());
-server.use(cors());
+server.use(cors({origin: 'http://localhost:3000'})); //enabling cors as middleware
 
 const sendUserError = (status, message, res) => {
     res.status(status).json({ errorMessage: message });
     return;
 }; //helper function to make code cleaner
 
-server.get('/', (req, res) => {
+const customLogger = (req, res, next) => {
+    // console.log(req.headers['user-agent']);
+    const ua = eq.headers['user-agent'];
+    const {path} = req;
+    const timeStamp = Date.now();
+    const log = {ua, path, timeStamp};
+    const stringLog = JSON.stringify(log);
+    console.log(stringLog);
+    next(); //very important to move onto next routeHandler/requestHandler or next middleware since you can have as many as you like
+};
+
+// server.use(customerLogger); // use this line of code if you want to use customLogger (globally) in each request below instead of adding customLogger to each one
+
+server.get('/', customLogger, (req, res) => {
     // 1st arg: route where a resource can be interacted with 
     // 2nd arg: callback to deal with sending responses, and handling incoming
     res.send('Hello from express'); 
-})
+});
 
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
@@ -42,7 +56,7 @@ server.post('/api/users', (req, res) => {
         });
 });
 
-server.get('/api/users', (req, res) => {
+server.get('/api/users', customLogger, (req, res) => {
     db
         .find()
         .then(users => {
