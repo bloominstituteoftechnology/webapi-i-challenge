@@ -95,14 +95,7 @@ server.put('/api/users/:id', (req, res) => {
         return;
     }
     db
-        .update({
-            id,
-            name, 
-            bio
-        })
-        .then(response => {
-            res.status(200).json(response);
-        })
+        .update( id, {name, bio} )
         .then(response => {
             if (response === 0) {
                 sendUserError(404, 'The user with that ID does not exist.', res);
