@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const chalk = require('chalk');
 const db = require('./data/db');
 
 const server = express();
@@ -9,8 +10,20 @@ const corsOptions = {
   methods: ['POST', 'GET', 'PUT', 'DELETE']
 };
 
+const customLogger = (req, res, next) => {
+  const timestamp = new Date(Date.now());
+  console.log(`\n${chalk.green(`@${timestamp.toISOString(
+  )}:`)} Request made from ${req.headers.origin || req.headers['user-agent']} to ${req.headers.host}\n
+    ${chalk.bold('Method:')}  ${req.method}
+    ${chalk.bold('Path:')}    ${req['_parsedUrl'].path}
+  `);
+  console.groupEnd();
+  next();
+};
+
 server.use(express.json());
 server.use(cors(corsOptions));
+server.use(customLogger);
 
 server.post('/api/users', (req, res) => {
   const { name, bio } = req.body;
