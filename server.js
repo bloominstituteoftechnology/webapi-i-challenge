@@ -13,13 +13,17 @@ server.get('/', (req, res) => {
 
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
+    if(!name || !bio) {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+        return;
+    }
     db
         .insert({ name, bio })
         .then(response => {
-            res.json(response);
+            res.status(201).json(response);
         })
         .catch(error => {
-            res.json(error);
+            res.status(500).json({ error: "There was an error while saving the user to the database" });
         });
 });
 
@@ -30,7 +34,7 @@ server.get('/api/users', (req, res) => {
             res.json({ users });
         })
         .catch(error => {
-            res.json(error);
+            res.status(500).json({ error: "The users information could not be retrieved." });
         });
 })
 
