@@ -1,10 +1,10 @@
 const express = require('express');
 const db = require('./data/db');
-
+const cors = require('cors');
 const port = 5555;
 const server = express();
 server.use(express.json());
-
+server.use(cors({ origin: 'http://localhost:3000' }));
 server.get('/', (req, res) =>  {
 res.send('hello from express');
 })
@@ -28,6 +28,7 @@ else {
         res.json({ error: "There was an error while saving the user to the database" });
     })
     }});
+    
 server.get('/api/users', (req, res) => {
     db
     .find()
@@ -52,7 +53,7 @@ const { id } = req.params;
         res.json({ message: "The user with the specified ID does not exist." })
         }
     })
-    .catch(users => {
+    .catch(error => {
         res.status(500);
         res.json({ error: "The user information could not be retrieved."});
     })
@@ -71,17 +72,12 @@ const { id } = req.params;
             res.json({ users })
         }
     })
-    .catch(users => {
+    .catch(error => {
         res.status(500)
         res.json({ error: "The user information could not be modified."});
     })
 })
 server.delete('/api/users/:id', (req, res) => {
-if(req.params.name === undefined || req.params.bio === undefined) {
-    res.status(400);
-    res.json({ errorMessage: "Please provide name and bio for the user." })
-}
-else {
 const { id } = req.params;
     db
     .remove(id)
@@ -95,11 +91,11 @@ const { id } = req.params;
             res.json({ users })
         }
     })
-    .catch(users => {
+    .catch(error => {
         res.status(500)
         res.json({ error: "The user could not be removed" })
     })
-}})
+})
 
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
