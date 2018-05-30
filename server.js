@@ -1,10 +1,31 @@
 const express = require('express');
+const db = require('./data/db');
 
 const server = express();
-const port = 5000
+const port = 5000;
+server.use(express.json());
 
-server.get('/', (req, res) => {
-    res.send("Hello from express")
-})
+server.get(`/api/users`, (req, res) => {
+    db
+        .find()
+        .then( response => {
+            res.send(response);
+        })
+        .catch( err => {
+            res.json(err);
+        })
+});
+
+server.post(`/api/users`, (req, res) => {
+    const { name, bio } = req.body;
+    db
+        .insert({ name, bio })
+        .then( response => {
+            res.send(response);
+        })
+        .catch( err => {
+            res.json(err)
+        });
+});
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
