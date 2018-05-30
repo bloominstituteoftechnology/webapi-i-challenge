@@ -64,8 +64,13 @@ server.put('/api/users/:id', (req, res) => {
          res.status(404).json({ message: "The user with the specified ID does not exist." });
          } 
          if(!name || !bio) {
-             res.status(400).json({errorMessage: "Please provide name and bio for the user."})
+             res.status(400).json({errorMessage: "Please provide name and bio for the user."})             
          }
+         db
+         .findById(id)
+         .then(response => {
+             res.json({response});
+         })
      })
      .catch(error => {
          res.status(500).json({message: `The user information could not be modified/n Error message: ${error}`});
