@@ -1,9 +1,12 @@
 const express = require ('express');
+const cors = require('cors');
 const db = require ('./data/db.js');
+
 
 const port = 5555;
 const server = express();
 server.use(express.json())
+server.use(cors({ origin: 'http://localhost:3000' }))
 
 server.get('/', (req, res) => {
     // 1st arg: route where a resource can be interacted with - request
@@ -79,7 +82,6 @@ server.put('/api/users/:id', (req, res) => {
             db
                 .findById(id)
                 .then(user => {
-                    res.status(200)
                     res.json({ user })
                 });
             }}) 
