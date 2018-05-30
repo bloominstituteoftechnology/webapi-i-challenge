@@ -5,7 +5,7 @@ const port = 5555;
 const server = express();
 server.use(express.json());
 
-server.get('/', (req, res) => {
+server.post('/', (req, res) => {
     // 1st arg: route where a resource can be interacted with
     // 2nd arg: callback to deal with sending responses, and handling incoming data.
     res.send('Hello from express');
@@ -93,5 +93,38 @@ server.put('/api/users/:id', (req, res) => {
             res.status(500).json(err);
         });
 });
+
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+    if (!name || !bio) {
+        sendUserError(400, 'Must provide name and bio', res);
+        return;
+    }
+    db
+        .update(id, { name, bio })
+        .then(response => {
+            if (response === 0) {
+                sendUserError(404, 'The user with the specified ID does not exist.', res);
+                return;
+             }
+            db
+                .findById(id)
+                .then(foundUser => {
+                    user = { ...foundUser[0] };
+
+                    db.remove(id).then(response => {
+                        res.status(200).json(user);
+                    });
+                });
+        })
+        .cath(error => {
+            sendUserError(500, 'Something bad happened in the database', res);
+            return;
+        });
+});
+
+
+
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
