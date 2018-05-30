@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./data/db');
 
 const port = 3333;
 const server = express();
 server.use(express.json());
+server.use(cors({ origin: 'http://localhost:3000' }));
 
 const sendUserError = (status, message, res) => {
     res.status(status).json({ errorMessage: message });
@@ -97,8 +99,9 @@ server.put('/api/users/:id', (req, res) => {
     db
         .update( id, {name, bio} )
         .then(response => {
-            if (response === 0) {
+            if (response == 0) {
                 sendUserError(404, 'The user with that ID does not exist.', res);
+                return;
             }
             res.json({ success: `User with ID: ${id} has been updated.`});
         })
