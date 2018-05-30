@@ -1,10 +1,11 @@
 const express = require('express');
 const db = require('./data/db.js');
+const cors = require('cors');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
-
+server.use(cors({ origin: 'http://localhost:3000' }));
 
 
 server.post('/api/users', (req, res) => {
@@ -25,7 +26,7 @@ server.post('/api/users', (req, res) => {
       })
       .catch(error => {
         res.status(500);
-        res.json({ error: "There was an error while saving the user to the database" });
+        res.json({ errorMessage: "There was an error while saving the user to the database" });
       });
   }
 });
@@ -37,7 +38,7 @@ server.get('/api/users', (req, res) => {
   })
   .catch(error => {
     res.status(500);
-    res.json({ error: "The users information could not be retrieved." });
+    res.json({ errorMessage: "The users information could not be retrieved." });
   });
 });
 
@@ -52,12 +53,12 @@ server.get('/api/users/:id', (req, res) => {
       }
       else {
         res.status(404);
-        res.json({ message: "The user with the specified ID does not exist." });
+        res.json({ errorMessage: "The user with the specified ID does not exist." });
       }
     })
     .catch(error => {
       res.status(500);
-      res.json({ error: "The user information could not be retrieved." });
+      res.json({ errorMessage: "The user information could not be retrieved." });
     })
 });
 
@@ -82,12 +83,12 @@ server.put('/api/users/:id', (req, res) => {
         }
         else {
           res.status(404);
-          res.json({ message: "The user with the specified ID does not exist." });
+          res.json({ errorMessage: "The user with the specified ID does not exist." });
         }
       })
       .catch(error => {
         res.status(500);
-        res.json({ error: "The user information could not be retrieved." });
+        res.json({ errorMessage: "The user information could not be retrieved." });
       })
   }
 });
@@ -103,12 +104,12 @@ server.delete('/api/users/:id', (req, res) => {
       }
       else {
         res.status(404);
-        res.json({ message: "The user with the specified ID does not exist." });
+        res.json({ errorMessage: "The user with the specified ID does not exist." });
       }
     })
     .catch(error => {
       res.status(500);
-      res.json({ error: "The user could not be removed" });
+      res.json({ errorMessage: "The user could not be removed" });
     })
 });
 
