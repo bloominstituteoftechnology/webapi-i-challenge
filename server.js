@@ -103,6 +103,10 @@ server.put('/api/users/:id', (req, res) => {
     )});
 server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params
+    let deletedPost;
+    db
+        .findById(id)
+        .then((post) => deletedPost = post)
     db
         .remove(id)
         .then(users => {
@@ -110,7 +114,7 @@ server.delete('/api/users/:id', (req, res) => {
             res.status(404)
             res.json({ message: "The user with the specified ID does not exist." })
         } else {
-            res.json({ users });
+            res.json({ deletedPost });
         }})
         .catch(error => {
             res.status(500)
