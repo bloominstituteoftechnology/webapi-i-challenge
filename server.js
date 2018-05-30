@@ -10,7 +10,7 @@ const sendUserError = (status, message, res) => {
     return;
 };
 
-// Is this an API?
+// THIS IS AN API
 
 server.get('/:id', (req, res) => {
     const { id } = req.params;
