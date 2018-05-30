@@ -1,56 +1,84 @@
 const express = require('express'); // go find the node directory called express.
-const db = require(`./data/db`);
+const db = require('./data/db');
 
 const port = 5000;
 const server = express(); // variable server calls express. Server is how we're going to build our server.
 server.use(express.json()); //extending middleware into our server
 
+//helper function for error handling 
+// const sendUserError = (status, message, res) => {
+//     res.status(status).json({ errorMessage: message });
+//     return;
+//   };
+
 //endpoint
-// request object, response object ==== the homies
-server.get(`/`, (req, res) => {
+// request object, response object ==== the homies 
+// then and catch === the bros
+server.get('/api/users', (req, res) => {
     // 1st arg: route where a resource can be interacted with
     // 2nd arg: callback to deal with sending responses, and handling incoming
-    res.send(`Hello from express`);
-})
+    db
+        .find()
+        .then(users => {
+            res.json({ users });
+        })
+        .catch(error => {
+            res.status(500).json({ errorMessage: 'The users information could not be retrieved.'});
+            // sendUserError(500, 'Must provide name and bio', res); //helper function
+            // return;
+        })
+});
+
+// server.get(`/api/users`, (req, res) => {
+//     db
+//     .find().then(response => {
+//         db.find().then(users => {
+//             res.json({ users });
+//         })
+//         .catch(error => {
+//             res.json({ error });
+//         });
+//     });
+// });
 
 //any data we send to /api/users will be found on the request object
 server.post(`/api/users`, (req, res) => {
     const { name, bio } = req.body;
+    if (!name || !bio) {
+        res.status(400).json({ errorMessage: 'Must provide name and bio'});
+        // sendUserError(400, 'Must provide name and bio', res); //helper function
+        // return; //return cancels request 
+    }
     db
     .insert({ name, bio })
     .then(response => {
-        res.send(response);
+        res.status(201).send(response);
+        return;
     })
     .catch(error => {
-        res.json(error);
+        console.log(error);
+        res.status(500).json({errorMessage: "There was an error while saving the user to the database"});
     })
     //console.log(db.insert({ name, bio })); //using postman we see that this a promise
 })
 
-server.get(`/api/users`, (req, res) => {
-    db
-    .find().then(response => {
-        db.find().then(users => {
-            res.json({ users });
-        })
-        .catch(error => {
-            res.json({ error });
-        });
-    });
-});
 
 server.get(`/api/users/:id`, (req, res) => {
     //grab the id from URL parameters
     const id = req.params.id;
-    console.log(`params`, req.params.id)
+    // const { id } = req.params; //deconstructed 
 
+    console.log(`params`, req.params.id)
+    //findById: this method expects an id as it's only parameter and returns the user corresponding to the id provided or an empty array if no user with that id is found. Empty array: array.length === 0;
     db
         .findById(id)
-        .then(users => {
-            if (users.length === 0) {
-                res.status(404).json({ message: 'user not found' });
+        .then(user => {
+            if (user.length === 0) { 
+                res.status(404).json({ errorMessage: 'The user with the specified ID does not exist.' });
+                // sendUserError(404, 'User with that id not found', res); // helper function 
+                // return;
             } else {
-                res.json(users[0]);
+                res.json(user);
             }
         })
         .catch(err => {
@@ -69,7 +97,7 @@ server.post(`/api/users`, (req, res) => {
         } )
         .catch(err => {
             if (err.errno === 19) {
-                res.status(400).json({ msg: 'Please provide all required fields.'})
+                res.status(400).json({ message: 'Please provide all required fields.'})
             } else {
                 res.status(500).json({ error: err});
             }
@@ -105,38 +133,55 @@ server.post(`/api/users`, (req, res) => {
 
 // Delete written using a URL paramenter instead /api/users/:id
 
-server.delete(`/api/users/:id`, (req, res) => {
-    const { id } = req.params;
-    let user;
+// server.delete(`/api/users/:id`, (req, res) => {
+//     const { id } = req.params;
+//     let user;
 
-    db
-    .findById(id)
-    .then( foundUser => {
-        user = { ...foundUser }; //...foundUser is shallow copy
+//     db
+//     .findById(id)
+//     .then( foundUser => {
+//         user = { ...foundUser }; //...foundUser is shallow copy
     
-       db.remove(id)
-        .then(response => {
-            res.status(204).json(user);
-         })
-        })
-        .catch(err => {
-        res.status(500).json({ error: err});
-    })
-})
+//        db.remove(id)
+//         .then(response => {
+//             res.status(204).json(user);
+//          })
+//         })
+//         .catch(err => {
+//         res.status(500).json({ error: err});
+//     })
+// })
+
+// delete endpoint written by Ryan
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db
+      .remove(id)
+      .then(response => {
+        if (response === 0) {
+          sendUserError(404, 'The user with the specified ID does not exist.', res);
+        }
+        res.json({ success: `User with id: ${id} removed from system` });
+      })
+      .catch(error => {
+        sendUserError(500, 'The user could not be removed', res);
+        return;
+      });
+  });
 
 server.put(`/api/users/:id`, (req, res) => {
     const { id } = req.params;
     const updateInfo = req.body;
-
+    // update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
     db.update(id, updateInfo)
         .then(count => {
             if (count > 0) {
-                res.status(200).json({msg: 'Updated Successfully'})
+                res.status(200).json({message: 'Updated Successfully'})
             } else {
-                res.status(404).json({msg: 'User Not Found'})
+                res.status(404).json({messageError: 'The user with the specified ID does not exist'})
             }
         }).catch(err => {
-            res.status(500).json(err);
+            res.status(500).json({messageError: 'The user information could not be modified.'});
         })
 })
 
