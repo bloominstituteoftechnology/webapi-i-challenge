@@ -53,4 +53,8 @@ server.js
 const express = require('express');
 
 const server = express();
-server.listen(5000, () => console.log('Server running on port 5000'));
+server.listen(5000, () => console.Clog('Server running on port 5000'));
+
+middleware
+[Client] -makes- (request) - [Middleware Stack]-[request handler function]
+we have to add yard add morgan and helmet
