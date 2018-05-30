@@ -114,7 +114,7 @@ server.put('/api/users/:id', (req, res) => {
     }
     db.update(id, {name, bio})
     .then(response => {
-        if (response == 0) {
+        if (response === 0) {
             sendUserError(404, 'The user with the specified ID does not exist.', res);
             return;
         }
@@ -125,7 +125,10 @@ server.put('/api/users/:id', (req, res) => {
                 sendUserError(404, 'User with that id not found', res);
                 return;
             }
-            res.json(user[0]);
+            res.json(user[0])
+        .catch(error => {
+            sendUserError(500, 'Error looking up user', res);
+        });
     })
     .catch(error => {
         sendUserError(500, 'Something bad happened in the database', res);
