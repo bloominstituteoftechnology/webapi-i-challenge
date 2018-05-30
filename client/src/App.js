@@ -19,7 +19,7 @@ componentDidMount(){
   .get(`http://localhost:5000/api/users`)
     .then(response => {
       console.log(response);
-      this.setState({users: response.data})
+      this.setState({users: response.data.users})
     })
     .catch(error => {
       console.log(error)
