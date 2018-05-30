@@ -12,9 +12,22 @@ const sendUserError = (status, message, res) => {
     return;
 };
 
+const customLogger = (req, res, next) => {
+    const ua = req.headers['user-agent'];
+    console.log(req.headers);
+    const { path } = req;
+    const timeStamp = Date.now();
+    const log = { path, us, timeStamp };
+    const stringLog = JSON.stringify(log);
+    console.log(stringLog);
+    next();
+};
+
+server.use(customLogger);
+
 // THIS IS AN API
 
-server.get('/:id', (req, res) => {
+server.get('/', (req, res) => {
     const { id } = req.params;
     console.log(id);
     // 1st arg: route where a resource can be interacted with
@@ -80,6 +93,7 @@ server.delete('/api/users/:id', (req, res) => {
         .then(response => {
             if (response === 0) {
                 sendUserError(404, 'The user with that ID does not exist.', res);
+                return;
             }
             res.json({ success: `User with ID: ${id} removed from system.`});
         })
@@ -91,7 +105,7 @@ server.delete('/api/users/:id', (req, res) => {
 
 server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
-    const { name, bio, created_at, updated_at } = req.body;
+    const { name, bio } = req.body;
     if (!name || !bio) {
         sendUserError(400, `Please provide both the user's name and bio.`, res);
         return;
@@ -103,12 +117,19 @@ server.put('/api/users/:id', (req, res) => {
                 sendUserError(404, 'The user with that ID does not exist.', res);
                 return;
             }
-            res.json({ success: `User with ID: ${id} has been updated.`});
-        })
-        .catch(error => {
-            sendUserError(500, 'The user information could not be modified.', res);
-            return;
+            db
+                .findById(id)
+                .then(user => {
+                    if (user.length === 0) {
+                        sendUserError(404, 'User with that ID not found.', res);
+                        return;
+                    }
+                    res.json(user);
+                })
+                .catch(error => {
+                    sendUserError(500, 'Something bad happened in the database.', res);
+                    return;
+                });
         });
-});
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
