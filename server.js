@@ -5,7 +5,7 @@ const db = require('./data/db');
 const server = express();
 const port = 5000;
 
-server.use(cors());
+server.use(cors({ origin: 'http://localhost:3000' }));
 server.use(express.json()); // will return the servers response as JSON
 
 /*************************
