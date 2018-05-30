@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('./data/db');
 const server = express();
-
+server.use(express.json());
 const port = 5000;
 
 server.get('/', (req, res) => {
@@ -21,7 +21,7 @@ server.post('/api/users', (req, res) => {
       bio
     })
     .then(response => {
-      res.send(response);
+      res.json(response);
     })
     .catch(error => {
       res.json(error);
@@ -86,4 +86,32 @@ server.delete('/api/users/:id', (req, res) => {
       res.status(500).json(error);
     });
 })
+
+server.put('/api/users/:id', (req, res) => {
+
+  const {
+    id
+  } = req.params;
+  const update = req.body;
+
+  db
+    .update(id, update)
+    .then(count => {
+      if (count > 0) {
+        db.findById(id).then(updatedUsers => {
+          res.status(200).json(updatedUsers[0]);
+        });
+
+      } else {
+        res
+          .status(404)
+          .json({
+            message: 'The user with the specified ID does not exist.'
+          });
+      }
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+});
 server.listen(5000, () => console.log(`Server running on port ${port}`))
