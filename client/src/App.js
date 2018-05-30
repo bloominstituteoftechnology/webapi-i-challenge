@@ -19,9 +19,9 @@ class App extends Component {
         ) : <h1 className="App-title">Welcome to Node Mini</h1>}
         </header>
         <div>
-          {Object.values(this.props.users).map(user => {
+          {Object.values(this.props.users).map((user, key) => {
             return (
-            <div key={user.bio}>
+            <div key={user.bio + key}>
               <div className="row"> <h1> {user.name} </h1></div>
               <div className="row"> <h2> {user.bio} </h2> </div>
               </div>
