@@ -8,13 +8,14 @@ server.use(express.json());
 
 
 server.post('/api/users', (req, res) => {
-  if (!req.body.name || !req.body.bio) {
+  const { name, bio } = req.body;
+  if (!name || !bio) {
     res.status(400);
     res.json({ errorMessage: "Please provide name and bio for the user." });
   }
   else {
     db
-      .insert(req.body)
+      .insert({ name, bio })
       .then(response => {
         res.status(201);
         db.findById(response.id)
@@ -41,10 +42,11 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
+  const id = req.params.id;
   db
-    .findById(req.params.id)
+    .findById(id)
     .then(users => {
-      if (users.length > 0) {
+      if (users.length) {
         res.status(200);
         res.json({ users });
       }
@@ -61,17 +63,19 @@ server.get('/api/users/:id', (req, res) => {
 
 
 server.put('/api/users/:id', (req, res) => {
-  if (!req.body.name || !req.body.bio) {
+  const { name, bio } = req.body;
+  const id = req.params.id;
+  if (!name || !bio) {
     res.status(400);
     res.json({ errorMessage: "Please provide name and bio for the user." });
   }
   else {
     db
-      .update(req.params.id, req.body)
+      .update(id, { name, bio })
       .then(success => {
         if (success) {
           res.status(200);
-          db.findById(req.params.id)
+          db.findById(id)
             .then(user => {
               res.json({ user });
             });
@@ -89,8 +93,9 @@ server.put('/api/users/:id', (req, res) => {
 });
 
 server.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
   db
-    .remove(req.params.id)
+    .remove(id)
     .then(success => {
       if (success) {
         res.status(200);
