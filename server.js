@@ -13,13 +13,25 @@ server.get(`/api/users`, (req, res) => {
         })
         .catch( err => {
             res.json(err);
-        })
+        });
 });
 
 server.post(`/api/users`, (req, res) => {
     const { name, bio } = req.body;
     db
         .insert({ name, bio })
+        .then( response => {
+            res.send(response);
+        })
+        .catch( err => {
+            res.json(err)
+        });
+});
+
+server.get(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    db
+        .findById(id)
         .then( response => {
             res.send(response);
         })
