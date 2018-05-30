@@ -69,7 +69,8 @@ class API {
 
     // insert
     endpoints.insert = (toInsert) => 
-        server.post(resourceURL, ( req, res )  => {
+        console.log("Something!")    
+    server.post(resourceURL, ( req, res )  => {
             const { name, bio } = req.body;
         db
             .insert({ name, bio })
@@ -77,7 +78,8 @@ class API {
             res.json(response);
             })
             .catch(error => {
-            res.json(error);
+            console.log(error)
+                res.json(error);
         });
     });
 
@@ -110,6 +112,7 @@ class API {
                 db
                 .findById({ id }) == id;
         };
+        
         if (selectedUserforRemoval) {
             const userRemoved = { ...selectedUserforRemoval };
             users = users.filter(user => users.id != id);
@@ -123,6 +126,6 @@ class API {
         
 return endpoints
 
-    }}
+}}
 
-modules.exports = { API }
+module.exports = API
