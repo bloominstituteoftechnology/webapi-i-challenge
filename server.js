@@ -1,10 +1,15 @@
 const express = require('express');
 const db = require('./data/db');
-
+const cors = require('cors');
 const port = 5555;
 const server = express();
+
+server.use(cors({origin: 'http://localhost:3000'}));
 server.use(express.json());
 
+const customLogger = (req, res, next) => {
+    
+}
 server.get('/', (req, res) => {
     res.send('Hello from express');
 });
@@ -58,7 +63,7 @@ server.delete('/api/users/:id', (req, res) => {
     .then(response => {
         if (response === 0){
             res.status(404).json({ message: "The user with the specified ID does not exist." });
-        } else {
+        } else { 
             res.status(200).json(response[0]);
         }
     })
