@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 const db = require("./data/db");
 
@@ -6,6 +7,7 @@ const port = 5555;
 const server = express();
 
 server.use(express.json());
+server.use(cors());
 
 /**
  * First argument: route to where a resource can be interacted with => the URL
@@ -112,7 +114,7 @@ server.delete("/api/users/:id", (req, res) => {
       res.status(200).json({ message: "User deleted" });
 
       /**
-       * SIMULATE: an error with db.delett(...) method.
+       * SIMULATE: an error with db.delete(...) method.
        */
       // return Promise.reject("");
     })
@@ -148,31 +150,35 @@ server.put("/api/users/:id", (req, res) => {
       }
 
       // Id found -> then:
-      return db
-        .update(id, { name, bio })
-        .then(response => {
-          console.log("response", response);
-          /**
-           * Response could be either 0 or 1
-           */
-          if (!response) {
-            //  response is === 0
-            return new Promise.reject("Something went wrong");
-          } else {
-            // response === 1
-            db
-              // fetch the user updated
-              .findById(id)
-              .then(user => (updated = user))
-              // SEND response with updated-user
-              .then(_ => res.status(200).json(updated));
-          }
-        })
-        // Id something went worng updating the user
-        .catch(e => {
-          console.log("error", e);
-          res.status(500).json({ error: "The user information could not be modified." });
-        });
+      return (
+        db
+          .update(id, { name, bio })
+          .then(response => {
+            console.log("response", response);
+            /**
+             * Response could be either 0 or 1
+             */
+            if (!response) {
+              //  response is === 0
+              return new Promise.reject("Something went wrong");
+            } else {
+              // response === 1
+              db
+                // fetch the user updated
+                .findById(id)
+                .then(user => (updated = user))
+                // SEND response with updated-user
+                .then(_ => res.status(200).json(updated));
+            }
+          })
+          // Id something went worng updating the user
+          .catch(e => {
+            console.log("error", e);
+            res
+              .status(500)
+              .json({ error: "The user information could not be modified." });
+          })
+      );
     })
     .catch(e => {
       console.log("error", e);
@@ -183,3 +189,4 @@ server.put("/api/users/:id", (req, res) => {
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
+console.log(__filename);
