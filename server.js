@@ -42,7 +42,7 @@ server.delete('/api/users', (req, res) => {
     db
         .findById(id)
         .then(foundUser => {
-            user = { ...foundUser };
+            user = { ...foundUser[0] };
         
             db.remove(id).then(response => {
                 res.status(200).json(user);
@@ -70,6 +70,27 @@ server.get('/api/users/:id', (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ error: err });
+        });
+});
+
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const update = req.body;
+
+    db
+        .update(id, update)
+        .then(count => {
+            if (count > 0) {
+                db.findById(id).then(users => {
+                    res.status(200).json(users[0]);
+                }); 
+                
+            } else {
+                res.status(404).json({ msg: 'user not found' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err);
         });
 });
 
