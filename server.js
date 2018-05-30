@@ -22,7 +22,6 @@ server.get('/', (req, res) => {
 
 server.post('/api/users', (req, res) => { //create
     const { name, bio } = req.body; //the same as var name=req.body.name or var bio=req.body.bio
-    const newUser = { name, bio, id:id}
     if(!name||!bio){
        return sendUserError(400, "Please provide name and bio for the user.", res)
 
@@ -94,10 +93,9 @@ server.put("/api/users/:id", (req, res) =>{
         sendUserError(400, {Error: "Please include both name and bio"}, res);
         return;
     }
-    const user = { name, bio };
     db
         
-        .update(id, user)
+        .update(id, { name, bio })
         .then(user => {
             if(user==0){
                sendUserError(404, {Error: "The user with the specified ID does not exist", res});
