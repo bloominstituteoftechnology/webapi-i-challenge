@@ -5,6 +5,11 @@ const server = express();
 const port = 5000;
 server.use(express.json());
 
+const sendUserError = (status, message, res) => {
+    res.status(status).json({ errorMessage: message});
+    return;
+}
+
 server.get(`/api/users`, (req, res) => {
     db
         .find()
@@ -51,5 +56,30 @@ server.delete(`/api/users/:id`, (req, res) => {
             res.json(err)
         });
 });
+
+server.put(`/api/users/:id`, (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+    db
+        .update(id, { name, bio })
+        .then( response => {
+            if (response == 0) {
+                sendUserError(404, "The user with the specified ID does not exist.", res);
+                return;
+            } else {
+                db
+                    .findById(id)
+                    .then( response => {
+                        res.send(response);
+                    })
+                    .catch( err => {
+                        res.json(err)
+                    });
+            }
+        })
+        .catch( err => {
+            res.json(err)
+        });
+})
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
