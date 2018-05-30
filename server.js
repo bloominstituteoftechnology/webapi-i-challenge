@@ -1,21 +1,34 @@
 const express = require('express');
+const cors= require('cors');
 const db = require('./data/db');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
+server.use(cors({ origin: 'http://localhost:5555' }));
 
 const sendUserError = (status, message, res) => {
   res.status(status).json({ errorMessage: message });
   return;
 };
 
-server.get('/:id', (req, res) => {
+const customLogger = (req, res, next) => {
+    const ua = req.headers['user-agent'];
+    const { path } = req;
+    const timeStamp = Date.now();
+    const log = {ua, path, timeStamp};
+    const stringLog = JSON.stringify(log);
+    console.log(stringLog);
+    next();
+};
+server.use(customLogger);
+
+server.get('/', customLogger, (req, res) => {
   const { id } = req.params;
   console.log(id);
   // 1st arg: route where a resource can be interacted with
   // 2nd arg: callback to deal with sending responses, and handling incoming data.
-  res.send('Hello from express');
+  res.send('Welcome!!!');
 });
 
 server.post('/api/users', (req, res) => {
@@ -59,7 +72,7 @@ server.get('/api/users/:id', (req, res) => {
     .findById(id)
     .then(user => {
       if (user.length === 0) {
-        sendUserError(404, 'User with that id not found', res);
+        sendUserError(404, 'User id not found', res);
         return;
       }
       res.json(user);
@@ -77,31 +90,52 @@ server.delete('/api/users/:id', (req, res) => {
     .remove(id)
     .then(response => {
       if (response === 0) {
-        sendUserError(404, 'The user with that ID does not exist."', res);
+        sendUserError(404, 'User id not found', res);
+        return;
       }
-      res.json({ success: `User with id: ${ id } removed from system` });
+      res.json({ success: `User with id: ${id} removed from system` });
     })
     .catch(error => {
       sendUserError(500, 'The user could not be removed', res);
       return;
     });
 });
+
 server.put('/api/users/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, bio } = req.body;
-    if(!name || !bio) {
-        sendUserError(400, 'Must provide anme abd bio', res);
+  const { id } = req.params;
+  const { name, bio } = req.body;
+  if (!name || !bio) {
+    sendUserError(400, 'Must provide name and bio', res);
+    return;
+  }
+  db
+    .update(id, { name, bio })
+    .then(response => {
+      if (response == 0) {
+        sendUserError(
+          404,
+          'User id not found',
+          res
+        );
         return;
-    }
-    db
-        .update(id, { name, bio });
-        then(response => {
-            console.log(response)
+      }
+      db
+        .findById(id)
+        .then(user => {
+          if (user.length === 0) {
+            sendUserError(404, 'User id not found', res);
+            return;
+          }
+          res.json(user);
         })
         .catch(error => {
-            sendUserError(500, 'An error occured in the database', res);
-            return;
+          sendUserError(500, 'Error looking up user', res);
         });
+    })
+    .catch(error => {
+      sendUserError(500, 'Error occured in the database', res);
+      return;
+    });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
