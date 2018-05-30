@@ -1,25 +1,43 @@
 const express = require('express');
 const db = require('./data/db');
+const cors = require('cors');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
+server.use(cors({ origin: 'http://localhost:3000'}));
+
+const sendUserError = (status, message, res) => {
+    res.status(status).json({ errorMessage: message });
+    return;
+  };
+  
 
 server.get('/', (req, res) => {
     res.send('Hello from express');
 })
 
-server.post('/api/users', (req, res) =>{
+server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
+    if (!name || !bio) {
+      sendUserError(400, 'Must provide name and bio', res);
+      return;
+    }
     db
-        .insert({ name: 'Hamburgler' , bio: 'Theif'  })
-        .then(response => {
-            res.send(response);
-    })
-        .catch(error => {
-            res.json(error);
-    });
-});
+      .insert({
+        name,
+        bio,
+        
+      })
+      .then(response => {
+        res.status(201).json(response);
+      })
+      .catch(error => {
+        console.log(error);
+        sendUserError(400, error, res);
+        return;
+      });
+  });
 
 //Below, users = response
 server.get('/api/users', (req, res) =>{
@@ -29,7 +47,7 @@ server.get('/api/users', (req, res) =>{
         res.json({ users })
     })
     .catch(error => {
-        res.json({ error });
+        sendUserError(500, 'The users information could not be retreived.', res)
     });
 });
 
@@ -64,13 +82,13 @@ server.delete('/api/users/:id', (req , res) => {
 
 server.put('/api/users/:id', (req, res) => {
     const { name, bio } = req.body;
-    const {id} = req.params;
-    db.update(id, {name: 'Harrison', bio: 'Carpenter'}) 
+    const id = req.params.id;
+    db.update(id, {name:'Harrison', bio:'Carpenter'}) 
         .then(response =>{
-            res.json({name, bio})
+            res.json(response);
         })
         .catch(error => {
-            res.json({error})
+            res.json({error});
         })
 
     });
