@@ -17,13 +17,13 @@ server.get('/:id', (req, res) => {
     console.log(id);
     // 1st arg: route where a resource can be interacted with
     // 2nd arg: callback to deal with sending responses amd handling incoming
-    res.send('Hello from Express!');
+    res.send('Hello there, from Express!');
 });
 
 server.post('/api/users', (req, res) => {
     const { name, bio, created_at, updated_at } = req.body;
     if (!name || !bio) {
-        sendUserError(400, 'Must provide name and bio', res);
+        sendUserError(400, `Please provide both the user's name and bio.`, res);
         return;
     }
     db
@@ -72,7 +72,7 @@ server.get('/api/users/:id', (req, res) => {
     });
 
 server.delete('/api/users/:id', (req, res) => {
-    const {id } = req.params;
+    const { id } = req.params;
     db
         .remove(id)
         .then(response => {
@@ -88,15 +88,30 @@ server.delete('/api/users/:id', (req, res) => {
 });
 
 server.put('/api/users/:id', (req, res) => {
-    const id = req.params.id;
-    const user = req.body;
+    const { id } = req.params;
+    const { name, bio, created_at, updated_at } = req.body;
+    if (!name || !bio) {
+        sendUserError(400, `Please provide both the user's name and bio.`, res);
+        return;
+    }
     db
-        .update(id, user)
+        .update({
+            id,
+            name, 
+            bio
+        })
         .then(response => {
-            res.json(response);
+            res.status(200).json(response);
+        })
+        .then(response => {
+            if (response === 0) {
+                sendUserError(404, 'The user with that ID does not exist.', res);
+            }
+            res.json({ success: `User with ID: ${id} has been updated.`});
         })
         .catch(error => {
-            res.json(error);
+            sendUserError(500, 'The user information could not be modified.', res);
+            return;
         });
 });
 
