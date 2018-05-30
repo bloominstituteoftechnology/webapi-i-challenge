@@ -26,14 +26,19 @@ class App extends Component {
       });
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
+  handleSubmit = (user) => {
     axios
-        .post(`http://localhost:5000/api/users`, this.state)
+        .post(`http://localhost:5000/api/users`, user)
         .then(response => {
             console.log("POST", response.data);
-            this.setState({ name: '', bio: '' })
-        })
+        axios
+        .get(`http://localhost:5000/api/users`)
+        .then((res) => {
+          console.log(res.data.users[0]);
+          this.setState( Object.assign({}, this.state, {users: res.data.users}) );
+          console.log(this.state.users);
+        })    
+      })
         .catch(error => {
             console.log(error);
         })
