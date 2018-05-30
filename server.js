@@ -71,13 +71,17 @@ server.put('/api/users/:id', (req, res) => {
             if (!name || !bio) {
             res.status(400)
             res.json({ errorMessage: "Please provide name and bio for the user." })
-           } if (users === 0) {
+           } else if (users === 0) {
             res.status(404)
             res.json({ message: "The user with the specified ID does not exist." })
            }
             else {
-            res.status(200)
-            res.json({ users })
+            db
+                .findById(id)
+                .then(user => {
+                    res.status(200)
+                    res.json({ user })
+                });
             }}) 
         .catch(error => {
             res.status(500)
