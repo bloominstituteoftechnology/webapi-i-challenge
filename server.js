@@ -2,11 +2,15 @@
 
 const express = require('express');
 const db = require('./data/db');
+const cors = require('cors');
 
 
 const port = 5555;
 const server = express();
 server.use(express.json());  
+server.use(cors({
+    credentials: true,
+  }));
 
 const sendUserError = (status, message, res) =>{
     res.status(status).json({Error: msg});
