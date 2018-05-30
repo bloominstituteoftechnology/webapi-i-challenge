@@ -1,15 +1,31 @@
 const express = require('express');
 const db = require('./data/db');
+const cors = require('cors');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
+server.use(cors({ origin: 'http://localhost:3000'}));
 
 server.post('/', (req, res) => {
     // 1st arg: route where a resource can be interacted with
     // 2nd arg: callback to deal with sending responses, and handling incoming data.
     res.send('Hello from express');
 });
+
+const customLogger = (req, res, next) => {
+    const ua = req.headers['user-agent'];
+    const { path } = req;
+    const timeStamp = Date.now();
+    const log = { ua, path, timeStamp };
+    const stringLog = JSON.stringify(log);
+    
+    console.log(stringLog);
+    
+    next(); // needed to move to next routehandler.
+}
+ 
+server.use(customLogger);
 
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
@@ -22,6 +38,7 @@ server.post('/api/users', (req, res) => {
             res.json(error);
         });
 });
+
 
 server.get('/api/users', (req, res) => {
     db
@@ -63,7 +80,7 @@ server.get('/api/users/:id', (req, res) => {
         .findById(id)
         .then(users => {
             if (users.length === 0) {
-                res.status(404).json({ mesage: 'user not found' });
+                res.status(404).json({ message: 'user not found' });
             } else {
                 res.json(users[0]);
             }

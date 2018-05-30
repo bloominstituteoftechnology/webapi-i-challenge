@@ -18,6 +18,7 @@
     "nodemon": "^1.17.3"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "knex": "^0.14.6",
     "sqlite3": "^4.0.0"
