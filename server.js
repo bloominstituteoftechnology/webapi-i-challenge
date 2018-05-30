@@ -6,6 +6,12 @@ const server = express();
 server.use(express.json());
 
 
+
+const sendUserError = (status, message, res) => {
+    res.status(staus).json({ errorMessage: message });
+    return;
+}
+
 // API Methods
 
 // Returns an array of all the user objects contained in the database.
@@ -18,36 +24,37 @@ server.get('/api/users', (req, res) => {
         .catch(error => {
             res.json({ error });
         });
-    res.json('testing get');
 });
 
 // Returns the user object with the specified id.
 server.get('/api/users/:id', (req, res) => {
     const { id } = req.params;
-    const { name, bio} = req.body;
     db
-        .findById({ name, bio })
+        .findById({ id })
         .then(users => {
             res.json({ users });
         })
         .catch(error => {
             res.json({ error });
         });
-    res.json('Success!');
 });
 
 // Creates a user using the information sent inside the request body.
 server.post('/api/users', (req, res) => {
-    const { name, bio } = req.body;
+    const { name, bio, created_at, updated_at } = req.body;
     db
-        .insert({ name, bio })
-        .then(users => {
-            res.json({ users });
+        .insert({
+            name,
+            bio,
+            created_at,
+            updated_at
+        })
+        .then(response => {
+            res.json({ response });
         })
         .catch(error => {
             res.json({ error });
         });
-    res.json('testing post');
 });
 
 // Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
