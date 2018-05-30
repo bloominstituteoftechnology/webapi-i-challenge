@@ -30,7 +30,10 @@ class App extends Component {
           Users:
         </p>
         {this.state.users.map(user => {
-          return (<p key={user.id}>{user.name}</p>)
+          return (<div className="userCard" key={user.id}>
+            <h2 className="userName">{user.name}</h2>
+            <p>{user.bio}</p>
+          </div>)
         })}
       </div>
     );
