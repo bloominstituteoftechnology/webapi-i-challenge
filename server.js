@@ -1,9 +1,11 @@
 const express = require ('express');
+const express = require('cors');
 const db = require('./data/db');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 const sendUserError = (status, message, res) => {
     res.status(status).json({ errorMessage: message });
@@ -87,19 +89,34 @@ server.delete('/api/users/:id', (req, res) => {
         });
 })
 
+
 server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
     const { name, bio } = req.body
 
-    db  
-        .update(id, { name, bio })
-        .then(users => {
-            res.status(200).json(users);
-        })
-        .catch(error => {
-            sendUserError(500, 'The user could not be updated', res)
+    if(!name || !bio) {
+        sendUserError(400, 'Must provide name and bio', res);
+        return;
+    }
+    db.update(id, {name, bio})
+    .then(response => {
+        if (response == 0) {
+            sendUserError(404, 'The user with the specified ID does not exist.', res);
             return;
-        })
+        }
+        db.findById(id) //returns newly updated resource as is asked for in readme
+        .then(users => {
+            // console.log('USER: ', user); //user is an array
+            if (user.length === 0) { //if the array is empty i.e. no users with requested id
+                sendUserError(404, 'User with that id not found', res);
+                return;
+            }
+            res.json(user[0]);
+    })
+    .catch(error => {
+        sendUserError(500, 'Something bad happened in the database', res);
+        return;
+    })
 })
 
 
