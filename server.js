@@ -79,12 +79,29 @@ server.delete('/api/users/:id', (req, res) => {
       if (response === 0) {
         sendUserError(404, 'The user with that ID does not exist."', res);
       }
-      res.json({ success: `User with id: ${id} removed from system` });
+      res.json({ success: `User with id: ${ id } removed from system` });
     })
     .catch(error => {
       sendUserError(500, 'The user could not be removed', res);
       return;
     });
+});
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+    if(!name || !bio) {
+        sendUserError(400, 'Must provide anme abd bio', res);
+        return;
+    }
+    db
+        .update(id, { name, bio });
+        then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            sendUserError(500, 'An error occured in the database', res);
+            return;
+        });
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
