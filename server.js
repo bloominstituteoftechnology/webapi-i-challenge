@@ -1,11 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./data/db');
 
 const server = express();
 const port = 5555;
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['POST', 'GET', 'PUT', 'DELETE']
+};
 
-// Extend server to use JSON
 server.use(express.json());
+server.use(cors(corsOptions));
 
 server.post('/api/users', (req, res) => {
   const { name, bio } = req.body;
