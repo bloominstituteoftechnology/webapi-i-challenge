@@ -1,15 +1,17 @@
 const express = require('express'); // go find the node directory called express.
+const cors = require('cors');
 const db = require('./data/db');
 
 const port = 5000;
 const server = express(); // variable server calls express. Server is how we're going to build our server.
+server.use(cors({origin: 'http://localhost:3001'}));
 server.use(express.json()); //extending middleware into our server
 
 //helper function for error handling 
-// const sendUserError = (status, message, res) => {
-//     res.status(status).json({ errorMessage: message });
-//     return;
-//   };
+const sendUserError = (status, message, res) => {
+    res.status(status).json({ errorMessage: message });
+    return;
+  };
 
 //endpoint
 // request object, response object ==== the homies 
@@ -169,21 +171,60 @@ server.delete('/api/users/:id', (req, res) => {
       });
   });
 
-server.put(`/api/users/:id`, (req, res) => {
+// server.put(`/api/users/:id`, (req, res) => {
+//     const { id } = req.params;
+//     const updateInfo = req.body;
+//     // update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
+//     db.update(id, updateInfo)
+//         .then(count => {
+//             if (count > 0) {
+//                 res.status(200).json({message: 'Updated Successfully'})
+//             } else {
+//                 res.status(404).json({messageError: 'The user with the specified ID does not exist'})
+//             }
+//         }).catch(err => {
+//             res.status(500).json({messageError: 'The user information could not be modified.'});
+//         })
+// })
+
+//Ryan's Put 
+server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
-    const updateInfo = req.body;
-    // update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
-    db.update(id, updateInfo)
-        .then(count => {
-            if (count > 0) {
-                res.status(200).json({message: 'Updated Successfully'})
-            } else {
-                res.status(404).json({messageError: 'The user with the specified ID does not exist'})
+    const { name, bio } = req.body;
+    if (!name || !bio) {
+      sendUserError(400, 'Must provide name and bio', res);
+      return;
+    }
+    db
+      .update(id, { name, bio })
+      .then(response => {
+        if (response == 0) {
+          sendUserError(
+            404,
+            'The user with the specified ID does not exist.',
+            res
+          );
+          return;
+        }
+        db
+          .findById(id)
+          .then(user => {
+            if (user.length === 0) {
+              sendUserError(404, 'User with that id not found', res);
+              return;
             }
-        }).catch(err => {
-            res.status(500).json({messageError: 'The user information could not be modified.'});
-        })
-})
+            res.json(user);
+          })
+          .catch(error => {
+            sendUserError(500, 'Error looking up user', res);
+          });
+      })
+      .catch(error => {
+        sendUserError(500, 'Something bad happened in the database', res);
+        return;
+      });
+  });
+
 
 // server object: we have inialized it with our express server
 server.listen(port, () => console.log('Server running on port ${port}'));
