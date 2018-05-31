@@ -29,6 +29,15 @@ class App extends Component {
         this.setState({ users: newUserList });
       });
   }
+  updateUser = (id, userObj) => {
+    axios.put(`http://localhost:5555/api/users/${id}`, userObj)
+      .then(response => {
+        const newUserList = this.state.users.map(x => {
+          return (x.id === id) ? response.data[0] : x
+        });
+        this.setState({ users: newUserList });
+      });
+  }
   removeUser = (id) => {
     axios.delete(`http://localhost:5555/api/users/${id}`)
       .then(response => {
@@ -50,13 +59,10 @@ class App extends Component {
         <CssBaseline />
         <AppHeader title="Building RESTful APIs with Node.js and Express Mini" />
         <AddUserButton add={this.createNewUser} />
-        <UserTable users={this.state.users} remove={this.removeUser} />
+        <UserTable users={this.state.users} remove={this.removeUser} update={this.updateUser} />
       </div>
     );
   }
 }
 
 export default withStyles(styles)(App);
-
-
-// C - U
