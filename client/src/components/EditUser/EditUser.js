@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,8 +13,8 @@ class EditUser extends Component {
     super(props);
     this.state = {
       open: false,
-      name: '',
-      bio: ''
+      name: this.props.user.name,
+      bio: this.props.user.bio
     }
   }
   handleOpen = () => {
@@ -35,12 +34,6 @@ class EditUser extends Component {
       });
       this.handleClose();
     }
-  }
-  componentDidMount(){
-    axios.get(`http://localhost:5555/api/users/${this.props.userId}`)
-      .then(response => {
-        this.setState({ name: response.data[0].name, bio: response.data[0].bio });
-      });
   }
   render() {
     return (

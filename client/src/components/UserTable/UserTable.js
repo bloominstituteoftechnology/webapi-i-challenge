@@ -30,7 +30,7 @@ const UserTable = props => {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.bio}</TableCell>
                   <TableCell>
-                    <EditUser userId={user.id} update={props.update} />
+                    <EditUser userId={user.id} user={user} update={props.update} />
                     <IconButton color="secondary" onClick={() => { props.remove(user.id) }}>
                       <Icon>delete_forever</Icon>
                     </IconButton>
