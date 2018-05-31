@@ -122,11 +122,11 @@ server.put('/api/users/:id', (req, res) => {
         db.findById(id) //returns newly updated resource as is asked for in readme
             .then(users => {
                 // console.log('USER: ', user); //user is an array
-                if (user.length === 0) { //if the array is empty i.e. no users with requested id
+                if (users.length === 0) { //if the array is empty i.e. no users with requested id 
                     sendUserError(404, 'User with that id not found', res)
                     return;
                 }
-                res.json(user[0]);
+                res.json(users[0]);
             })
             .catch(error => {
                 sendUserError(500, 'Error looking up user', res);
