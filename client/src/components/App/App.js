@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppHeader from '../AppHeader';
+import AddUserButton from '../AddUserButton';
 import UserTable from '../UserTable';
 
 const styles = () => ({
@@ -20,6 +21,13 @@ class App extends Component {
     this.state = {
       users: []
     };
+  }
+  createNewUser = userObj => {
+    axios.post('http://localhost:5555/api/users', userObj)
+      .then(response => {
+        const newUserList = this.state.users.concat(response.data);
+        this.setState({ users: newUserList });
+      });
   }
   removeUser = (id) => {
     axios.delete(`http://localhost:5555/api/users/${id}`)
@@ -41,6 +49,7 @@ class App extends Component {
       <div className={classes.appContainer}>
         <CssBaseline />
         <AppHeader title="Building RESTful APIs with Node.js and Express Mini" />
+        <AddUserButton add={this.createNewUser} />
         <UserTable users={this.state.users} remove={this.removeUser} />
       </div>
     );
@@ -50,4 +59,4 @@ class App extends Component {
 export default withStyles(styles)(App);
 
 
-// C - U - D
+// C - U
