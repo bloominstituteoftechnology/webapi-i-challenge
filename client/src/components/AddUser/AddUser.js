@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,6 +7,23 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
+
+const styles = () => ({
+  addUserBtn: {
+    backgroundColor: '#ffa726',
+    borderRadius: '20px',
+    color: '#000',
+    margin: '0 auto',
+    top: '-20px',
+    width: '200px',
+    '&:hover': {
+      backgroundColor: '#ffd95b'
+    }
+  },
+  iconPad: {
+    margin: '0 0 0 10px'
+  }
+});
 
 class AddUser extends Component {
   constructor(props) {
@@ -36,11 +54,12 @@ class AddUser extends Component {
     }
   }
   render() { 
+    const { classes } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={this.handleOpen}>
+        <Button className={classes.addUserBtn} onClick={this.handleOpen}>
           Add New User
-        <Icon>person_add</Icon>
+        <Icon className={classes.iconPad} >person_add</Icon>
         </Button>
         <Dialog open={this.state.open} onClose={this.handleClose}>
           <DialogTitle>Add a New User</DialogTitle>
@@ -78,4 +97,4 @@ class AddUser extends Component {
   }
 }
  
-export default AddUser;
+export default withStyles(styles)(AddUser);

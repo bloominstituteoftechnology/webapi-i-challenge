@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,6 +8,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
+
+const styles = () => ({
+  primaryBtnColor: {
+    color: '#ffa726',
+    '&:hover': {
+      backgroundColor: '#ffd95b29'
+    }
+  }
+});
 
 class EditUser extends Component {
   constructor(props) {
@@ -36,9 +46,10 @@ class EditUser extends Component {
     }
   }
   render() {
+    const { classes } = this.props;
     return (
       <React.Fragment>
-        <IconButton onClick={this.handleOpen} color="primary">
+        <IconButton classes={{ colorPrimary: classes.primaryBtnColor }} onClick={this.handleOpen} color="primary">
           <Icon>edit</Icon>
         </IconButton>
         <Dialog open={this.state.open} onClose={this.handleClose}>
@@ -77,4 +88,4 @@ class EditUser extends Component {
   }
 }
 
-export default EditUser;
+export default withStyles(styles)(EditUser);
