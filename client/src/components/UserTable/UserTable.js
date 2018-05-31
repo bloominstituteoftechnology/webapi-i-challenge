@@ -5,6 +5,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
 
 const UserTable = props => {
   return (
@@ -16,7 +18,7 @@ const UserTable = props => {
               <TableCell>User</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Bio</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -27,7 +29,12 @@ const UserTable = props => {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.bio}</TableCell>
                   <TableCell>
-                    Edit/Delete
+                    <IconButton color="primary">
+                      <Icon>edit</Icon>
+                    </IconButton>
+                    <IconButton color="secondary" onClick={() => { props.remove(user.id) }}>
+                      <Icon>delete_forever</Icon>
+                    </IconButton>
                 </TableCell>
                 </TableRow>
               );
