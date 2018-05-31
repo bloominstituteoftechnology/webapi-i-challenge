@@ -17,7 +17,7 @@ const customLogger = (req, res, next) => {
     console.log(req.headers);
     const { path } = req;
     const timeStamp = Date.now();
-    const log = { path, us, timeStamp };
+    const log = { path, ua, timeStamp };
     const stringLog = JSON.stringify(log);
     console.log(stringLog);
     next();
@@ -127,9 +127,13 @@ server.put('/api/users/:id', (req, res) => {
                     res.json(user);
                 })
                 .catch(error => {
-                    sendUserError(500, 'Something bad happened in the database.', res);
-                    return;
+                    sendUserError(500, 'Error looking up user.', res);
                 });
+        })
+        .catch(error => {
+            sendUserError(500, 'Something bad happened in the database.', res);
+            return;
         });
+    });
 
-server.listen(port, () => console.log(`Server running on port ${port}`));
+server.listen(port, () => console.log(`Server running on port ${port}.`));
