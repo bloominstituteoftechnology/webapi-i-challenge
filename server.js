@@ -1,6 +1,6 @@
 //cb functions such as request handlers are also considered middleware and you can use as many middleware as you like
 const express = require ('express');
-const express = require('cors');
+const cors = require('cors');
 const db = require('./data/db');
 
 const port = 5555;
@@ -15,7 +15,7 @@ const sendUserError = (status, message, res) => {
 
 const customLogger = (req, res, next) => {
     // console.log(req.headers['user-agent']);
-    const ua = eq.headers['user-agent'];
+    const ua = req.headers['user-agent'];
     const {path} = req;
     const timeStamp = Date.now();
     const log = {ua, path, timeStamp};
@@ -48,10 +48,10 @@ server.post('/api/users', (req, res) => {
     db
         .insert({ name, bio })
         .then(response => {
-            res.status(201).json(response);
+            res.status(201).json(response)
         })
         .catch(error => {
-            sendUserError(400, error, res);
+            sendUserError(400, error, res)
             return;
         });
 });
@@ -75,7 +75,7 @@ server.get('/api/users/:id', (req, res) => {
         .then(users => {
             // console.log('USER: ', user); //user is an array
             if (user.length === 0) { //if the array is empty i.e. no users with requested id
-                sendUserError(404, 'User with that id not found', res);
+                sendUserError(404, 'User with that id not found', res)
                 return;
             }
             res.json(user[0]) //send the object that was asked for by id
@@ -93,6 +93,7 @@ server.delete('/api/users/:id', (req, res) => {
             console.log(response)
             if(response === 0) {
                 sendUserError(404, 'The user with the specified ID does not exist', res)
+                return;
             }
             res.json({ success: `User with id: ${id} removed from system` });
         })
@@ -115,21 +116,22 @@ server.put('/api/users/:id', (req, res) => {
     db.update(id, {name, bio})
     .then(response => {
         if (response === 0) {
-            sendUserError(404, 'The user with the specified ID does not exist.', res);
+            sendUserError(404, 'The user with the specified ID does not exist.', res)
             return;
         }
         db.findById(id) //returns newly updated resource as is asked for in readme
-        .then(users => {
-            // console.log('USER: ', user); //user is an array
-            if (user.length === 0) { //if the array is empty i.e. no users with requested id
-                sendUserError(404, 'User with that id not found', res);
-                return;
-            }
-            res.json(user[0])
-        .catch(error => {
-            sendUserError(500, 'Error looking up user', res);
-        });
-    })
+            .then(users => {
+                // console.log('USER: ', user); //user is an array
+                if (user.length === 0) { //if the array is empty i.e. no users with requested id
+                    sendUserError(404, 'User with that id not found', res)
+                    return;
+                }
+                res.json(user[0]);
+            })
+            .catch(error => {
+                sendUserError(500, 'Error looking up user', res);
+            });
+            })
     .catch(error => {
         sendUserError(500, 'Something bad happened in the database', res);
         return;
