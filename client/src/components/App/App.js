@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
+
+import UserTable from '../UserTable';
+
+const styles = () => ({
+  appContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+});
 
 class App extends Component {
   constructor(props){
@@ -16,20 +27,14 @@ class App extends Component {
       });
   }
   render() {
+    const { classes } = this.props;
     return (
-      <React.Fragment>
+      <div className={classes.appContainer}>
         <CssBaseline />
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-        </div>
-      </React.Fragment>
+        <UserTable users={this.state.users} />
+      </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
