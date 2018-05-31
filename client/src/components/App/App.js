@@ -3,6 +3,7 @@ import axios from 'axios';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 
+import AppHeader from '../AppHeader';
 import UserTable from '../UserTable';
 
 const styles = () => ({
@@ -31,6 +32,7 @@ class App extends Component {
     return (
       <div className={classes.appContainer}>
         <CssBaseline />
+        <AppHeader title="Building RESTful APIs with Node.js and Express Mini" />
         <UserTable users={this.state.users} />
       </div>
     );
