@@ -96,33 +96,33 @@ server.delete('/api/users/:id', (req, res) => {
     });
 });
 
-// server.put('/api/users/:id', (req, res) => {
-//   const id = req.params.id;
-//   const users = {
-//     name: req.body.name,
-//     bio: req.body.bio
-//   }
-//   db
-//     .update(id, users)
-//     .then(users => {
-//       if (!users) {
-//         return res.status(404).json({
-//           message: "The user with the specified ID does not exist."
-//         })
-//       }
-//       if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('body')) {
-//         return res.status(400).json({
-//           errorMessage: "Please provide name and bio for the user."
-//         })
-//       }
-//       res.status(200).json(users)
-//     })
-//     .catch(error => {
-//       res.status(500).json({
-//         error: "The user information could not be modified."
-//       })
-//     })
-// });
+server.put('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const users = {
+    name: req.body.name,
+    bio: req.body.bio
+  }
+  db
+    .update(id, users)
+    .then(users => {
+      if (!users) {
+        return res.status(404).json({
+          message: "The user with the specified ID does not exist."
+        })
+      }
+      if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('body')) {
+        return res.status(400).json({
+          errorMessage: "Please provide name and bio for the user."
+        })
+      }
+      res.status(200).json(users)
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "The user information could not be modified."
+      })
+    })
+});
 // server.put('/api/users/:id', (req, res) => {
 //   const {
 //     id
