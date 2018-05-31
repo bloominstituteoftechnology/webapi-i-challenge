@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
 
-class AddUserButton extends Component {
+class AddUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,4 +78,4 @@ class AddUserButton extends Component {
   }
 }
  
-export default AddUserButton;
+export default AddUser;

@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppHeader from '../AppHeader';
-import AddUserButton from '../AddUserButton';
+import AddUser from '../AddUser';
 import UserTable from '../UserTable';
 
 const styles = () => ({
@@ -58,7 +58,7 @@ class App extends Component {
       <div className={classes.appContainer}>
         <CssBaseline />
         <AppHeader title="Building RESTful APIs with Node.js and Express Mini" />
-        <AddUserButton add={this.createNewUser} />
+        <AddUser add={this.createNewUser} />
         <UserTable users={this.state.users} remove={this.removeUser} update={this.updateUser} />
       </div>
     );
