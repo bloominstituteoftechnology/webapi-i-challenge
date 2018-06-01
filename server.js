@@ -17,9 +17,12 @@ const sendUserError = (status, message, res) => {
 }
 
 const customLogger = (req, res, next) => {
-    console.log(req.path);
+    //console.log("Path: ", req.path, "Body: ", req.body);
     next();
 }
+
+server.use(customLogger)
+
 server.post('/api/users', (req, res) => {
    const { name, bio } = req.body;
    if ( !name || !bio ) {
@@ -37,7 +40,7 @@ server.post('/api/users', (req, res) => {
     })
 });
 
-server.get('/', customLogger, (req, res) => {
+server.get('/', (req, res) => {
     // 1st arg: route where a resource can be interacted with
     // 2nd arg: callback to deal with sending responses and handle incoming data
     res.send('Hello from express');
@@ -50,7 +53,8 @@ server.get('/api/users', ((req, res) => {
             res.json({ users })
         })
         .catch(error => {
-            res.json({error});
+            sendUserError(500, "The users information could not be retrieved.", res)
+            return;
         });
     })
 );
@@ -59,10 +63,17 @@ server.get('/api/users/:id', ((req, res) => {
     const id = req.params.id;
     db
         .findById(id).then(users => {
+            //console.log(users);
+            if(!users.length){
+                sendUserError(404, "The user with the specified ID does not exist.", res)
+                //console.log('status: ',res.status(404))
+                //console.log(users.response)
+                return
+            }
             res.json({ users })
         })
         .catch(error => {
-            res.json({error});
+            sendUserError(500, "The user information could not be retrieved.", res);
         });
     })
 );
