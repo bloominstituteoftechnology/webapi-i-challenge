@@ -78,8 +78,24 @@ server.get('/api/users/:id', ((req, res) => {
     })
 );
 
-//Missing delete part
-server.delete('.api/users/:id', ()=> {})
+server.delete('/api/users/:id', (req, res)=> {
+    const {id} = req.params;
+    db
+        .remove(id)
+        .then(response => {
+            if(!response){
+                sendUserError(404,"The user with the specified ID does not exist.", res)
+                return;
+            }
+            res.json({success: `The user with id: ${id} was removed from system`})
+        })
+        .catch(error => {
+            sendUserError(500, "The user could not be removed", res);
+            return;
+        })
+})
+
+
 
 
 
