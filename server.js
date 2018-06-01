@@ -7,14 +7,35 @@ const server = express();
 server.use(express.json());
 server.use(cors({origin: 'http://localhost:3000'}));
 
-const customMiddleware = (req, rex, next) => {
+// const customMiddleware = (req, rex, next) => {
 
-};
+// };
+
+const sendUserError = (status, message, res) => {
+    res.status(status).json({errorMessage: message});
+    return;
+}
 
 const customLogger = (req, res, next) => {
     console.log(req.path);
     next();
 }
+server.post('/api/users', (req, res) => {
+   const { name, bio } = req.body;
+   if ( !name || !bio ) {
+       sendUserError(400, "Please provide title and contents for the post.", res);
+       return;
+   }
+   db
+    .insert( { name, bio } )
+    .then(  (response) => {
+        res.status(201);
+        res.json(response);
+    })
+    .catch(error => {
+        sendUserError(500, 'There was an error while saving the post to the database', res)
+    })
+});
 
 server.get('/', customLogger, (req, res) => {
     // 1st arg: route where a resource can be interacted with
@@ -22,17 +43,6 @@ server.get('/', customLogger, (req, res) => {
     res.send('Hello from express');
 });
 
-server.post('/api/users', (req, res) => {
-   const { name, bio } = req.body;
-   db
-    .insert( { name, bio } )
-    .then(  (response) => {
-        res.send(response);
-    })
-    .catch(error => {
-        res.json(error);
-    })
-});
 
 server.get('/api/users', ((req, res) => {
     db
