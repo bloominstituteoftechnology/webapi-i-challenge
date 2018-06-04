@@ -1,41 +1,63 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import UsersList from './UsersList';
+import UsersForm from './Form';
 
+const URL = 'http://localhost:5000/api/users';
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      users: {},
-      name: '',
-      bio: '',
-      id: ''
+      data:[{}], //this needs to be an empty object inside an array to access the users object
+      user: {
+        id: '',
+        name: '',
+        bio: ''
+      }
     };
 
   }
   
-  componentWillMount() {
-    const getUser = (axios.get(`http://localhost:5555/api/users`));
-    getUser
-      .then(res => {
-        const users = res.data;
-        console.log(users);
-        this.setState({ users });
+  componentWillMount(){
+    let promise = axios.get(URL);
+    promise
+      .then(res =>{
+        return this.setState({data:res.data.users});
       })
+      .catch(err =>{
+        console.log(err);
+      });
   }
 
+  
+  handleClick = (user)=>{
+    let promise = axios.post(URL, user);
+    promise
+      .then(res =>{
+       axios
+        .get(URL)
+          .then(res =>{
+            return this.setState({data:res.data.users})
+          })
+          .catch(err =>{
+            console.log(err);
+          })
+      })
+}
+
+ 
   render() {
+    console.log(this.state);
     return(
-      <div>
-  {/* //  <div>{this.users.map((user, index) =>{ */}
-  {/* //    return(
-  //      <h3 key={index}>{`${this.name} ${this.bio}`}</h3>
-  //    )
-  //  })} */}
-  <h1>I will be a list element</h1>
-   </div>
-    );
+    <div>
+     <UsersForm handleClick={this.handleClick} value={this.state.user} />
+     <UsersList data={this.state.data} />
+    </div>
+     
+       
+    )
 }
 }
 

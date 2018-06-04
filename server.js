@@ -39,7 +39,7 @@ server.post('/api/users', (req, res) => { //create
     }
     
     db
-        .insert({ id, name, bio }) //insert comes from db.js
+        .insert({ name, bio }) //insert comes from db.js
         .then(response => {
             res.status(201).json(response); //good idea to console.log it to see how you will interact with it
         })
