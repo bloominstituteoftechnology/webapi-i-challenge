@@ -19,7 +19,8 @@ class UsersForm extends Component{
     render(){
         console.log(this.props, "USERSFORM")
         return(
-            <div>
+            <div className="form-input">
+                <h3>Submit Person</h3>
                 <div>
                     <label>Name:</label>
                     <input onChange = {this.handleChange} type="text" name="name" value={this.props.user}/>

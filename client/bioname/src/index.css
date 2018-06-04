@@ -3,3 +3,19 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.form-input{
+  width:900px;
+}
+.remove-button{
+  background-color:darkred;
+  color:aliceblue;
+  text-decoration: outline;
+}
+.naming{
+  background-color:lightseagreen;
+  width:300px;
+}
+.bioing{
+  background-color:lightblue;
+  width:300px;
+}

@@ -10,8 +10,9 @@ const UsersList = (props) => {
                     {props.data.map(element =>{
                     return(
                         <tr className="bio-table" key={element.name}>
-                            <td>{element.name}</td>
-                            <td>{element.bio}</td>
+                            <td className="naming">{element.name}</td>
+                            <td className="bioing">{element.bio}</td>
+                            <div className='remove-button'>Remove</div>
                         </tr>
                     )
                     })}
