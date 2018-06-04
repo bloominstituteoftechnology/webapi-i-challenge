@@ -9,8 +9,8 @@ const server = express();
 //middleware
 server.use(morgan('dev'));
 server.use(helmet());
-server.use(express.json()); 
-        
+server.use(express.json());
+
 server.get('/', function (req, res) {
   res.send({ api: 'Running..' });
 });
@@ -18,7 +18,7 @@ server.get('/', function (req, res) {
 // (1) | GET | /api/users | Returns an array of all the user objects contained in the database.
 server.get('/api/users', (req, res) => {
   //get the users            //homies
-  db 
+  db
     .find()
     .then(users => {
       res.json(users);
@@ -76,24 +76,24 @@ server.delete('/api/users/:id', (req, res) => {
     .findById(id)
     .then(response => {
       user = { ...response[0] };
-    
+
       db
-      
+
         .remove(id)
         .then(response => {
           res.status(200).json(user);
         })
-    
+
         .catch(error => {
           res.status(500).json(error);
           //do something with error
 
         });
-      
+
     })
     .catch(error => {
       res.status(500).json(error);
-    }); 
+    });
 });
 // (5) | PUT | /api/users /: id | Updates the user with the specified`id` using data from the`request body`.Returns the modified document, ** NOT the original **. |
 //return the modifiyed document.
@@ -101,34 +101,36 @@ server.put('/api/users/:id', (req, res) => {
   //grab the id fromurl parameters
   const { id } = req.params;
   const update = req.body;
-  let user;
+
 
   db
     .update(id, update)
     .then(count => {
-       
-
-
-
-      db
-        .remove(id)
-        .then(response => {
-          res.status(200).json(response);
-        })
-        .catch(error => {
-          res.status(500).json(user);
-          //do something with error
+      if (count > 0) {
+        db.findById(id).then(updatedUsers => {
+          res.status(200).json(updatedUser)
         });
-      
+
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exsist.' });
+
+      }
+
     })
-          .catch(error => {
-          res.status(500).json(error);
-        
+
+
+    .catch(error => {
+      res.status(500).json(user);
+      //do something with error
     });
+
 });
 
- // pull id off of req.params;
-   // invoke proper db.method(id) passing it the id.
-   // handle the promise like above
+
+// pull id off of req.params;
+// invoke proper db.method(id) passing it the id.
+// handle the promise like above
 const port = 5000;
 server.listen(port, () => console.log('Server running on port '));
