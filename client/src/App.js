@@ -3,7 +3,7 @@ import axios from 'axios';
 
 class App extends Component {
   state = {
-    friends: [],
+    users: [],
 
     dummy: {
       name: 'April',
