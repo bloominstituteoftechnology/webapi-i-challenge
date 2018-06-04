@@ -21,8 +21,11 @@
     "nodemon": "^1.17.3"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.1",
     "express": "^4.16.3",
     "knex": "^0.14.6",
+    "reactstrap": "^6.1.0",
     "sqlite3": "^4.0.0"
   }
 }
