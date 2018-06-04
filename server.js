@@ -11,6 +11,7 @@ const server = express();
 server.use(morgan('dev'));
 server.use(helmet());
 server.use(express.json());
+server.use(cors());
 
 server.get('/', function (req, res) {
   res.send({ api: 'Running..' });
