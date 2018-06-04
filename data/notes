@@ -58,3 +58,5 @@ server.listen(5000, () => console.Clog('Server running on port 5000'));
 middleware
 [Client] -makes- (request) - [Middleware Stack]-[request handler function]
 we have to add yard add morgan and helmet
+
+an api in the content is a server that publishes a set of endpoints thatclients can use to manage resources
