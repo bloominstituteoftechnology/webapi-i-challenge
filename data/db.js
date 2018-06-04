@@ -1,4 +1,4 @@
-const knex = require('knex');
+const knex = require('knex'); //this page concerns us with helper methods (CRUD)
 const knexConfig = require('../knexfile.js');
 const db = knex(knexConfig.development);
 
@@ -19,7 +19,7 @@ function findById(id) {
 }
 
 function insert(user) {
-  return db('users')
+  return db('users') //returns a promise
     .insert(user)
     .then(ids => ({ id: ids[0] }));
 }
