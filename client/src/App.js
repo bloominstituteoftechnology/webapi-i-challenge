@@ -9,8 +9,7 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      name: '',
-      bio: ''
+     
     }
   }
   
@@ -24,17 +23,20 @@ class App extends Component {
       .catch(error => console.log(error));
   }
 
-  HandleInput = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
-
-  addUsers = (e) => {
-    e.preventDefault();
-    const newUser = { name: this.state.name, bio: this.state.bio };
+ 
+  addUsers = ( newUser ) => {   
+    console.log('my new user', newUser)
     axios
       .post('http://localhost:5555/api/users', newUser)
-      .then(res => { this.setState({ users: res.data.users, name: '', bio: '' })
-    })
+      .then(result => {
+        axios
+        .get('http://localhost:5555/api/users')
+        .then(res => {
+          console.log(res.data.users);
+          this.setState({ users: res.data.users})
+        })
+        .catch(error => console.log(error));
+      })
     .catch(error => console.log(error));
   }
 
@@ -48,7 +50,7 @@ class App extends Component {
         <div>
           <AddForm 
             addUsers={this.addUsers} 
-            HandleInput={this.HandleInput}
+    
           />
           <UsersList users={this.state.users}/>
         </div>
