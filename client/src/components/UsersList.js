@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-class FriendsList extends Component {
+class UsersList extends Component {
     render() {
         return (
-            <div>
-                {this.props.friends.map(person => {
+            <div className ='card-container row'>
+                {this.props.users.map(person => {
                     return (
                         <div key={person.id}>
                             <p>{person.name}</p>
@@ -17,4 +17,4 @@ class FriendsList extends Component {
     }
 }
 
-export default FriendsList;
+export default UsersList;
