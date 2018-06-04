@@ -58,7 +58,7 @@ server.post('/api/users', (req, res) => {
     .catch(error => {
       // something with erro r
       res.status(500).json({
-        error: 'There wa s an error while saving the wuser to the database',
+        error: 'There was an error while saving the user to the database',
 
       });
     });
