@@ -9,13 +9,16 @@ const server = express();
 //middleware
 server.use(morgan('dev'));
 server.use(helmet());
-server.use(express.json());
+server.use(express.json()); 
         
+server.get('/', function (req, res) {
+  res.send({ api: 'Running..' });
+});
 
 // (1) | GET | /api/users | Returns an array of all the user objects contained in the database.
 server.get('/api/users', (req, res) => {
-  //get yhe users
-  db
+  //get the users            //homies
+  db 
     .find()
     .then(users => {
       res.json(users);
@@ -28,7 +31,7 @@ server.get('/api/users', (req, res) => {
 
 // (2) | GET | /api/users /: id | Returns the user object with the specified id.   
 server.get('/api/users/:id', (req, res) => {
-  //grab the id fromurl parameters
+  //grab the id from url parameters
   const { id } = req.params;
 
   db
@@ -64,30 +67,33 @@ server.post('/api/users', (req, res) => {
 // (4) | DELETE | /api/users /: id | Removes the user with the specified id and returns the deleted user.  
 server.delete('/api/users/:id', (req, res) => {
   //grab the id fromurl parameters
+
+
   const { id } = req.params;
   let user;
-
 
   db
     .findById(id)
     .then(response => {
       user = { ...response[0] };
-
-
+    
       db
+      
         .remove(id)
         .then(response => {
-          res.status(200).json(response);
+          res.status(200).json(user);
         })
-        .catch(error => {
-          res.status(500).json(user);
-          //do something with error
-
-        })
+    
         .catch(error => {
           res.status(500).json(error);
+          //do something with error
+
         });
-    });
+      
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    }); 
 });
 // (5) | PUT | /api/users /: id | Updates the user with the specified`id` using data from the`request body`.Returns the modified document, ** NOT the original **. |
 //return the modifiyed document.
@@ -98,9 +104,9 @@ server.put('/api/users/:id', (req, res) => {
   let user;
 
   db
-    .findById(id)
-    .then(response => {
-      user = { ...response[0] };
+    .update(id, update)
+    .then(count => {
+       
 
 
 
@@ -112,11 +118,12 @@ server.put('/api/users/:id', (req, res) => {
         .catch(error => {
           res.status(500).json(user);
           //do something with error
-
-        })
-        .catch(error => {
-          res.status(500).json(error);
         });
+      
+    })
+          .catch(error => {
+          res.status(500).json(error);
+        
     });
 });
 
