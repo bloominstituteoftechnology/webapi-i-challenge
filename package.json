@@ -4,7 +4,8 @@
   "description": "Express Demo",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start2": "nodemon server2.js"
   },
   "repository": {
     "type": "git",
