@@ -141,3 +141,11 @@ When the client makes a `PUT` request to `/api/users/:id`:
 * Use `create-react-app` to create an application inside the root folder, name it `client`.
 * From the React application connect to the `/api/users` endpoint in the API and show the list of users.
 * Style the list of users however you see fit.
+
+
+```yarn add cors```
+```const cors = require('cors');
+````
+
+then before the endpoints
+```app.use(cors());```
