@@ -1,6 +1,7 @@
 import React from "react";
 
-const UsersList = (props) => {
+
+export const UsersList = (props) => {
         console.log("UsersListPROPS", props)
         return(
             <div>
@@ -12,7 +13,7 @@ const UsersList = (props) => {
                         <tr className="bio-table" key={element.name}>
                             <td className="naming">{element.name}</td>
                             <td className="bioing">{element.bio}</td>
-                            <div className='remove-button'>Remove</div>
+                            <button className='remove-button' onClick={this.handleDeletedUser}>Remove</button>
                         </tr>
                     )
                     })}
@@ -23,5 +24,5 @@ const UsersList = (props) => {
         
     }
 
-export default UsersList;
+
     
