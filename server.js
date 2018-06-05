@@ -1,9 +1,11 @@
 const express = require('express');
 const db = require('./data/db');
+const cors = require('cors');
 
 const port = 5555;
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 //error msg variable for cleaner look
 const sendUserError = (status, message, res) => {
@@ -17,13 +19,13 @@ server.get('/', (req, res) => {
 });
 
 server.post('/api/users', (req, res) => {
-    const { name, bio, created_at, updated_at } = req.body;
+    const { name, bio } = req.body;
     if(!name || !bio) {
-       sendUserError(400, 'Please provide name and bio for the user.')
+       sendUserError(400, 'Please provide name and bio for the user.', res)
         return;
     }
     db
-        .insert({ name, bio, created_at, updated_at })
+        .insert({ name, bio })
         .then(response => {
             res.status(201).json(response);
         })
@@ -81,13 +83,34 @@ server.delete('/api/users/:id', (req, res) => {
 server.put('/api/users/:id', (req, res) => {
     const { name, bio } = req.body;
     const id = req.params.id;
+    if(!name || !bio) {
+        sendUserError(400, 'Please provide name and bio for the user.', res);
+        return;
+    }
     db
         .update(id, { name, bio })
         .then(count => {
-            res.json(count)
+            if(count == 0) {
+                sendUserError(404, 'The user with the specified ID does not exist.', res);
+                return;
+            }
+            db
+                .findById(id)
+                .then(users => {
+                    if(users.length === 0) {
+                        sendUserError(404, 'The user with the specified ID does not exist.', res);
+                        return;
+                    }
+                    res.json({ users })
+                })
+                .catch(error => {
+                    sendUserError(500, 'The users information could not be retrived.', res);
+                    return;
+                })
         })
         .catch(error => {
-            res.json(error);
+            sendUserError(500, 'The user could not be removed.', res);
+            return;
         })
 
 })
