@@ -11,7 +11,7 @@ class AddForm extends Component {
 
     handleInput = (e) => {
         this.setState({ [e.target.name]: e.target.value })
-      }
+    }
 
     handleNewUser = () => {
         this.props.addUsers(this.state);
