@@ -3,7 +3,7 @@
 
 const express = require('express'); //this is common JS -- require takes a string as its argument -- go find the node directory call express...
 const db = require('./data/db'); //this is our database directory full of helper methods
-const cors = require('cors');
+const cors = require('cors'); //helps to use two localhosts at the same time
 
 
 const port = 5000;
@@ -11,27 +11,74 @@ const server = express(); //server is the invocation to express - this is how yo
 server.use(express.json());  //global middleware - anything that we pipe in our request body we will pipe in
 //as JSON - JavaScript Oriented Notation
 //extend our server by using JSON
-server.use(cors({
-    credentials: true,
-  }));
+server.use(cors({origin: 'http://localhost:3000'}));
 
-const sendUserError = (status, message, res) =>{
+const sendUserError = ((status, message, res) =>{
     res.status(status).json({Error:message});
     return;
+});
+const customMiddlewareLogger = (req, res, next) =>{
+    const ua = req.headers['user-agent'];
+    const { path } = req;
+    const timeStamp = Date.now();
+    const log= { path, ua, timeStamp};
+    console.log(log);
+    next();
 };
+server.use(customMiddlewareLogger);
+
+const searchMiddleware = (req, res, next) =>{
+    if(!req.query.name){
+        next();
+    }
+    db
+        .find()
+        .then(users =>{
+            const { name } = req.query; //take query string
+            const filteredUsers = users.filter(
+                //loop over users
+                //filter out any that do not match our query string
+                user => user.name.toLowerCase() === name.toLowerCase()
+            );
+            //save the filtered users to req.users
+        req.users = filteredUsers;
+        next();
+    })
+    .catch(err=>{
+        res.status(500).json({Error:"Something bad!"})
+        
+    });
+};
+
+
 //receive a resource from your API
-server.get('/', (req, res) => {
+server.get('/', searchMiddleware, (req, res) => {
+    console.log(req.query);
+    console.log(req.users);
+   const { users } = req;
+   if(!users){
+       res.json('Welcome to Express!');
+   }
+   if(users.length===0){
+       sendUserError(404,`${req.query.name} not found`, res);
+       return;
+   }
+   else{
+       res.json({users});
+   }
+
     // 1st arg: route where a resource can be interacted with (where it can be found)
     // 2nd arg: callback to deal with sending responses, and handling incoming data
     //this is how you build an application programming interface (an API)
     //req and res are the homies
     //req = request
     //res = response
-    res.send("<h1>Hello from Express!!</h1>");
+    res.send("<h1>Hello from Express Two!!</h1>");
     
 });
 
 server.post('/api/users', (req, res) => { //create
+
     const { name, bio } = req.body; //the same as var name=req.body.name or var bio=req.body.bio
     if(!name||!bio){
        return sendUserError(400, "Please provide name and bio for the user.", res)
@@ -49,8 +96,8 @@ server.post('/api/users', (req, res) => { //create
 
 });
 
-server.get('/api/users', (req, res) => {//fetch===read
-
+server.get('/api/users',  (req, res) => {//fetch===read
+    console.log(req.query);
 
     db
         .find()
