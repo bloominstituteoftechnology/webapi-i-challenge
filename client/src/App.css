@@ -1,0 +1,28 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  list-style: none;
+}
+
+.user {
+  display: flex;
+  width: 100%;
+  margin: 0 0 20px 0;
+}
+
+.user__name, .user__bio {
+  text-transform: capitalize;
+}
+
+.user__name {
+  padding: 0 20px 0 0;
+  font-weight: bold;
+}
