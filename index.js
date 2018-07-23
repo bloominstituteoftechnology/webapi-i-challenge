@@ -9,12 +9,11 @@ server.get('/', (req, res) => {
 })
 
 server.post('/api/users', (req, res) => {
-  const { name, bio, created_at, updated_at } = req.body;
-  if (!name || !bio) {
+  if (!req.body.name || !req.body.bio) {
     return res.status(400).json({ errorMessage: "Please provide name and bio for the user." });
   }
-  db.insert({ name, bio, created_at, updated_at })
-    .then(users => res.status(200).json(users))
+  db.insert(req.body)
+    .then(users => res.status(201).json(users))
     .catch(err => res.status(500).json({ error: "The users information could not be retrieved." }));
 })
 
