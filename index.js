@@ -29,14 +29,34 @@ server.get('/hobbits', (req, res) => {
 });
 
 server.get('/users', (req, res) => {
-    request = db.find();
-    request.then(result => {
+    return db
+    .find()
+    .then(result => {
         res.json(result);
     })
-    .catch(err => {
+    .catch(() => {
+        res.status(500).send({ error: "The users information could not be retrieved." })
+    })
+})
+
+server.post('/users', (req, res) => {
+    const { name, bio } = req.body;
+    if(!name || !bio){
+        res.status(400).send({ errorMessage: "Please provide name and bio for the user." })
+    }
+    return db
+    .insert({
+        name: name,
+        bio: bio,
+        // created_at: Date.now(),
+        // updated_at: Date.now()
+    })
+    .then(user => {
+        res.status(201).send(user)
+    })
+    .error(err => {
         res.status(500).send(err)
     })
-    
 })
 
 
