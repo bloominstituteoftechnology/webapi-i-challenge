@@ -22,4 +22,20 @@ request.then(response => {
 
 });
 
+server.get('/api/users/:id', (req, res) => {
+
+	const request = database.findById(req.params.id);
+
+	request.then(response => {
+		res.json(response);
+	})
+	
+	.catch(error => {
+        res.status(404).json({ message: "The user with the specified ID does not exist." });
+        })
+
+
+	});
+
+
 server.listen(8000, () => console.log('API running on port 8000'));
