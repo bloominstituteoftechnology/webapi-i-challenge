@@ -60,4 +60,26 @@ server.delete('/api/users/:id', (req, res) => {
 
 });
 
+server.put('/api/users/:id', (req, res) => {
+  let id = req.params.id;
+  const { name, bio } = req.body;
+  if (!name || !bio) {
+    res.status(400).send({ error: 'Please provide name and bio for the user.' })
+  }
+  return db.findById(id)
+  .then(user => {
+    if (user.length === 0) {
+      res.status(404).send({ error: 'The user with the specified ID does not exist.' })
+    } else {
+      return db.update(id, req.body)
+      .then(() => {
+        return db.findById(id)
+        .then(updatedUser => res.status(200).json(updatedUser))
+      })
+    }
+  })
+  .catch(error => res.status(500).send({ error: 'The user could not be removed.' }))
+
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
