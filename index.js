@@ -30,10 +30,19 @@ server.get("/api/users/:id", (req, res) => {
 
 
 server.post("/api/users", (req, res) => {
-
   if (req.query.name == "" || req.query.bio == ""){
   res.status(400).send({ errorMessage: "Please provide name and bio for the user."});
         }
+  else {
+    db.insert({
+      name: req.query.name,
+      bio: req.query.bio
+    })
+    .then(response => res.status(201).send(response))
+    .catch(error => {
+      res.status(500).send({ error: "There was an error while saving the user to the database" });
+    })
+  }
 });
 
 server.listen(8000, () => console.log('API running on port 8000'));
