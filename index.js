@@ -22,6 +22,23 @@ server.get('/api/users', (req, res) => {
         })
 });
 
+server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    
+    db
+        .findById(id)
+        .then(users => {
+            if (users.length === 0) {
+                res.status(404).json({ message: 'Not found' });
+            } else {
+                res.json(users[0]);
+            }
+        })
+        .catch (message => {
+            res.status(500).json({ message: "The user with the specified ID does not exist." })
+        })
+})
+
 server.post('/api/users', (req, res) => {
     // if (!name||!bio) {
     //     return res.status(400)({error: "Please provide name and bio for the user."})
@@ -39,7 +56,7 @@ server.post('/api/users', (req, res) => {
         })
 })
 
-server.delete('/api/user', (req, res) => {
+server.delete('/api/users', (req, res) => {
     const { id } = req.query
     
     db
