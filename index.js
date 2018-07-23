@@ -37,5 +37,27 @@ server.get('/api/users/:id', (req, res) => {
 
 	});
 
+/*server.post('/api/users/', (req, res) => {
+ const {name, bio } = req.query;
+console.log(req.query);	
+  const user = {name, bio};
+
+  const request = database.insert(user);
+   
+	request.then(response => {
+                res.status(201).json(response);
+        })
+
+  });*/
+
+
+server.delete('/api/users/:id', (req, res) => {
+  const request = database.remove(req.params.id);
+        
+        request.then(response => {
+                res.json(response);
+        })
+
+  });	
 
 server.listen(8000, () => console.log('API running on port 8000'));
