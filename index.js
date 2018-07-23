@@ -16,7 +16,7 @@ server.get('/api/users', (req, res)=> {
          res.status(200).json(item)
     })
     .catch(err => { 
-        res.status(500).send(err)
+        res.status(500).json({ err: "The users information could not be retrieved." })
     })
   
 })
