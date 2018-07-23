@@ -26,7 +26,7 @@ Database access will be done using the `db.js` file included inside the `data` f
 * update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
 * remove: the remove method accepts an id as it's first parameter and upon successfully deleting the user from the database it returns the number of records deleted.
 
-Now that we have a way to add, update, remove and retrieve data from the provided databse, it is time to work on the API.
+Now that we have a way to add, update, remove and retrieve data from the provided database, it is time to work on the API.
 
 ### Start the API and Implement Requirements
 
