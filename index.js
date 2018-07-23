@@ -13,10 +13,8 @@ const sendUserError = (status, message, res) => {
 
 server.get('/api/users', (req, res) => {
   db.find().then(response => {
-    // console.log(response)
     res.status(200).json(response)
   }).catch(err => {
-    // console.log(err);
     res.status(500).json({
       error: "The users information could not be retrieved."
     });
@@ -52,7 +50,6 @@ server.post('/api/users', (req, res) => {
     return;
   } else {
     db.insert(req.body).then(response => {
-      console.log('add', response);
       res.status(201).json(response);
     }).catch(err => {
       console.log(err);
@@ -63,7 +60,6 @@ server.post('/api/users', (req, res) => {
 });
 
 server.delete('/api/users/:id', (req, res) => {
-  console.log('something');
   db.remove(req.params.id).then(response => {
     if (response === 0) {
       sendUserError(404, "The user with the specified ID does not exist.", res);
@@ -77,12 +73,19 @@ server.delete('/api/users/:id', (req, res) => {
 })
 
 server.put('/api/users/:id', (req, res) => {
-  const {name, bio} = req.body;
+  const {
+    name,
+    bio
+  } = req.body;
   if (!(name && bio)) {
     sendUserError(400, 'Please provide name and bio for the user.', res);
     return;
   }
-  db.update(req.params.id, {name, bio}).then(response => {
+
+  db.update(req.params.id, {
+    name,
+    bio
+  }).then(response => {
     if (response === 0) {
       sendUserError(404, "The user with the specified ID does not exist.", res);
       return;
