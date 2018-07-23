@@ -1,23 +1,26 @@
 const express = require('express');
 const server = express();
-const db = require('./data.db');
+const db = require('./data/db');
 
 server.get('/', (req, res) => {
-  res.send(find());
+  res.send('Homepage!');
 });
 
 server.get('/api/users', (req, res) => {
-  const users = [
-    {
-      id: 1,
-      name: 'Samwise Gamgee',
-    },
-    {
-      id: 2,
-      name: 'Frodo Baggins',
-    },
-  ];
-  res.send(users);
+  db
+  .find()
+  .then(users => {
+    res.json({ users });
+  })
+  .catch(error => {
+    res.status(500).json({ error: "Could not retrieve user's information" })
+  })
 });
 
-server.listen(8000, () => console.log('API Running...'));
+server.post('/api/users', (req, res) => {
+  if(!name || !bio) {
+
+  }
+});
+
+server.listen(8000, () => console.log('API running on port 8000'));
