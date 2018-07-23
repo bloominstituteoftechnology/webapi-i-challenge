@@ -72,6 +72,7 @@ server.get('/api/users/:id', (req, res) => {
 
 server.delete('/api/users/:id', (req, res) => {
   const id = Number(req.params.id)
+
   db
     .findById(id)
     .then(user => {
@@ -89,9 +90,9 @@ server.delete('/api/users/:id', (req, res) => {
 
 server.put('/api/users/:id', jsonParser, (req, res) => {
   const id = Number(req.params.id)
-
+  
   db
-    .update(Number(req.params.id), {
+    .update(id, {
       name: req.body.name,
       bio: req.body.bio
     })
@@ -102,6 +103,7 @@ server.put('/api/users/:id', jsonParser, (req, res) => {
         .catch(error => res.status(500).json({ error: 'The user information could not be retrieved' }))
     })
     .catch(error => res.status(500).json({ error: 'The user could  not be updated' }))
+
 })
 
 
