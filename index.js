@@ -53,6 +53,21 @@ server.get('/api/users', (req, res) => {
     .then(users => 
       res.status(200).json(users)
     )
+    .catch(error =>
+      res.status(500).json({ error: 'The users information could not be retrieved' }))
+})
+
+server.get('/api/users/:id', (req, res) => {
+  db
+    .findById(Number(req.params.id))
+    .then(user => {
+      if(typeof user === 'Array'
+         && user.length === 0) {
+        return res.status(404).json({ message: 'The user with the specified ID does not exist'})
+      }
+      return res.status(200).json(user[0])
+    })
+    .catch(error => res.status(500).json({ error: 'The user information could not be retrieved.' }))
 })
 
 
