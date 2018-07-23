@@ -44,15 +44,24 @@ server.get("/users", (req, res) => {
 
 server.get("/users/:id", (req, res) => {
   users
-    .findById(id)
+    .findById(req.params.id)
     .then(user => {
-      res.status(200).json(users);
+      if (user.length === 0) {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+      res.status(200).json(user);
     })
     .catch(error => {
       res
         .status(500)
         .json({ error: "The user information could not be retrieved." });
     });
+});
+
+server.post("/users", (req, res) => {
+  users.insert({ name: "", bio: "", created_at: date, updated_at: date });
 });
 
 server.listen(8000, () => console.log("API running..."));
