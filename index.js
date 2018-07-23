@@ -9,13 +9,14 @@ const users = require("./data/db");
 const server = express();
 //add middleware
 server.use(helmet());
+//for postman
+server.use(express.json());
 
 server.get("/", (req, res) => {
   res.send("<h1>Hello World<h1>");
 });
 
 server.get("/hobbits", (req, res) => {
-  // route handler code here
   const hobbits = [
     {
       id: 1,
@@ -61,7 +62,19 @@ server.get("/users/:id", (req, res) => {
 });
 
 server.post("/users", (req, res) => {
-  users.insert({ name: "", bio: "", created_at: date, updated_at: date });
+  //   users.insert({ name: "", bio: "", created_at: date, updated_at: date });
+  const { name, bio } = req.body;
+  if (!name || !bio) {
+    res.status(400).json({ error: "Please provide name and bio for the user" });
+  }
+  users
+    .insert({ name, bio })
+    .then(users => res.status(201).json(users))
+    .catch(error => {
+      res.status(500).json({
+        error: "There was an error while saving the user to the database"
+      });
+    });
 });
 
 server.listen(8000, () => console.log("API running..."));
