@@ -44,4 +44,20 @@ server.post('/api/users', (req, res) => {
 
 });
 
+server.delete('/api/users/:id', (req, res) => {
+  let foundUser = null, id = req.params.id;
+  return db.findById(id)
+  .then(user => {
+    if (user.length === 0) {
+      res.status(404).send({ error: 'The user with the specified ID does not exist.' })
+    } else {
+      foundUser = user;
+      return db.remove(id)
+      .then(() => res.status(200).json(foundUser))
+    }
+  })
+  .catch(error => res.status(500).send({ error: 'The user could not be removed.' }))
+
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
