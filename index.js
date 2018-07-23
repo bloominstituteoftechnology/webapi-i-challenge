@@ -61,13 +61,22 @@ server.post('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
 
-  data.findById(id).then(response => {
-    if (response.length !== 0) {
-      console.log('REPONSE', response);
-    } else {
-      console.log('empyty!!');
-    }
-  });
+  data
+    .findById(id)
+    .then(response => {
+      if (response.length !== 0) {
+        res.status(200).json(response);
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      }
+    })
+    .catch(() =>
+      res
+        .status(500)
+        .json({ error: 'The user information could not be retrieved.' }),
+    );
 });
 
 server.listen(PORT, console.log(`Server listening on port ${PORT}`));
