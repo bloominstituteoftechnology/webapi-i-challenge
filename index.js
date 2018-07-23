@@ -1,5 +1,6 @@
 // require the express npm module, needs to be added to the project using "yarn add" or "npm install"
 const express = require('express');
+const db = require('./data/db.js');
 
 // creates an express application using the express module
 const server = express();
@@ -27,6 +28,16 @@ server.get('/hobbits', (req, res) => {
     res.status(200).json(hobbits);
 });
 
+server.get('/users', (req, res) => {
+    request = db.find();
+    request.then(result => {
+        res.json(result);
+    })
+    .catch(err => {
+        res.status(500).send(err)
+    })
+    
+})
 
 
 // once the server is fully configured we can have it "listen" for connections on a particular "port"
