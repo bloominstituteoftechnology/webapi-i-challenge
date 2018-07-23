@@ -11,19 +11,27 @@ server.get('/', (req, res) => {
 server.get('/api/users', (req, res) => {
     db
         .find()
-        .then(
-            res
-                .status(200)
-                .json(users)
-        )
+        .then(users => {
+            res.status(200).json(users);
+        })
         .catch(err => {
-            res
-                .status(500)
-                .json({
-                    error: 'The post information could not be retrieved.'
-                });
+            res.status(500).json({error: 'The users information could not be retrieved.'});
         });
 });
+
+server.get('/api/users/:id', (req, res) => {
+    const {id} = req.params;
+    db
+        .findById(id)
+        .then(user => {
+            if (user[0]) {
+                res.status(200).json(user);
+        }})
+        .catch(err => {
+            res.status(500).jason({error: 'The user information could not be retrieved.'})
+        })
+
+})
 
 server.post('/api/users', (req, res) => {
     const { name, bio, created_at, updated_at } = req.body;
