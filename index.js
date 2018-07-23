@@ -1,29 +1,28 @@
 const express = require('express');
+const db = require('./data/db');
 
 const server = express();
+server.use(express.json());
 
 server.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1>');
+    res.send('Hello World');
 })
 
-server.get('/marvel', (req, res) => { // route handler
-    const marvel = [ // endpoint data
-        {
-            id: 1,
-            name: 'Captain America'
-        },
-        {
-            id: 2,
-            name: 'Iron Man'
-        }
-    ];
-
-    res.status(200).json(marvel);
+server.get('/api/users', (req, res) => {
+    db
+        .find()
+        .then(response => {
+            res
+                .status(200)
+                .json(response)
+    })
+    .catch(err => {
+        res
+            .status(500)
+            .json({
+                error: 'The post information could not be retrieved.'
+            });
+    });
 });
 
-server.get('/marvel', (req, res) => { // route handler
-    res.send(marvel);
-    res.status(200).json(marvel);
-});
-
-server.listen(8000, () => console.log('API started'));
+server.listen(8000, () => console.log('API running on port 8000'));
