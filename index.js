@@ -7,11 +7,6 @@ server.use(express.json());
 // the second argument passed to the .get() method is the "Route Handler Function"
 // the route handler function will run on every GET request to "/"
 
-const sendError = (status, message, res) => {
-    // This is just a helper method that we'll use for sending errors when things go wrong.
-    res.status(status).json({ errorMessage: message });
-    return;
-  };
 
 server.get("/", (req, res) => {
   // express will pass the request and response objects to this function
@@ -103,13 +98,13 @@ server.delete('/api/users/:id', (req, res) => {
       .remove(id)
       .then(response => {
         if (response === 0) {
-            sendError(404, 'The user with that ID does not exist."', res);
-          return;
+            res.status(404).json({error: "The user with the specified ID does not exist."})          
+            return;
         }
         res.json({ success: `User with id: ${id} removed from system` });
       })
       .catch(error => {
-        sendError(500, 'The user could not be removed', res);
+          res.status(500).json({error: 'The user could not be removed'})
         return;
       });
   });
@@ -119,35 +114,31 @@ server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
     const { name, bio } = req.body;
     if (!name || !bio) {
-        sendError(400, 'Must provide name and bio', res);
+        res.status(400).json({error: "Please provide name and bio for the user."})
       return;
     }
     data
       .update(id, { name, bio })
       .then(response => {
         if (response == 0) {
-            sendError(
-            404,
-            'The user with the specified ID does not exist.',
-            res
-          );
+            res.status(404).json({error: 'The user with the specified ID does not exist.'})
           return;
         }
         data
           .findById(id)
           .then(user => {
             if (user.length === 0) {
-                sendError(404, 'User with that id not found', res);
+                res.status(404).json({error: 'User with that id not found'})
               return;
             }
             res.json(user);
           })
           .catch(error => {
-            sendError(500, 'Error looking up user', res);
+            res.status(500).json({error: 'Error looking up user'})
           });
       })
       .catch(error => {
-        sendError(500, 'Something bad happened in the database', res);
+        res.status(500).json({error: 'Something bad happened in the database'})
         return;
       });
   });
