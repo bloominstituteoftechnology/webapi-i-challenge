@@ -11,7 +11,7 @@ module.exports = {
 };
 
 function find() {
-  return db('user3s');
+  return db('users');
 }
 
 function findById(id) {
