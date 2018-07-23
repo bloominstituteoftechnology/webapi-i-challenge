@@ -27,6 +27,8 @@ server.get("/hobbits", (req, res) => {
   res.status(200).json(hobbits);
 });
 
+
+
 //find
 server.get("/users", (req, res) => {
   data
@@ -38,6 +40,32 @@ server.get("/users", (req, res) => {
       res.status(500).json({ error: "The users information could not be retrieved." });
     });
 });
+
+//Post
+server.post('/users', (req, res) => {
+    const { name, bio, created_at, updated_at } = req.body;
+    if (!name || !bio) {
+        sendUserError(400, 'Must provide name and bio', res);
+        return;
+      }
+      data
+        .insert({
+          name,
+          bio,
+          created_at,
+          updated_at
+        })
+        .then(response => {
+          res.status(201).json(response);
+        })
+        .catch(error => {
+          console.log(error);
+          sendUserError(400, error, res);
+          return;
+        });
+    });
+
+
 
 //findbyid
 server.get("/users/:id", (req, res) => {
@@ -59,9 +87,8 @@ server.get("/users/:id", (req, res) => {
         .json({error: "User info could not be retrieved"})
     })
     });  
-    // .catch(() => 
-    //     res.status(400).json({ error: "error! could not find that user!" })
-    // )})
+
+
 
 
 
