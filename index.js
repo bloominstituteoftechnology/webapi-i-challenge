@@ -28,7 +28,6 @@ server.get("/api/users/:id", (req, res) => {
 })
 //kinda redundant ^
 
-
 server.post("/api/users", (req, res) => {
   if (req.query.name == "" || req.query.bio == ""){
   res.status(400).send({ errorMessage: "Please provide name and bio for the user."});
@@ -45,4 +44,12 @@ server.post("/api/users", (req, res) => {
   }
 });
 
+server.delete("/api/users/:id", (req, res) => {
+  let user = req.params;
+  db.findById(user.id)
+  .then(db.remove(user.id)
+        .then(res.send("Delete worked"))
+        .catch(res.status(500).send({ error: "The user could not be removed" })))
+  .catch(res.status(404).send({ message: "The user with the specified ID does not exist." }))
+})
 server.listen(8000, () => console.log('API running on port 8000'));
