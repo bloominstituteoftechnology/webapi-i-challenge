@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const server = express();
-const db = require('./data/db.js')
+const db = require("./data/db.js")
 
 
-server.get('/api/users', (req, res) => {
+server.get("/api/users", (req, res) => {
   db.find()
   .then(users => {
             res.send({ users });
@@ -13,6 +13,20 @@ server.get('/api/users', (req, res) => {
   })
 });
 
+server.get("/api/users/:id", (req, res) => {
+  let user = req.params;
+  db.findById(user.id)
+  .then(user => {
+    if (user == ""){
+      res.status(404).send({ message: "The user with the specified ID does not exist." })
+    }
+    res.send({ user });
+  })
+  .catch(error => {
+    res.status(404).send({ message: "The user with the specified ID does not exist." })
+  })
+})
+//kinda redundant ^
 
 
 server.post("/api/users", (req, res) => {
