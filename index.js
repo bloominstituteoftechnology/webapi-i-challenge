@@ -1,3 +1,5 @@
+const db = require('./data/db')
+
 // require the express module
 const express = require('express')
 
@@ -31,6 +33,15 @@ server.get('/hobbits', (req, res) => {
   res.status(200).json(hobbits);
 });
 
+server.get('/users', (req,res) => {
+  db.find()
+    .then( users => {
+      res.status(200).json(users)
+    }, reason => {
+      res.status(500)
+    });
+
+})
 
 //set which port to listent to and the callback to run after the server starts
 server.listen(8000, ()=> console.log('API running on port 8000 ....'))
