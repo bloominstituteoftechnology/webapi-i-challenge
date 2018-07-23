@@ -44,10 +44,9 @@ server.post('/api/users', (req, res) => {
     sendUserError(400, 'Please provide name and bio for the user.', res);
     return;
   } else {
-    console.log(req.body);
     db.insert(req.body).then(response => {
-      console.log(response);
-      res.status(200).json(response);
+      console.log('add', response);
+      res.status(201).json(response);
     }).catch(err => {
       console.log(err);
       sendUserError(500, errr, res);
@@ -55,5 +54,19 @@ server.post('/api/users', (req, res) => {
     })
   }
 });
+
+server.delete('/api/users/:id', (req, res) => {
+  console.log('something');
+  db.remove(req.params.id).then(response => {
+    if (response === 0) {
+      sendUserError(404, "The user with the specified ID does not exist.", res);
+      return;
+    }
+    res.status(200).json(response);
+  }).catch(err => {
+    sendUserError(500, err, res);
+    return;
+  });
+})
 
 server.listen(8000, () => console.log('App is listening...'));
