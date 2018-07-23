@@ -87,6 +87,23 @@ server.delete('/api/users/:id', (req, res) => {
     
 })
 
+server.put('/api/users/:id', jsonParser, (req, res) => {
+  const id = Number(req.params.id)
+
+  db
+    .update(Number(req.params.id), {
+      name: req.body.name,
+      bio: req.body.bio
+    })
+    .then(n => {
+      db
+        .findById(id)
+        .then(user => res.status(200).json(user[0]))
+        .catch(error => res.status(500).json({ error: 'The user information could not be retrieved' }))
+    })
+    .catch(error => res.status(500).json({ error: 'The user could  not be updated' }))
+})
+
 
 
 
