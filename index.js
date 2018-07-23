@@ -38,12 +38,18 @@ server.get('/api/users/:id', (req, res) => {
 
 server.delete('/api/users/:id', (req, res) => {
     db
-        .remove(req.params.id)
+        .findById(req.params.id)
         .then(user => {
-            if (user === 0) return res.status(404).json({ message: 'The user with the specified ID does not exist.' });
-            res.status(200).json({ completed: 'Delete completed!' })
+            if (user.length === 0) return res.status(404).json({ message: "The user with the specified ID does not exist." });
+            res.status(200).json(user)
+            db
+                .remove(req.params.id)
+                .then(count => {
+                    if (count === 0) return res.status(404).json({ message: "The user with the specified ID does not exist." });
+                })
+                .catch(err => res.status(500).json({ error: "The user could not be removed" }));
         })
-        .catch(err => res.status(500).json({ error: 'The user could not be removed' }));
+        .catch(err => res.status(500).json({ error: 'The user information could not be retrieved.' }));
 })
 
 server.put('/api/users/:id', (req, res) => {
@@ -54,7 +60,13 @@ server.put('/api/users/:id', (req, res) => {
         .update(id, { name, bio })
         .then(user => {
             if (user === 0) return res.status(404).json({ message: 'The user with the specified ID does not exist.' });
-            res.status(200).json({ completed: 'Update completed!' });
+            db
+                .findById(id)
+                .then(user => {
+                    if (user.length === 0) return res.status(404).json({ message: "The user with the specified ID does not exist." });
+                    res.status(200).json(user)
+                })
+                .catch(err => res.status(500).json({ error: "The user information could not be retrieved." }));
         })
         .catch(err => res.status(500).json({ error: "The user information could not be modified." }));
 })

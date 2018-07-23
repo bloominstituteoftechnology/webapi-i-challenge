@@ -12,6 +12,7 @@ class App extends Component {
       users: []
     }
   }
+  
   componentDidMount() {
     axios
       .get('http://localhost:8000/api/users')
