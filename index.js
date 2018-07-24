@@ -71,7 +71,7 @@ server.post('/api/users', (req,res) => {
       newUser.hasOwnProperty('updated_at')){
     db.insert(newUser)
     .then( user => res.status(200).json(user), 
-      reason => {res.status(500)});
+      reason => {res.status(500).json({ error: "There was an error while saving the user to the database" })});
   }
   
 })
