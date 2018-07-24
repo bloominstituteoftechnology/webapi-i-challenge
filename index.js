@@ -33,6 +33,7 @@ server.get('/api/users', (req, res) => {
             return;
         })
 })
+
 server.get('/api/users/:id', (req, res) => {
     const id = req.params.id ;
     db
@@ -49,6 +50,17 @@ server.get('/api/users/:id', (req, res) => {
         })
 
 })
+
+server.post('/api/users', (req, res) => {
+    const { name, bio } = req.body ;
+    const newUser = { name, bio } ;
+    db
+        .insert(newUser)
+        res.json({ newUser })
+})
+    
+
+
 
 //data shape
 // {
