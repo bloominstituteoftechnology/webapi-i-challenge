@@ -14,11 +14,25 @@ server.get('/api/users', (req, res) => {
 		res.json(users);
 	})
 	.catch(err => {
-		res.status(500).json({error: err});
+		res.status(500).json({error: "The users information could not be retrieved."});
 	});
 });
 
-
+server.get('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  db
+    .findById(id)
+    .then(users => {
+      if (users.length === 0) {
+        res.status(404).json({message: 'User not Found'});
+      } else {
+      	res.json(users[0]);
+      }
+  })
+    .catch(err => {
+    	res.status(500).json({ error: err });
+    });
+});
 
 
 
