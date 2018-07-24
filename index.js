@@ -1,12 +1,21 @@
 const express = require('express');
 const server = express();
-const util = require('util');
-//const users = require('./data/seeds/users.js');
+const bodyParser = require('body-parser');
 const db = require('./data/db.js');
 
+server.use(express.json());
 
-let id = 1;
+const user = {
+    name: '',
+    bio: ''
+}
 
+let nextId = 2;
+
+
+server.get('/', (req, res) => {
+    res.send('API running');
+})
 
 server.get('/api/users', (req, res) => {
     db.find()
@@ -24,7 +33,7 @@ server.get('/api/users/:id', (req, res) => {
         res.status(404);
         res.json({error: 'The user with the specified ID does not exist'});
     }
-    db.findById()
+    db.findById(id)
     .then (response => {
         res.status(200).json(response);
     })
@@ -35,13 +44,14 @@ server.get('/api/users/:id', (req, res) => {
 });
 
 server.post('/api/users', (req, res) => {
+    const { name, bio } = req.body;
+    const user = req.body;
+
     if (!name || !bio) {
         res.status(400);
         res.json({error: 'Please provide name and bio for the user.'})
     }
-    const { name, bio } = req.body;
-    const newUser = { name, bio, id: id }
-    db.insert()
+    db.insert(user)
     .then (response => {
         res.status(200).json(response);
     })
@@ -49,7 +59,8 @@ server.post('/api/users', (req, res) => {
         res.status(500);
         res.json({error: 'There was an error while saving the user to the database.'})
     }) 
-    id++;
+
+    
 });
 
 server.delete('/api/users/:id', (req, res) => {
@@ -57,9 +68,9 @@ server.delete('/api/users/:id', (req, res) => {
         res.status(404);
         res.json({error: 'The user with the specified ID does not exist'});
     }
-    db.remove()
+    db.remove(id)
     .then (response => {
-        res.status(200).json(response);
+        res.status(200).send('The user has been removed.');
     })
     .catch(err => {
         res.status(500);
@@ -68,7 +79,11 @@ server.delete('/api/users/:id', (req, res) => {
 });
 
 server.put('/api/users/:id', (req, res) => {
-    if (!id) {
+    const requestId = req.params.id;
+    const { name, bio } = req.body;
+    const user = req.body;
+
+    if (!requestId) {
         res.status(404);
         res.json({error: 'The user with the specified ID does not exist'});
     }
@@ -76,7 +91,7 @@ server.put('/api/users/:id', (req, res) => {
         res.status(400);
         res.json({error: 'Please provide name and bio for the user.'})
     }
-    db.update()
+    db.update(requestId, user)
     .then (response => {
         res.status(200).json(response);
     })

@@ -6,10 +6,12 @@ exports.seed = function(knex, Promise) {
         {
           name: 'AtokiBot',
           bio: 'CS8 Student at Lambda School',
+          id: 1
         },
         {
           name: 'GeekBot',
           bio: 'CS8 Student at Lambda School',
+          id: 2
         },
       ]);
     });
