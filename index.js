@@ -8,7 +8,6 @@ server.use(bodyParser.json());
 
 
 server.post('/api/users', (req, res) => {
-    console.log(req.body)
     
     
     if(req.body.name === undefined || req.body.bio === undefined) {
@@ -51,29 +50,12 @@ server.get('/api/users/:id', (req, res) => {
         }
         res.status(200).send(response);
     })
-    .catch(err => {
-        console.log(err);
+    .catch(() => {
+        res.json({ message: 'The user with the specified ID does not exist.'});
     })
 })
 
-// server.get('/', (req, res) => {
-//     res.send('Hello World');
-// });
 
-// server.get('/hobbits', (req, res) => {
-//     const hobbits = [
-//         {
-//             id: 1,
-//             name: 'Samwise Gamgee',
-//         },
-//         {
-//             id: 2,
-//             name: 'Frodo Baggins',
-//         }
-//     ];
-//     res.status(200).json(hobbits);
-// })
-
-server.listen(8000, () => console.log('API running on port 8000'));
+server.listen(8000);
 
 
