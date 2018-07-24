@@ -1,8 +1,11 @@
 const express = require('express');
 const db = require('./data/db');
 const server = express();
+
+//middleware
 server.use(express.json());
 
+//route handlers
 server.get('/', (req, res) => {
 
   res.send('Hello World');
@@ -34,6 +37,21 @@ server.get('/api/users/:id', (req, res) => {
     });
 });
 
+server.post('/api/users', (req,res) => {
+  const newUserInfo = req.body;
+  db
+    .insert(newUserInfo)
+    .then(response => {
+      res.status(201).json(response);
+    })
+    .catch(error => {
+      if(err.error === 19){
+      	res.status(400).json({ errorMessage: "Please provide name and bio for the user."});
+      } else {
+      	res.status(500).json({error: "There was an error while saving the user to the database"});
+      }
+    });
+});
 
 
 
