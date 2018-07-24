@@ -5,13 +5,6 @@ const db = require('./data/db.js');
 
 server.use(express.json());
 
-const user = {
-    name: '',
-    bio: ''
-}
-
-let nextId = 2;
-
 
 server.get('/', (req, res) => {
     res.send('API running');
@@ -29,6 +22,8 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+
     if (!id) {
         res.status(404);
         res.json({error: 'The user with the specified ID does not exist'});
@@ -64,6 +59,8 @@ server.post('/api/users', (req, res) => {
 });
 
 server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+
     if (!id) {
         res.status(404);
         res.json({error: 'The user with the specified ID does not exist'});
@@ -79,7 +76,7 @@ server.delete('/api/users/:id', (req, res) => {
 });
 
 server.put('/api/users/:id', (req, res) => {
-    const requestId = req.params.id;
+    const id = req.params.id;
     const { name, bio } = req.body;
     const user = req.body;
 
@@ -91,7 +88,7 @@ server.put('/api/users/:id', (req, res) => {
         res.status(400);
         res.json({error: 'Please provide name and bio for the user.'})
     }
-    db.update(requestId, user)
+    db.update(id, user)
     .then (response => {
         res.status(200).json(response);
     })
