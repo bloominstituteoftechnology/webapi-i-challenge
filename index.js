@@ -70,4 +70,33 @@ server.delete('/api/users', (req, res) => {
     });
 });
 
+server.put('/api/users/:id', (req, res) => {
+	const id = req.params;
+	const update = req.body;
+
+	db
+	 	.update(id, update)
+	 	.then(count => {
+	 		if (count > 0) {
+	 			res.status(200).json({ message: "Update Successful"});
+	 		} else {
+	 			res.status(404).json({ message: "User Not Found"});
+	 		}
+	 	})
+	 	.catch(err => {
+	 		res.status(500).json({ error: "The user information could not be modified."})
+	 	})
+})
+
+
+
+
+
+
+
+
+
+
+
+
 server.listen(8000, () => console.log('API running on port 8000'));
