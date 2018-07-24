@@ -53,7 +53,21 @@ server.post('/api/users', (req,res) => {
     });
 });
 
+server.delete('/api/users', (req, res) => {
+	const id = req.query;
+	let user;
+	db
+		.findById(id)
+		.then(foundUser => {
+			user = { ...foundUser };
 
-
+	db.remove(id).then(response => {
+      res.status(200).json(response);
+		});
+ 	})
+    .catch(error => {
+      res.status(500).json({ message: "The user could not be removed"});
+    });
+});
 
 server.listen(8000, () => console.log('API running on port 8000'));
