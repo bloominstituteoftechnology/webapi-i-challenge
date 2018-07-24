@@ -27,3 +27,31 @@ server.post('/api/users', (req, res) => {
     })
 });
 
+
+server.get('/api/users', (req, res) => {
+    db.find()
+    .then(response => {
+        res.status(200).json(response);
+    })
+    .catch(() =>{
+        res.status(500).json({ error: "The user information could not be retreived."});
+        res.end();
+    })
+});
+
+server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.findById(id)
+    .then(response => {
+        if(response.length === 0) {
+        res.status(404);
+        res.json({ message: 'The user with the specified ID does not exist.'});
+        return;
+        }
+        res.status(200).send(response);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
