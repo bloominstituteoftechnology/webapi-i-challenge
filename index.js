@@ -52,7 +52,11 @@ server.post('/api/users', (req, res) => {
     return;
   } else {
     db.insert(req.body).then(response => {
-      res.status(201).json(response);
+      db.findById(response.id).then(response => {
+        res.status(201).json(response);
+      }).catch(err => {
+        sendUserError(500, "User could not be added to the database", res);
+      });
     }).catch(err => {
       console.log(err);
       sendUserError(500, errr, res);
@@ -92,7 +96,11 @@ server.put('/api/users/:id', (req, res) => {
       sendUserError(404, "The user with the specified ID does not exist.", res);
       return;
     }
-    res.status(200).json(response);
+    db.findById(req.params.id).then(response => {
+      res.status(200).json(response)
+    }).catch(err => {
+      sendUserError(500, "User could not be updated", res);
+    })
   }).catch(err => {
     sendUserError(500, err, res);
     return;
