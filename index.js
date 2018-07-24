@@ -1,28 +1,97 @@
-const data = require("./data/db");
-const bodyParser = require("body-parser");
 const express = require("express");
 
-const server = express();
-server.use(bodyParser.json());
+const db = require("./data/db"); // So we have access to the database through our db const. We can rename db to database, or anything.
 
+const server = express();
+server.use(express.json()); // Body parser.
+
+let hobbits = [
+  {
+    id: 1,
+    name: "Samwise Gamgee"
+  },
+  {
+    id: 2,
+    name: "Frodo Baggins"
+  }
+];
+let nextId = 3;
+
+// Get Request - Hello World
 server.get("/", (req, res) => {
   res.send("Hello Worldd");
 });
 
-server.get("/api/users", (req, res) => {
-  data
-    .find()
-    .then(response => res.status(200).json(response))
-    .catch(err =>
-      res.status(500).json({
-        error: "The users information could not be retrieved"
-      })
-    );
+// Get Request - Hobbits
+server.get("/hobbits", (req, res) => {
+  //res.send(hobbits);
+  res.status(200).json(hobbits);
 });
+
+// Get Request - Sort
+server.get("/hobbits", (req, res) => {
+  const sortField = req.query.sortby || "id";
+  const response = hobbits.sort(
+    (a, b) => (a[sortField] < b[sortField] ? -1 : 1)
+  );
+  res.status(200).json(response);
+});
+
+// Post Request
+server.post("/hobbits", (req, res) => {
+  const hobbit = { id: nextId++, ...req.body };
+  console.log(req.body);
+  hobbits.push(hobbit);
+  res.status(200).json(hobbits);
+});
+
+// Delete Request
+server.delete("/hobbits/:id", (req, res) => {
+  const { id } = req.params;
+  hobbits = hobbits.filter(h => h.id != id);
+  res.status(200).json(hobbits);
+});
+
+// Update Request
+server.put("/hobbits/:id", (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+  const format = req.query.format || "short";
+});
+
+// Different Routes
+server.get("/about", (req, res) => {
+  res.send("About us");
+});
+
+server.get("/contact", (req, res) => {
+  res.send("About us");
+});
+
+// Using Database:
+server.get("/users", (req, res) => {
+  db.find()
+    .then(users => res.status(200).json(users))
+    .catch(err =>
+      res
+        .status(500)
+        .json({ error: "The users information could not be retrieved" })
+    ); // Bros - then and catch.
+});
+
+// Different way to use get, with async / await:
+/*server.get("/users", async (req, res) => {
+  try {
+    const users = await db.find(); // Telling JS to wait until you have the result of the promise to return the data.
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: "sorry we failed you." });
+  }
+});*/
 
 // Adding users
 
-server.post("/api/users", (req, res) => {
+server.post("/users", (req, res) => {
   const name = req.body.name;
   const bio = req.body.bio;
   const user = { name, bio };
@@ -44,6 +113,15 @@ server.post("/api/users", (req, res) => {
     );
   }
 });
+
+server.listen(8000, () => console.log("API running on port 8000"));
+
+// immutable operations on the hobbits
+// push = nh => h => [...h, nh];
+// delete = index => h => [...h.slice(0, index), ...h.slice(index + 1)]
+
+/*
+
 
 // Getting individual users
 server.get("/api/users/:id", (req, res) => {
@@ -84,4 +162,4 @@ server.delete("/api/users/:id", (req, res) => {
     );
 });
 
-server.listen(8000, () => console.log("API is running on port 8000"));
+server.listen(8000, () => console.log("API is running on port 8000"));*/
