@@ -15,8 +15,8 @@ server.use(helmet());
 // configure routing/endpoints
 
 server.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1  >');
-    //res.send({ hello: 'world' });
+    //res.send('<h1>Hello World</h1>');
+    res.send({ hello: 'world' });
 })
 
 server.get('/api/users', (req, res) => {
@@ -44,41 +44,54 @@ server.get('/api/users/:id', (req, res) => {
             }
             res.json({ users })
         })
-        .catch(error => {
+        .catch(erro => {
             res.status(500).json({ error: 'The user information could not be retrieved.' })
             return;
         })
 
 })
 
+// CREATE GATE
+//     ELSE RELAY ERROR MESSAGE
+//         RETURN newUser
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body ;
     const newUser = { name, bio } ;
+
+    if (newUser.name == null || newUser.bio == null) {
+        res.status(400).json({errorMessage: "Please provide name and bio for the user."});
+        return;
+    }
+
     db
-        .insert(newUser)
-        res.json({ newUser })
+    .insert(newUser)
+    .then(response => {
+        res.status(201).json(response)
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({error: "There was an error while saving the user to the database"});
+        return;
+    })    
 })
-    
-
-
 
 //data shape
 // {
 //     users: [
-//     {
-//     id: 1,
-//     name: "AtokiBot",
-//     bio: "CS8 Student at Lambda School",
-//     created_at: "2018-04-02 19:01:14",
-//     updated_at: "2018-04-02 19:01:14"
-//     },
-//     {
-//     id: 2,
-//     name: "GeekBot",
-//     bio: "CS8 Student at Lambda School",
-//     created_at: "2018-04-02 19:01:14",
-//     updated_at: "2018-04-02 19:01:14"
-//     }
+//         {
+//         id: 1,
+//         name: "AtokiBot",
+//         bio: "CS8 Student at Lambda School",
+//         created_at: "2018-04-02 19:01:14",
+//         updated_at: "2018-04-02 19:01:14"
+//         },
+//         {
+//         id: 2,
+//         name: "GeekBot",
+//         bio: "CS8 Student at Lambda School",
+//         created_at: "2018-04-02 19:01:14",
+//         updated_at: "2018-04-02 19:01:14"
+//         }
 //     ]
-//     }
+// }
 server.listen(3333, () => console.log('API running...'));
