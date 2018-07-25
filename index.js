@@ -8,6 +8,30 @@ const bodyParser = require('body-parser');
 const server = express();
 server.use(bodyParser.json());
 
+function balance(req, res, next){
+  const re = /\:(?<sec>\d{2})\./
+  const result = re.exec(new Date().toISOString())
+  if (Number(result.groups.sec) % 2 !== 0 ) {
+    res.status(403).send('Balance is the key, making things even is the secret to success')
+  }else {
+    next()
+  }
+}
+
+server.use(balance)
+
+function logger(req, res, next) {
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
+      'Origin'
+    )}`
+  );
+
+  next();
+}
+
+server.use(logger);
+
 //configures our server to execute a function fro every GET request to "/"
 // the second argument is the "Route Handler Function"
 // the route handler function will run on every GET request to '/'
