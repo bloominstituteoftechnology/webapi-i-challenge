@@ -100,10 +100,52 @@ server.delete('/api/users/:id', (req, res) => {
             res.json({ success: `User with the id: ${id} removed from system`});
         })
         .catch(error => {
+            console.log(error)
+            //first use of helper func below
             sendUserError(500, 'The user could not be removed', res);
             return;
         })   
 })
+
+//PUT - UPDATE	/api/users/:id	Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+
+    if(!name || !bio) {
+        res.status(400).jsonp({ errorMessage: "Please provide name and bio for the user.", });
+        return;
+    }
+    db
+        .update(id, { name, bio })
+        .then(response => {
+            if (response === 0) {
+                res.status(404).json({ message: "The user with the specified ID does not exist." });
+                return;
+            }
+            db
+                .findById(id)
+                .then(user => {
+                    if (user.length === 0) {
+                        res.status(404).json({ message2: "(NESTED) The user with the specified ID does not exist." });
+                        return;
+                    }
+                    res.json(user);
+                })
+                .catch(error => {
+                    res
+                        .status(500)
+                        .send({ message: "(NESTED) The user information could not be modified.", error: error.message })
+                })
+        })//end of main .then
+        .catch(error => {
+            res
+                .status(500)
+                .send({ message: "The user information could not be modified.", error: error.message });
+                return;
+        })
+})//end of server.put
+
 
 
 
@@ -126,4 +168,4 @@ server.delete('/api/users/:id', (req, res) => {
 //         }
 //     ]
 // }
-server.listen(port, () => console.log('API running...'));
+server.listen(port, () => console.log(`API running...on port ${port}`));
