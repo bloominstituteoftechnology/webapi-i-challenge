@@ -63,7 +63,7 @@ server.get('/api/users/:id', (req, res) => {
             return;
         })
 })
-//POST - CREATE NEW USER
+// POST - CREATE NEW USER
     //pseudo code logic
         // CREATE GATE
         //     ELSE RELAY ERROR MESSAGE
