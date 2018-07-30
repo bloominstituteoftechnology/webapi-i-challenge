@@ -1,21 +1,18 @@
 const express = require('express');
 const server = express();
+const db = require('./data/db');
 
-let users = [
-    {
-        name: 'Jane',
-        bio: 'doe',
-    }
-]
+server.use(express.json());
 
-server.get('/', (req, res) => {
-    res.send('<h1>Hello World</h1>');
-})
 
-server.get('/api/users', (req, res) => {
-    setTimeout(() => {
-        res.send(users);
-    }, );
+server.get('/users', (req, res) => {
+    db.find()
+        .then(users => {
+            res.status(200).json(users)
+        })
+        .catch(() => {
+            res.status(500).json({ error: 'users information could not be retrieved' })
+        })
 })
 
 server.listen(8000, () => console.log('API running...'))
