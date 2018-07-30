@@ -5,6 +5,8 @@ const db = require('./data/db');
 
 const server = express();
 
+server.listen(8000, () => console.log('API running...'));
+
 server.use(helmet());
 server.use(express.json());
 
