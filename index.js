@@ -22,6 +22,24 @@ server.get('/hobbits', (req, res) => {
   res.status(200).json(hobbits);
 });
 
+
+server.post('/api/users', (req, res) => {
+  if (!req.name || !req.body) {
+    res.status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+    return;
+  } else {
+    data.insert(req)
+      .then(response => {
+        res.status(201).json(response);
+      })
+      .catch(err =>{
+        res.status(500)
+          .json({ error: "There was an error while saving the user to the database" });
+      });
+  }
+});
+
 server.get('/api/users', (req,res) => {
   data.find()
     .then(response => res.status(200).json(response))
