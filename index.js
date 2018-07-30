@@ -49,7 +49,7 @@ server.delete('/users/:id', (req, res) => {
     const {id} = req.params;
     db.remove(id)
         .then(response => {
-            if ( response == id ) {
+            if ( response >= 1 ) {
                 res.status(200).json(response)
             } else {
                 res.status(404).json({ message: 'The user with the specified ID does not exist.'})
