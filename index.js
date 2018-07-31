@@ -1,7 +1,7 @@
 //ASSIGNMENT: Use Node.js and Express to build an API that performs CRUD operations on users.
 
 //we use require() to import the express module and make it available to our application. This is similar to the import keyword we have used before. 
-const express = require('express'); 
+const express = require('express');
 
 //The return of calling express() is an instance of an Express application that we can use to configure our server and, eventually, start “listening” and responding to requests. 
 const server = express();
@@ -15,9 +15,6 @@ server.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-let db = require('./data/db')
-
-
 
 // The .find() method returns a promise, so make sure to send 
 // the response after that promise has resolved and, in case 
@@ -28,20 +25,45 @@ let db = require('./data/db')
 //     return db('users');
 //   }
 
+let db = require('./data/db');
+
 // server.get('/api/users', (req,res) => {
 //     let users = db.find()
 //     res.send(users);
 // })
 
-const promise = db.find()
 
+// server.get('/api/users', (req, res) => {
+//     let users = db.find();
+//     users
+//         .then(users => {
+//             return users;
+//         })
+//         .catch(users => {
+//             return ('500: ERROR')
+//         })
+// })
 
+// server.get('/api/users', (req, res) => {
+//     db.find()
+//         .then(users => {
+//             return res.send(users);
+//         })
+//         .catch(users => {
+//             return ('500: ERROR', res.status(200));
+//         })
+// })
 
-server.get('/api/users', (req,res) => {
-    db.find()
-        .then(res.send(db.find()))
+server.get('/api/users', (req, res) => {
+    let users = db.find();
+    users
+        .then(users => {
+            return res.send(users);
+        })
+        .catch(users => {
+            return ('500: ERROR', res.status(200));
+        })
 })
-
 
 
 // Below we code a new endpoint that returns an array of movie characters in JSON format. 
