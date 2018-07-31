@@ -1,9 +1,8 @@
 const db = require("./data/db");
 const express = require("express");
 const server = express();
-const bodyParser = require("body-parser");
 
-server.use(bodyParser.json());
+server.use(express.json());
 
 server.get("/", (req, res) => {
   res.send("Hello World");
@@ -35,8 +34,8 @@ server.post("/api/users", (req, res) => {
   db.insert({
     name: req.body.name,
     bio: req.body.bio,
-    created_at: Date.now(),
-    updated_at: Date.now()
+    created_at: Date.now().toLocaleString(),
+    updated_at: Date.now().toLocaleString()
   })
     .then(id => res.status(201).json(id))
     .catch(error =>
