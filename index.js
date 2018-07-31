@@ -27,33 +27,6 @@ server.get('/', (req, res) => {
 
 let db = require('./data/db');
 
-// server.get('/api/users', (req,res) => {
-//     let users = db.find()
-//     res.send(users);
-// })
-
-
-// server.get('/api/users', (req, res) => {
-//     let users = db.find();
-//     users
-//         .then(users => {
-//             return users;
-//         })
-//         .catch(users => {
-//             return ('500: ERROR')
-//         })
-// })
-
-// server.get('/api/users', (req, res) => {
-//     db.find()
-//         .then(users => {
-//             return res.send(users);
-//         })
-//         .catch(users => {
-//             return ('500: ERROR', res.status(200));
-//         })
-// })
-
 server.get('/api/users', (req, res) => {
     let users = db.find();
     users
@@ -61,7 +34,7 @@ server.get('/api/users', (req, res) => {
             return res.send(users);
         })
         .catch(users => {
-            return ('500: ERROR', res.status(200));
+            return (res.status(500).json({error: "There was an error while saving user to the database"}));
         })
 })
 
