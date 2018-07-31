@@ -60,19 +60,27 @@ server.delete('/users/:id', (req, res) => {
         })
 })
 
-server.put('/user/:id', (req, res) => {
+server.put('/users/:id', (req, res) => {
     const {id} = req.params;
-    const {user} = req.body;
+    const user = req.body;
 
     if (user.name == null || user.bio == null ) {
         res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' })
     }
     db.findById(id)
         .then(response => {
+            console.log(response)
             if (response.length < 1) {
                 res.status(404).json({ message: 'The user with the specified ID does not exist' })
-            } else {
-                res.status(200).json(response)
+            } else { 
+                db.update(id, user)
+                    .then(user => {
+                        // console.log(response);
+                        res.status(200).json(user)
+                    })
+                    .catch(() => {
+                        res.status(500).json({ error: "The post information could not be modified"})
+                    })
             }
         })
         .catch(() => {
