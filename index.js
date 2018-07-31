@@ -54,6 +54,7 @@ server.get('/api/users/:id', (req, res) => {
       if (!response) {
         res.status(404)
           .json({ message: "The user with the specified ID does not exist." });
+        return;
       } else {
         res.status(200).json(response);
       }
@@ -61,7 +62,7 @@ server.get('/api/users/:id', (req, res) => {
     .catch(err => {
       res.status(500)
         .json({ error: "The user information could not be retrieved." });
-    })
+    });
 });
 
 server.delete('/api/users/:id', (req, res) => {
@@ -76,7 +77,24 @@ server.delete('/api/users/:id', (req, res) => {
     .catch(response => {
       res.status(500)
         .json({ error: "The user could not be removed" });
-    })
+    });   
 });
+
+server.put('/api/users/:id', (req, res) => {
+  data.update(req.params.id, req)
+    .then(response => {
+      if (!response) {
+        res.status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      } else if (!req.name || !req.bio) {
+        res.status(400)
+          .json({ errorMessage: "Please provide name and bio for the user." });
+      }  
+    })
+    .catch(response => {
+      res.status(500)
+        .json({ error: "The user information could not be modified." })
+    });
+})
 
 server.listen(8000, () => console.log('API running on port 8000'));
