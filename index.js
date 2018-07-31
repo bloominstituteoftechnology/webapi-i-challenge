@@ -34,6 +34,31 @@ db.findById(id)
 	)
 });
 
-
+server.post('/users', (req,res) => {
+	console.log(req.query);
+const { name, bio, created_at, updated_at } = req.query;
+if(!name || !bio){
+res.status(400).json({message:"Please make sure you have a name and bio"});
+return;
+}
+db.insert({name,bio})
+	.then (response => {
+	res.status(200).json(response)	
+	})
+	.catch(()=>{
+	res.status(500).json({message:"Internal server error"})
+	})
+});
 
 server.listen(8000, () => console.log('API running on port 8000'));
+
+
+
+
+
+
+
+
+
+
+
