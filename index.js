@@ -5,7 +5,7 @@ const db = require('./data/db');
 
 const server = express();
 
-server.listen(8000, () => console.log('API running...'));
+// server.listen(8000, () => console.log('API running...'));
 
 server.use(helmet());
 server.use(express.json());
@@ -30,7 +30,7 @@ server.post('/api/users', (req, res) => {
 // delete
 server.delete('/api/users', function(req, res) {
     const { id } = req.query;
-    let user;
+    //let user;
 
     db
     .findById(id)
@@ -79,10 +79,11 @@ server.put('/api/users/:id', function(req, res) {
     db
       .find()
       .then(users => {
-        res.json(users);
+        res.json({ users });
       })
       .catch(err => {
         res.status(500).json({ error: err });
+        return;
         // do something with the error
       });
   });
@@ -107,4 +108,4 @@ server.put('/api/users/:id', function(req, res) {
       });
   });
   
-  server.listen(5000, () => console.log('\n== API Running on port 5000 ==\n'));
+  server.listen(8000, () => console.log('\n== API Running on port 8000 ==\n'));
