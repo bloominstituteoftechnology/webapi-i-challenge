@@ -9,6 +9,9 @@ class App extends Component {
     };
   }
 
+  /* When mounted pull in users api. In package.json you'll need to proxy 
+   the node url */
+
   componentDidMount() {
     fetch("api/users")
       .then(res => res.json())
