@@ -11,6 +11,12 @@ server.use(express.json());
 let db = require('./data/db');  // const or let???
 
 //// *********** When the client makes a GET request to /api/users: ********** ////
+
+// If there's an error in retrieving the users from the database:
+// -cancel the request.
+// -respond with HTTP status code 500.
+// -return the following JSON object: { error: "The users information could not be retrieved." }.
+
 server.get('/api/users', (req, res) => {
     let users = db.find();
     users
@@ -22,7 +28,40 @@ server.get('/api/users', (req, res) => {
         })
 })
 
-//// *********** When the client makes a POST request to /api/users: ********** ////
+//// *********** When the client makes a GET request to /api/users/:id ********** ////
+
+// If the user with the specified id is not found:
+// -return HTTP status code 404 (Not Found).
+// -return the following JSON object: { message: "The user with the specified ID does not exist." }.
+
+// If there's an error in retrieving the user from the database:
+// -cancel the request.
+// -respond with HTTP status code 500.
+// -return the following JSON object: { error: "The user information could not be retrieved." }.
+
+// // findById: this method expects an id as it's only parameter and returns the user corresponding to the id provided or an empty array if no user with that id is found.
+//   function findById(id) {
+//     return db('users').where({ id: Number(id) });
+//   }
+
+server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    // or we could destructure it like so: const { id } = req.params;
+    let user = db.findById(id);
+    user
+        .then(user => {
+            if (user.length === 0) {
+                return res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
+            else return res.send(user);
+        })
+        .catch(user => {
+            return (res.status(500).json({ error: "There was an error while saving user to the database" }));
+        })
+})
+
+
+//// *********** When the client makes a POST request to /api/users ************ ////
 
 // Users in the database conform to the following object structure:
 
@@ -41,7 +80,6 @@ server.get('/api/users', (req, res) => {
 //       .then(ids => ({ id: ids[0] }));
 //   }
 
-// When the client makes a POST request to /api/users:
 
 // If the request body is missing the name or bio property:
 // -cancel the request.
@@ -66,35 +104,73 @@ server.post('/api/users', (req, res) => {
     })
 })
 
-server.post('/hobbits', (req, res) => {
-    const hobbit = req.body;
-    hobbit.id = nextId++;
+//// *************** When the client makes a DELETE request to /api/users/:id ******* ////
 
-    hobbits.push(hobbit);
+// If the user with the specified id is not found:
+// -return HTTP status code 404 (Not Found).
+// -return the following JSON object: { message: "The user with the specified ID does not exist." }.
 
-    res.status(201).json(hobbits);
-});
+// If there's an error in removing the user from the database:
+// -cancel the request.
+// -respond with HTTP status code 500.
+// -return the following JSON object: { error: "The user could not be removed" }.
+
+// // remove: the remove method accepts an id as it's first parameter and upon successfully deleting the user from the database it returns the number of records deleted.
+// function remove(id) {
+//     return db('users')
+//       .where('id', Number(id))
+//       .del();
+//   }
+
+server.delete('/api/users/:id', (req, res) => {
+    const {id} = req.params;
+    db.remove(id).then(id => {
+        return res.sendStatus(id.length)
+    })
+})
 
 
-// Below we code a new endpoint that returns an array of movie characters in JSON format. 
-// The first step is to define a new route handler to respond to GET requests to /hobbits.
-server.get('/hobbits', (req, res) => {
-    //Next, we define the data that our endpoint will return inside the newly defined route handler function.
-    const hobbits = [
-        {
-            id: 1,
-            name: 'Samwise Gamgee',
-        },
-        {
-            id: 2,
-            name: 'Frodo Baggins',
-        },
-    ];
 
-    // We should provide as much useful information as possible to the clients using our API. One such piece of information is the HTTP status code that reflects the outcome of the operation the client is trying to perform. The .status() method of the response object can be used to send any valid HTTP status code.
-    // We are also chaining the .json() method of the response object to clearly communicate to both the client making the request, but most importantly, to the next developer working with this code, that the we intend to send the data in JSON format.
-    res.status(200).json(hobbits);
-});
+//// *************** When the client makes a PUT request to /api/posts/:id ******* ////
+
+// If the post with the specified id is not found:
+// -return HTTP status code 404 (Not Found).
+// -return the following JSON object: { message: "The post with the specified ID does not exist." }.
+
+// If the request body is missing the title or contents property:
+// -cancel the request.
+// -respond with HTTP status code 400 (Bad Request).
+// -return the following JSON response: { errorMessage: "Please provide title and contents for the post." }.
+
+// If there's an error when updating the post:
+// -cancel the request.
+// -respond with HTTP status code 500.
+// -return the following JSON object: { error: "The post information could not be modified." }.
+
+// If the post is found and the new information is valid:
+// -update the post document in the database using the new information sent in the reques body.
+// -return HTTP status code 200 (OK).
+// -return the newly updated post.
+
+// // update: accepts two arguments, the first is the id of the user to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
+// function update(id, user) {
+//     return db('users')
+//       .where('id', Number(id))
+//       .update(user);
+//   }
+
+server.put('/api/users/:id', (req, res) => {
+    const {id} = req.params;
+    const user = req.body;
+    db.update(id,user)
+        .then(count => { 
+            return res.status(200).json(count);
+        })
+        .catch(count => {
+            return res.status(500).json({ error: "The post information could not be modified." });
+        })
+})
+
 
 
 // We use the .listen() method to have the express server monitor a port on the computer for any incoming connections and respond to those we have configured. 
