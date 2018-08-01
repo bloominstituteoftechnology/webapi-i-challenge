@@ -72,15 +72,6 @@ server.get('/api/users/:id', (req, res) => {
 //   updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, required, defaults to current date
 // }
 
-
-// // insert: calling insert passing it a user object will add it to the database and return an object with the id of the inserted user. The object looks like this: { id: 123 }.
-// function insert(user) {
-//     return db('users')
-//       .insert(user)
-//       .then(ids => ({ id: ids[0] }));
-//   }
-
-
 // If the request body is missing the name or bio property:
 // -cancel the request.
 // -respond with HTTP status code 400 (Bad Request).
@@ -96,13 +87,38 @@ server.get('/api/users/:id', (req, res) => {
 // -respond with HTTP status code 500 (Server Error).
 // -return the following JSON object: { error: "There was an error while saving the user to the database" }.
 
+// // insert: calling insert passing it a user object will add it to the database and return an object with the id of the inserted user. The object looks like this: { id: 123 }.
+// function insert(user) {
+//     return db('users')
+//       .insert(user)
+//       .then(ids => ({ id: ids[0] }));
+//   }
+
 // Creates a user using the information sent inside the request body.
 server.post('/api/users', (req, res) => {
-    const user = req.body;
-    db.insert(user).then(user => {
-        return res.status(201).json(user)
+    const newUser = req.body;
+    db.insert(newUser)
+        .then(newUser => {
+            // if (!(req.body.name) || !(req.body.bio)) {
+            //     return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+            // }
+            if ((req.body.name.length === 0) || (req.body.bio.length ===0)) {
+                return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+            }
+            else return res.status(201).json(newUser)
+            // else return res.status(201).json(req.body) WHICH ONE should be returned?
+        .catch(newUser => {
+            return res.status(500).json({ error: "There was an error while saving the user to the database" }) //NEED TO TEST THIS
+        })
     })
 })
+
+// server.post('/api/users', (req, res) => {
+//     const user = req.body;
+//     db.insert(user).then(user => {
+//          return res.status(201).json(user)
+//     })
+// })
 
 //// *************** When the client makes a DELETE request to /api/users/:id ******* ////
 
