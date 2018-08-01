@@ -10,6 +10,9 @@ server.use(express.json());
 
 let db = require('./data/db');  // const or let???
 
+// QUESTION: ARE THE ENTRY IDs SUPPOSED TO AUTOMATICALLY UPDATE WHEN I PERFORM THESE CRUD OPERATIONS, OR DO I HAVE TO CODE THAT MYSELF? HOW TO DO?
+// DO I HAVE TO CODE SOMETHING SPECIFIC TO "CANCEL" THE REQUEST?
+
 //// *********** When the client makes a GET request to /api/users: ********** ////
 
 // If there's an error in retrieving the users from the database:
@@ -100,9 +103,9 @@ server.post('/api/users', (req, res) => {
     db.insert(newUser)
         .then(newUser => {
             // if (!(req.body.name) || !(req.body.bio)) {
-            //     return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+            //     return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })  //WHY DOES LEAVING THE REQ.BODY BLANK IN POSTMAN NOT WORK HERE?
             // }
-            if ((req.body.name.length === 0) || (req.body.bio.length ===0)) {
+            if ((req.body.name.length === 0) || (req.body.bio.length ===0)) {  //IS THERE A BETTER WAY HERE?
                 return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
             }
             else return res.status(201).json(newUser)
@@ -137,9 +140,9 @@ server.delete('/api/users/:id', (req, res) => {
     db.remove(id)
         .then(id => {
             if (id === 0) {
-                return res.status(404).json({ message: "The user with the specified ID does not exist." })
+                return res.status(404).json({ message: "The user with the specified ID does not exist." }) // THIS WORKS.
             }
-            else return res.status(204)
+            else return res.status(204) // THIS MAKES POSTMAN HANG UP.
         })
         .catch(id => {
             return res.status(500).json({ error: "The user could not be removed" })
@@ -185,7 +188,7 @@ server.put('/api/users/:id', (req, res) => {
             if (count !== 1) {
                 return res.status(404).json({ message: "The post with the specified ID does not exist." })
             }
-            if (revisedUser.name.length === 0 || revisedUser.bio.length === 0) {
+            if (revisedUser.name.length === 0 || revisedUser.bio.length === 0) { //BETTER WAY TO HANDLE THIS ERROR?
                 return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
             }
             else return res.status(200).json(count); //HOW TO RETURN REVISED USER ENTRY?
