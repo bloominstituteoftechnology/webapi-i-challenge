@@ -113,13 +113,6 @@ server.post('/api/users', (req, res) => {
     })
 })
 
-// server.post('/api/users', (req, res) => {
-//     const user = req.body;
-//     db.insert(user).then(user => {
-//          return res.status(201).json(user)
-//     })
-// })
-
 //// *************** When the client makes a DELETE request to /api/users/:id ******* ////
 
 // If the user with the specified id is not found:
