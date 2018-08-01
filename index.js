@@ -131,11 +131,20 @@ server.post('/api/users', (req, res) => {
 //       .del();
 //   }
 
+// NOTE: THIS IS NOT WORKING IN POSTMAN. IT DELETES FINE, BUT STAYS HUNG UP EACH TIME. 
 server.delete('/api/users/:id', (req, res) => {
     const {id} = req.params;
-    db.remove(id).then(id => {
-        return res.sendStatus(id.length)
-    })
+    db.remove(id)
+        .then(id => {
+            if (id === 0) {
+                return res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
+            else return res.status(204)
+        })
+        .catch(id => {
+            return res.status(500).json({ error: "The user could not be removed" })
+        })
+        
 })
 
 
@@ -170,8 +179,8 @@ server.delete('/api/users/:id', (req, res) => {
 
 server.put('/api/users/:id', (req, res) => {
     const {id} = req.params;
-    const user = req.body;
-    db.update(id,user)
+    const revisedUser = req.body;
+    db.update(id,revisedUser)
         .then(count => { 
             return res.status(200).json(count);
         })
