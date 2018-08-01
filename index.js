@@ -106,7 +106,7 @@ server.post('/api/users', (req, res) => {
                 return res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
             }
             else return res.status(201).json(newUser)
-            // else return res.status(201).json(req.body) WHICH ONE should be returned?
+            // else return res.status(201).json(req.body) WHICH ONE should be returned? HOW TO RETURN THE POSTED ENTRY?
         .catch(newUser => {
             return res.status(500).json({ error: "There was an error while saving the user to the database" }) //NEED TO TEST THIS
         })
@@ -182,7 +182,13 @@ server.put('/api/users/:id', (req, res) => {
     const revisedUser = req.body;
     db.update(id,revisedUser)
         .then(count => { 
-            return res.status(200).json(count);
+            if (count !== 1) {
+                return res.status(404).json({ message: "The post with the specified ID does not exist." })
+            }
+            if (revisedUser.name.length === 0 || revisedUser.bio.length === 0) {
+                return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+            }
+            else return res.status(200).json(count); //HOW TO RETURN REVISED USER ENTRY?
         })
         .catch(count => {
             return res.status(500).json({ error: "The post information could not be modified." });
