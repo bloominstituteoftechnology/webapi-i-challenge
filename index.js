@@ -5,28 +5,12 @@ const express = require('express');
 
 //The return of calling express() is an instance of an Express application that we can use to configure our server and, eventually, start “listening” and responding to requests. 
 const server = express();
-
-// We are using the .get() method to set up a route handler function that will be executed on every GET request to the URL specified as the first parameter, in this case the root of the site (represented by a /). 
-
-// The first two arguments passed by express to a route handler function are: an object that represents the request and another object that represents the response. 
-// Express augments those objects with a set of useful properties and methods. Our example uses the .send() method of the response object to specify the data sent to the client as the response body. 
-
-server.get('/', (req, res) => {
-    res.send('Hello World');
-});
+server.use(express.json());
 
 
-// The .find() method returns a promise, so make sure to send 
-// the response after that promise has resolved and, in case 
-// of failure, return a status code of 500 and an error message 
-// back to the client.
-//
-// function find() {
-//     return db('users');
-//   }
+let db = require('./data/db');  // const or let???
 
-let db = require('./data/db');
-
+//// *********** When the client makes a GET request to /api/users: ********** ////
 server.get('/api/users', (req, res) => {
     let users = db.find();
     users
@@ -34,9 +18,62 @@ server.get('/api/users', (req, res) => {
             return res.send(users);
         })
         .catch(users => {
-            return (res.status(500).json({error: "There was an error while saving user to the database"}));
+            return (res.status(500).json({ error: "There was an error while saving user to the database" }));
         })
 })
+
+//// *********** When the client makes a POST request to /api/users: ********** ////
+
+// Users in the database conform to the following object structure:
+
+// {
+//   name: "Jane", // String, required
+//   bio: "Doe",  // String, required
+//   created_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, required, defaults to current date
+//   updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, required, defaults to current date
+// }
+
+
+// // insert: calling insert passing it a user object will add it to the database and return an object with the id of the inserted user. The object looks like this: { id: 123 }.
+// function insert(user) {
+//     return db('users')
+//       .insert(user)
+//       .then(ids => ({ id: ids[0] }));
+//   }
+
+// When the client makes a POST request to /api/users:
+
+// If the request body is missing the name or bio property:
+// -cancel the request.
+// -respond with HTTP status code 400 (Bad Request).
+// -return the following JSON response: { errorMessage: "Please provide name and bio for the user." }.
+
+// If the information about the user is valid:
+// -save the new user the the database.
+// -return HTTP status code 201 (Created).
+// -return the newly created user document.
+
+// If there's an error while saving the user:
+// -cancel the request.
+// -respond with HTTP status code 500 (Server Error).
+// -return the following JSON object: { error: "There was an error while saving the user to the database" }.
+
+// Creates a user using the information sent inside the request body.
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    db.insert(user).then(user => {
+        return res.status(201).json(user)
+    })
+})
+
+server.post('/hobbits', (req, res) => {
+    const hobbit = req.body;
+    hobbit.id = nextId++;
+
+    hobbits.push(hobbit);
+
+    res.status(201).json(hobbits);
+});
 
 
 // Below we code a new endpoint that returns an array of movie characters in JSON format. 
