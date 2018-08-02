@@ -18,7 +18,7 @@ server.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-server.get('/users', (req, res) => {
+server.get('/api/users', (req, res) => {
     db.find()
         .then(users => {
             res.status(200).json(users);
@@ -29,13 +29,13 @@ server.get('/users', (req, res) => {
   // express will pass the request and response objects to this function
   // the .send() on the response object can be used to send a response to the client
 
-server.post('/users', (req, res) => {
+server.post('/api/users', (req, res) => {
     const user = { id: nextId++, ...req.body }
     users.push(user);
     res.status(200).json(users);
 });
 
-server.put('/users/:id', (req, res) => {
+server.put('/api/users/:id', (req, res) => {
     const id = req.params.id;
     const changes = req.body;
     const format = req.query.format || 's';
@@ -44,14 +44,14 @@ server.put('/users/:id', (req, res) => {
     res.status(200).json(users);
 })
 
-server.delete('/users/:id', (req, res) => {
+server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params;
     users = users.filter(u => u.id != id);
     res.status(200).json(users);
 })
 // once the server is fully configured we can have it "listen" for connections on a particular "port"
 // the callback function passed as the second argument will run once when the server starts
-server.get('/users', (req, res) => {
+server.get('/api/users', (req, res) => {
     const sortField = req.query.sortby || 'id';
     
     res.status(200).json(users);
