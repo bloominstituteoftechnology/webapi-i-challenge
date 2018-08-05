@@ -5,13 +5,14 @@ const express = require('express');
 
 //The return of calling express() is an instance of an Express application that we can use to configure our server and, eventually, start “listening” and responding to requests. 
 const server = express();
-server.use(express.json());
+server.use(express.json()); //added support for parsing JSON content out of the request body. All types of middleware are used in the same way. We tell express about the middleware we want to turn on for our application by making a call to .use() on our server and passing it the piece of middleware we want to use. This line must come after the server has been created by calling express().
 
 
-let db = require('./data/db');  // const or let???
+let db = require('./data/db');  // const or let??? 
 
-// QUESTION: ARE THE ENTRY IDs SUPPOSED TO AUTOMATICALLY UPDATE WHEN I PERFORM THESE CRUD OPERATIONS, OR DO I HAVE TO CODE THAT MYSELF? HOW TO DO?
-// DO I HAVE TO CODE SOMETHING SPECIFIC TO "CANCEL" THE REQUEST?
+// ??? Note that we are not validating the information to keep the demo simple, but in a production application we will validate before attempting to save to the database. ????
+// ??? POSSIBLE STRETCH to practice : Add sorting and pagination support to the GET all endpoint. For pagination the client should supply the API with sorting information, the number of users per page and the page number. ??????
+
 
 //// *********** When the client makes a GET request to /api/users: ********** ////
 
