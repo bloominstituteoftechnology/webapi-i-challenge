@@ -71,7 +71,7 @@ When the client makes a `POST` request to `/api/users`:
 
 * If the information about the _user_ is valid:
 
-  * save the new _user_ the the database.
+  * save the new _user_ to the database.
   * return HTTP status code `201` (Created).
   * return the newly created _user document_.
 
