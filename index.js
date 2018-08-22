@@ -1,11 +1,15 @@
 //ASSIGNMENT: Use Node.js and Express to build an API that performs CRUD operations on users.
 
 //we use require() to import the express module and make it available to our application. This is similar to the import keyword we have used before. 
+// Express is a minimalist framework. It doesn’t provide everything out of the box, but using middleware we can add extra functionality to our application. Middleware provide a way to extend the features provided by the Express framework.
+// We can use Express Middleware to add features to Express. It is the biggest part of Express, most of the code we write, including route handlers, is middleware under the hood.
 const express = require('express');
 
 //The return of calling express() is an instance of an Express application that we can use to configure our server and, eventually, start “listening” and responding to requests. 
+//Notice we used the word server, not API. Express application is generic, meaning it can be used to serve static content, dynamically generated web pages, real-time communications servers and more
 const server = express();
-server.use(express.json()); //added support for parsing JSON content out of the request body. All types of middleware are used in the same way. We tell express about the middleware we want to turn on for our application by making a call to .use() on our server and passing it the piece of middleware we want to use. This line must come after the server has been created by calling express().
+//added support for parsing JSON content out of the request body. All types of middleware are used in the same way. We tell express about the middleware we want to turn on for our application by making a call to .use() on our server and passing it the piece of middleware we want to use. This line must come after the server has been created by calling express().
+server.use(express.json()); 
 
 
 let db = require('./data/db');  // const or let??? 
@@ -14,6 +18,12 @@ let db = require('./data/db');  // const or let???
 // ??? POSSIBLE STRETCH to practice : Add sorting and pagination support to the GET all endpoint. For pagination the client should supply the API with sorting information, the number of users per page and the page number. ??????
 
 
+// ----------------------------------------
+// -Express application publishes a set of methods we can use to configure it. 
+// -We use the .get() method to set up a route handler function 
+// 
+// ----------------------------------------
+
 //// *********** When the client makes a GET request to /api/users: ********** ////
 
 // If there's an error in retrieving the users from the database:
@@ -21,13 +31,21 @@ let db = require('./data/db');  // const or let???
 // -respond with HTTP status code 500.
 // -return the following JSON object: { error: "The users information could not be retrieved." }.
 
+// configures our server to execute a function for every GET request to "/api/users"
+// the second argument passed to the .get() method is the "Route Handler Function"
+// the route handler function will run on every GET request to "/api/users"
 server.get('/api/users', (req, res) => {
     let users = db.find();
     users
         .then(users => {
+            // express will pass the request and response objects to this function
+            // the .send() method of the response object can be used to send a response to the client
+            // the .send() method of the response object here specifies the data sent to the client as the response body. 
             return res.send(users);
         })
         .catch(users => {
+            // The .status() method of the response object can be used to send any valid HTTP status code.
+            // We are also chaining the .json() method of the response object to clearly communicate to both the client making the request, but most importantly, to the next developer working with this code, that the we intend to send the data in JSON format.
             return (res.status(500).json({ error: "There was an error while saving user to the database" }));
         })
 })
@@ -48,7 +66,11 @@ server.get('/api/users', (req, res) => {
 //     return db('users').where({ id: Number(id) });
 //   }
 
-server.get('/api/users/:id', (req, res) => {
+// How can the client let the API know which user you want? One way, and they one we’ll use, is through route parameters. 
+// We define route parameters by adding it to the URL with a colon (:) in front of it. Express will add it to the .params property that is part of the request object.
+// The value for a route parameter will always be string, even if the value passed is numeric. 
+// Express routing has support multiple route parameters. For example, defining a route URL that reads /hobbits/:id/friends/:friendId, will add properties for id and friendId to req.params.
+server.get('/api/users/:id', (req, res) => { 
     const id = req.params.id;
     // or we could destructure it like so: const { id } = req.params;
     let user = db.findById(id);
@@ -202,6 +224,7 @@ server.put('/api/users/:id', (req, res) => {
 
 
 // We use the .listen() method to have the express server monitor a port on the computer for any incoming connections and respond to those we have configured. 
+// the callback function passed as the second argument will run once when the server starts
 server.listen(8000, () => console.log('API running on port 8000'));
 
 
