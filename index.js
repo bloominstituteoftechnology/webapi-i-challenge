@@ -1,11 +1,12 @@
 const express = require("express");
-
 const db = require("./data/db");
+const cors = require('cors');
 
 const server = express();
 
 //configure middleware
 server.use(express.json());
+server.use(cors());
 
 //configure routing (also middleware)
 server.get("/", (req, res) => {

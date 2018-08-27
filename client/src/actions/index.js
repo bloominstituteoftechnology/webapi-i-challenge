@@ -12,7 +12,7 @@ export const fetchUsers = () => dispatch => {
       .then(response => {
         dispatch({ 
           type: USERS_FETCH_SUCCESS,
-          payload: response
+          payload: response.data
          })
       })
 }
