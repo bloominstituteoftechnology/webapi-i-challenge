@@ -51,6 +51,21 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    let data = await db.remove(req.params.id);
+    if (data > 0) {
+      return res.json({ message: `${data} users removed ` });
+    }
+
+    return res
+      .status(404)
+      .json({ message: 'The user with the specified ID does not exsit.' });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 app.listen(3000, () =>
   console.log('\n Server listeneing on port 3000 \n === \n'),
 );
