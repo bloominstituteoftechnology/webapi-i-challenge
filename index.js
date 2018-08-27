@@ -22,7 +22,7 @@ server.get('/users', (req,res)=> {
 });
 
 server.get('/users/:id', (req, res) => {
-    let id = req.params.id;{
+    let id = req.params.id;
     db.findById(id)
         .then(user => user.length ? res.status(200).json(user) : res.status(404)
             .json({message: 'the user with the specified id is not found'}))
@@ -30,7 +30,6 @@ server.get('/users/:id', (req, res) => {
             console.error('error', err);
             res.status(500).json({message: 'the user information could not be retrieved'});
         })
-    }
 })
 
 server.listen(9000, ()=> console.log(`\n==API on port 9k ==\n`));
