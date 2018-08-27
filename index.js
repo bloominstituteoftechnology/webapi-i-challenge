@@ -1,11 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const db = require('./data/db');
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', (_, res) => res.send('Hello world'));
 
@@ -67,14 +70,14 @@ app.delete('/api/users/:id', async (req, res) => {
 });
 
 app.put('/api/users/:id', async (req, res) => {
+  let { name, bio } = req.body;
+
+  if (!name || !bio)
+    return res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+
   try {
-    let { name, bio } = req.body;
-
-    if (!name || !bio)
-      return res
-        .status(400)
-        .json({ errorMessage: 'Please provide name and bio for the user.' });
-
     let data = await db.update(req.params.id, { name, bio });
     if (data > 0) {
       return res.status(200).json({ message: `${data} user(s) updated ` });
