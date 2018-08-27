@@ -55,7 +55,7 @@ app.delete('/api/users/:id', async (req, res) => {
   try {
     let data = await db.remove(req.params.id);
     if (data > 0) {
-      return res.json({ message: `${data} users removed ` });
+      return res.json({ message: `${data} user(s) removed ` });
     }
 
     return res
@@ -63,6 +63,29 @@ app.delete('/api/users/:id', async (req, res) => {
       .json({ message: 'The user with the specified ID does not exsit.' });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    let { name, bio } = req.body;
+
+    if (!name || !bio)
+      return res
+        .status(400)
+        .json({ errorMessage: 'Please provide name and bio for the user.' });
+
+    let data = await db.update(req.params.id, { name, bio });
+    if (data > 0) {
+      return res.status(200).json({ message: `${data} user(s) updated ` });
+    }
+    res.status(404).json({
+      message: 'The user with the specified ID does not exist.',
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: 'The user information could not be modified' });
   }
 });
 
