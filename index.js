@@ -18,7 +18,7 @@ server.get("/users", (req, res) => {
 			res.status(200).json(users);
 		})
 		.catch(err => {
-			console.err(err);
+      console.log(err);
 			res.status(500).json({ 
         error: "The users information could not be retrieved." 
       });
@@ -85,34 +85,31 @@ server.delete("/users/:id", (req, res) => {
 })
 
 server.put("/users/:id", (req, res) => {
-  if (req.body.name && req.body.bio) {
-    db.update(req.params.id, req.body)
-      .then(result => {
-        console.log(result)
-        if (result > 0) {
-          res.status(200).json({
-            id: req.params.id, 
-            name: req.body.name,
-            bio: req.body.bio
-          })
-        } else {
-          res.status(404).json({
-            message: "The user with the specified ID does not exist."
-          })
-        }
-        }
-      )
-      .catch(err => {
-        console.err(err);
-        res.status(500).json({
-          error: "The user information could not be modified."
-        })
-      })
-  } else {
+  if (!(req.body.name && req.body.bio)) {
     return res.status(400).json({
       errorMessage: "Please provide name and bio for the user."
-    })
+    });
   }
+  db.update(req.params.id, req.body)
+    .then(result => {
+      if (result > 0) {
+        res.status(200).json({
+          id: req.params.id, 
+          name: req.body.name,
+          bio: req.body.bio
+        })
+      } else {
+        res.status(404).json({
+          message: "The user with the specified ID does not exist."
+        })
+      }
+    })
+    .catch(err => {
+      console.err(err);
+      res.status(500).json({
+        error: "The user information could not be modified."
+      })
+    })
 })
 
 //Start server
