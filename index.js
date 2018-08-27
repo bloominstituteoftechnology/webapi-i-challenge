@@ -54,5 +54,36 @@ server.get("/users/:id", async (req, res) => {
 	}
 });
 
+server.delete("/users/:id", async (req, res) => {
+	try {
+		let data = await db.remove(req.params.id);
+		if (data > 0) {
+			return res.json({ message: `${data} user(s) removed` });
+		}
+
+		return res.status(404).json({ message: "don't exist bro" });
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+server.put("/users/:id", async (req, res) => {
+	if (!(req.body.name && req.body.bio)) {
+		res.status(400).json({
+			mesage: "You didn't fill stuff you ya ding-dong",
+		});
+	}
+	try {
+		let data = await db.update(req.params.id, req.body);
+		if (data > 0) {
+			return res.json(data);
+		} else {
+			return res.status(400).json(data);
+		}
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
 //Start server
 server.listen(9000, () => console.log("\n== API on port 9k ==\n"));
