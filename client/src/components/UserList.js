@@ -2,11 +2,12 @@ import React from 'react';
 
 const UserList = ({ users }) => {
   return (
-    <div>
+    <div className="user-list">
       {users.map(user => (
-        <div key={user.id}>
-          <h2>{user.name}</h2>
-          <p>{user.bio}</p>
+        <div key={user.id} className="card">
+          <div className="avatar">{user.name.charAt(0)}</div>
+          <h2 className="card__title">{user.name}</h2>
+          <p className="card__body">{user.bio}</p>
         </div>
       ))}
     </div>

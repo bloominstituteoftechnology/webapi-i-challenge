@@ -8,11 +8,23 @@ html {
   font-size: 62.5%;
 }
 
+@media (max-width: 600px) {
+  html {
+    font-size: 56.25%;
+  }
+}
+
+@media (max-width: 425px) {
+  html {
+    font-size: 50%;
+  }
+}
+
 body {
   font-size: 1.6rem;
   font-family: 'Roboto', sans-serif;
-  background-color: #FAFAFA;
-  color: #424242;
+  background-image: linear-gradient(to right, #606c88, #3f4c6b);
+  color: #F5F5F5;
 }
 
 h1,h2,h3,h4,h5 {
@@ -29,7 +41,48 @@ h1,h2,h3,h4,h5 {
 .heading-primary {
   font-size: 3.6rem;
   font-weight: 300;
-  padding: 30px 0;
+  padding-top: 3rem;
   text-align: center;
   text-shadow: 0 .3rem .6rem rgba(0,0,0, 0.15);
+}
+
+.user-list {
+  text-align: center;
+  padding: 3rem;
+}
+
+.card {
+  padding: 3rem;
+  background-color: #F5F5F5;
+  color: #263238;
+  max-width: 45rem;
+  margin: 0 auto;
+  border-radius: 3px;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.4);
+}
+
+.card:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.card__title {
+  margin-bottom: 1rem;
+}
+
+.card__body {
+  color: #757575;
+}
+
+.avatar {
+  font-size: 2rem;
+  width: 5rem;
+  height: 5rem;
+  margin: 0  auto;
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  background-color:#7CB342;
+  color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
