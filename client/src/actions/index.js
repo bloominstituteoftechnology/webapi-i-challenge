@@ -4,6 +4,10 @@ export const FETCHING_USERS = "FETCHING_USERS";
 export const USERS_FETCH_SUCCESS = "USERS_FETCH_SUCCESS";
 export const USERS_FETCH_ERROR = "USERS_FETCH_ERROR";
 
+export const ADDING_USER = "ADDING_USER";
+export const USER_ADD_SUCCESS = "USER_ADD_SUCCESS";
+export const USER_ADD_FAILURE = "USER_ADD_FAILURE";
+
 const URL = "http://localhost:9000/users";
 
 export const fetchUsers = () => dispatch => {
@@ -11,6 +15,16 @@ export const fetchUsers = () => dispatch => {
 	axios.get(URL).then(response => {
 		dispatch({
 			type: USERS_FETCH_SUCCESS,
+			payload: response.data,
+		});
+	});
+};
+
+export const addUser = user => dispatch => {
+	dispatch({ type: ADDING_USER });
+	axios.post(URL, user).then(response => {
+		dispatch({
+			type: USER_ADD_SUCCESS,
 			payload: response.data,
 		});
 	});
