@@ -5,6 +5,8 @@ import {
 	USER_ADD_SUCCESS,
 	DELETING_USER,
 	DELETE_USER_SUCCESS,
+	UPDATING_USER,
+	UPDATE_USER_SUCCESS,
 } from "../actions";
 
 const initialState = {
@@ -12,6 +14,7 @@ const initialState = {
 	fetchingUsers: false,
 	addingUser: false,
 	deletingUser: false,
+	updatingUser: false,
 };
 
 export const usersReducer = (state = initialState, action) => {
@@ -50,6 +53,23 @@ export const usersReducer = (state = initialState, action) => {
 					user => user.id.toString() !== action.payload.id,
 				),
 			};
+		case UPDATING_USER:
+			return {
+				...state,
+				updatingUser: true,
+			};
+		case UPDATE_USER_SUCCESS:
+			return {
+				...state,
+				users: state.users.map(user => {
+					if (user.id.toString() !== action.payload.id) {
+						return user;
+					} else {
+						return action.payload;
+					}
+				}),
+			};
+
 		default:
 			return state;
 	}

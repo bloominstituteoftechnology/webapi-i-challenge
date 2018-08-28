@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchUsers, addUser, deleteUser } from "./actions";
+import { fetchUsers, addUser, deleteUser, updateUser } from "./actions";
 import styled from "styled-components";
 
+import Form from "./Components/Form";
+
+import User from "./Components/User";
 import "./App.css";
 
 const UserContainer = styled.div``;
-
-const User = styled.div``;
 
 class App extends Component {
 	state = {
@@ -24,35 +25,28 @@ class App extends Component {
 		this.setState({ name: "", bio: "" });
 	};
 
+	handleChange = e => {
+		this.setState({ [e.target.name]: e.target.value });
+	};
+
 	render() {
 		return (
 			<UserContainer>
 				{this.props.users.map(user => (
-					<div key={user.id}>
-						<User>
-							<h3>{user.name}</h3>
-							<p>{user.bio}</p>
-						</User>
-						<button onClick={() => this.props.deleteUser(user.id)}>
-							Murder me
-						</button>
-					</div>
+					<User
+						key={user.id}
+						user={user}
+						onSubmit={this.props.updateUser}
+						onChange={this.handleChange}
+						onClick={this.props.deleteUser}
+					/>
 				))}
-				<form onSubmit={this.handleSubmit}>
-					<input
-						type="text"
-						value={this.state.name}
-						placeholder="Enter Name"
-						onChange={e => this.setState({ name: e.target.value })}
-					/>
-					<input
-						type="text"
-						value={this.state.bio}
-						placeholder="Enter bio"
-						onChange={e => this.setState({ bio: e.target.value })}
-					/>
-					<input type="submit" />
-				</form>
+				<Form
+					name={this.state.name}
+					bio={this.state.bio}
+					onChange={this.handleChange}
+					onSubmit={this.handleSubmit}
+				/>
 			</UserContainer>
 		);
 	}
@@ -63,5 +57,5 @@ const mapStateToProps = state => ({
 
 export default connect(
 	mapStateToProps,
-	{ fetchUsers, addUser, deleteUser },
+	{ fetchUsers, addUser, deleteUser, updateUser },
 )(App);
