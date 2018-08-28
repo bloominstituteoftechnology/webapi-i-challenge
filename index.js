@@ -1,12 +1,12 @@
+const express = require('express');
+const cors = require('cors');
 const db = require('./data/db.js');
-const server = require('express')();
-const bodyParser = require('body-parser');
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
+const server = express();
 
-let id = 3;
-
-server.get('/', (req, res) => res.status(200).json('request made to server'));
+// middleware
+server.use(cors());
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
 const fetchUsers = (req, res) => {
   db.find()
