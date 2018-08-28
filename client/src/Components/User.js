@@ -19,13 +19,16 @@ class User extends React.Component {
 					<h3>{this.props.user.name}</h3>
 					<p>{this.props.user.bio}</p>
 				</div>
+				<h5>Edit Friend</h5>
 				<Form
 					name={this.state.name}
 					bio={this.state.bio}
 					onChange={this.handleChange}
-					onSubmit={() =>
-						this.props.onSubmit(this.props.user.id, this.state)
-					}
+					onSubmit={e => {
+						e.preventDefault();
+						this.props.onSubmit(this.props.user.id, this.state);
+						this.setState({ name: "", bio: "" });
+					}}
 				/>
 				<button onClick={() => this.props.onClick(this.props.user.id)}>
 					Murder me

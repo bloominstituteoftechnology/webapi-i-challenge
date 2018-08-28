@@ -41,6 +41,7 @@ class App extends Component {
 						onClick={this.props.deleteUser}
 					/>
 				))}
+				<h3>Add Friend</h3>
 				<Form
 					name={this.state.name}
 					bio={this.state.bio}
