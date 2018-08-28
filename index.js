@@ -1,10 +1,10 @@
 const express = require('express');
-
 const db = require('./data/db.js');
 
 const server = express();
 
 server.use(express.json());
+
 
 server.post('/users', async (req, res) => {
     const user = req.body;
@@ -40,5 +40,26 @@ server.get('/users', (req, res) => {
             res.status(500).json({ message: 'Error getting your data' });
         });
 });
+
+server.delete('/users/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.remove(id)
+        .then( count => {
+            console.log(count);
+            if(count ) {
+                res.status(204).end();
+            } else {
+                res.status(404).json({ message: 'No user with that ID found' });
+            }
+        } )
+        .catch(err => {
+            res.status(500).json({ message: 'Could not delete item' });
+        })
+})
+
+server.put('users/:id', (req, res) => {
+
+})
 
 server.listen(9000, () => console.log('\n== API on port 9K ==\n'));
