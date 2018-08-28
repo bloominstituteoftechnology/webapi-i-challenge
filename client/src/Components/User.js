@@ -1,6 +1,26 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
 
 import Form from "./Form";
+
+const styles = {
+	card: {
+		minWidth: 275,
+	},
+	bullet: {
+		display: "inline-block",
+		margin: "0 2px",
+		transform: "scale(0.8)",
+	},
+	title: {
+		marginBottom: 16,
+		fontSize: 14,
+	},
+	pos: {
+		marginBottom: 12,
+	},
+};
 
 class User extends React.Component {
 	state = {
@@ -15,10 +35,10 @@ class User extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>
-					<h3>{this.props.user.name}</h3>
+				<Paper className="User__card">
+					<h3 color="textSecondary">{this.props.user.name}</h3>
 					<p>{this.props.user.bio}</p>
-				</div>
+				</Paper>
 				<h5>Edit Friend</h5>
 				<Form
 					name={this.state.name}
@@ -30,9 +50,13 @@ class User extends React.Component {
 						this.setState({ name: "", bio: "" });
 					}}
 				/>
-				<button onClick={() => this.props.onClick(this.props.user.id)}>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => this.props.onClick(this.props.user.id)}
+				>
 					Murder me
-				</button>
+				</Button>
 			</div>
 		);
 	}
