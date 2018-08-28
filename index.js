@@ -38,7 +38,7 @@ server.get('/users/:id', (req, res) => {
 server.post('/users', (req, res) => {
   const { name, bio } = req.body;
   if (!name || !bio) {
-    res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' });
+    res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' }).end();
   }
   const user = { name, bio };
   db.insert(user)
@@ -80,7 +80,7 @@ server.delete('/users/:id', (req, res) => {
 server.put('/users/:id', (req, res) => {
   const { name, bio } = req.body;
   if (!name || !bio) {
-    res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' });
+    res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' }).end();
   }
   const id = req.params.id;
   db.findById(id)
