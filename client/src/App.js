@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchUsers, addUser } from "./actions";
+import { fetchUsers, addUser, deleteUser } from "./actions";
 import styled from "styled-components";
 
 import "./App.css";
@@ -33,6 +33,9 @@ class App extends Component {
 							<h3>{user.name}</h3>
 							<p>{user.bio}</p>
 						</User>
+						<button onClick={() => this.props.deleteUser(user.id)}>
+							Murder me
+						</button>
 					</div>
 				))}
 				<form onSubmit={this.handleSubmit}>
@@ -60,5 +63,5 @@ const mapStateToProps = state => ({
 
 export default connect(
 	mapStateToProps,
-	{ fetchUsers, addUser },
+	{ fetchUsers, addUser, deleteUser },
 )(App);

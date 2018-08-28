@@ -8,6 +8,10 @@ export const ADDING_USER = "ADDING_USER";
 export const USER_ADD_SUCCESS = "USER_ADD_SUCCESS";
 export const USER_ADD_FAILURE = "USER_ADD_FAILURE";
 
+export const DELETING_USER = "DELETING_USER";
+export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS";
+export const DELETE_USER_FAILURE = "DELETE_USER_FAILURE";
+
 const URL = "http://localhost:9000/users";
 
 export const fetchUsers = () => dispatch => {
@@ -25,6 +29,16 @@ export const addUser = user => dispatch => {
 	axios.post(URL, user).then(response => {
 		dispatch({
 			type: USER_ADD_SUCCESS,
+			payload: response.data,
+		});
+	});
+};
+
+export const deleteUser = id => dispatch => {
+	dispatch({ type: DELETING_USER });
+	axios.delete(`${URL}/${id}`).then(response => {
+		dispatch({
+			type: DELETE_USER_SUCCESS,
 			payload: response.data,
 		});
 	});
