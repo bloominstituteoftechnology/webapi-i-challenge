@@ -10,8 +10,8 @@ module.exports = {
   remove,
 };
 
-function find() {
-  return db('users');
+function find(sortDir, field) {
+  return db('users').orderBy(field, sortDir);
 }
 
 function findById(id) {

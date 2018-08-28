@@ -1,8 +1,6 @@
 const express = require('express');
 const db = require('./data/db.js');
-
 const server = express();
-
 server.use(express.json());
 
 
@@ -30,13 +28,13 @@ server.get('/', (req, res) => {
 });
 
 server.get('/users', (req, res) => {
-    db.find()
+    const { sort, field } = req.query;
+
+    db.find(sort, field)
         .then(users => {
-            res.status(200).json(users);
+            res.status(200).json({ sortedBy: field, sortOrder: sort, users });
         })
         .catch(err => {
-            console.error('error', err);
-
             res.status(500).json({ message: 'Error getting your data' });
         });
 });
@@ -45,9 +43,8 @@ server.delete('/users/:id', (req, res) => {
     const { id } = req.params;
 
     db.remove(id)
-        .then( count => {
-            console.log(count);
-            if(count ) {
+        .then(count => {
+            if(count) {
                 res.status(204).end();
             } else {
                 res.status(404).json({ message: 'No user with that ID found' });
@@ -58,8 +55,14 @@ server.delete('/users/:id', (req, res) => {
         })
 })
 
-server.put('users/:id', (req, res) => {
-
-})
+server.put('/users/:id', (req, res) => {
+    db.update(req.params.id, req.body)
+        .then(users => {
+        res.status(200).json(users)
+    })
+        .catch(err => {
+            res.status(500).json({ message: 'update failed' });
+    })
+});
 
 server.listen(9000, () => console.log('\n== API on port 9K ==\n'));
