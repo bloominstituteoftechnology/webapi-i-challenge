@@ -2,6 +2,12 @@ body {
 	font-family: "Roboto";
 }
 
+.UserContainer {
+	width: 75%;
+	margin: 0 auto;
+}
+
 .User__card {
 	width: 40%;
+	text-align: center;
 }

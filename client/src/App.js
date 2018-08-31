@@ -31,7 +31,7 @@ class App extends Component {
 
 	render() {
 		return (
-			<UserContainer>
+			<UserContainer className="UserContainer">
 				{this.props.users.map(user => (
 					<User
 						key={user.id}
