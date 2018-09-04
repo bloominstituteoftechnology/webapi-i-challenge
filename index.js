@@ -62,6 +62,13 @@ server.delete('/users/:id', (req , res) => {
     .catch(err => res.status(500).json(err));
 });
 
+server.put('/users/:id', (req , res) => {
+ db.update(req.params.id, req.body).then(users => {
+     res.status(200).json(users)
+ })
+ .catch(err => res.status(500).json({ message: 'update failed'}));  
+})
+
 // start the server
 server.listen(9000, () => console.log('\n== API on port 9k ==\n'));
 
