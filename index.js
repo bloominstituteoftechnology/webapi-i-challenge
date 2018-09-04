@@ -35,7 +35,7 @@ server.post('/users', async (req, res) => {
         try {
             const response = await db.insert(user);
             res.status(201).json({ message: 'User created successfully'});
-        } catch (ex) {
+        } catch (err) {
             res.status(500).json({
                 title:'Error adding the user',
                 description:'what happened',
@@ -46,6 +46,21 @@ server.post('/users', async (req, res) => {
         res.status(422).json({ message: 'A user needs both a name and bio'});
     }
 })
+
+server.delete('/users/:id', (req , res) => {
+    const { id } = req.params; // const id = req.params.id;
+
+    db.remove(id)
+    .then(count => {
+        console.log('count:', count);
+        if (count) {
+        res.status(204).end();
+    } else {
+        res.status(200).json({ message: 'No user with this id was found'});
+    }
+    })
+    .catch(err => res.status(500).json(err));
+});
 
 // start the server
 server.listen(9000, () => console.log('\n== API on port 9k ==\n'));
