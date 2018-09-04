@@ -26,6 +26,27 @@ server.get('/users', (req ,res) => {
  });
 })
 
+
+server.post('/users', async (req, res) => {
+
+    const user = req.body;
+
+    if(user.name && user.bio){
+        try {
+            const response = await db.insert(user);
+            res.status(201).json({ message: 'User created successfully'});
+        } catch (ex) {
+            res.status(500).json({
+                title:'Error adding the user',
+                description:'what happened',
+                recoveryInstructions: 'this is what you can do to recover',
+            });
+        }
+    } else {
+        res.status(422).json({ message: 'A user needs both a name and bio'});
+    }
+})
+
 // start the server
 server.listen(9000, () => console.log('\n== API on port 9k ==\n'));
 
