@@ -24,9 +24,9 @@ server.get("/download", (req, res, next) => {
   });
 });
 
-server.get("/", (req, res) => {
-  res.send("Hello FSW12");
-});
+// server.get("/", (req, res) => {
+//   res.send("Hello FSW12");
+// });
 
 server.use("/api", userRoutes);
 

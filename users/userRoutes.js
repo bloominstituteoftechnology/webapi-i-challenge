@@ -36,9 +36,9 @@ router.post("/", async (req, res) => {
   //   .catch(err => res.status(500).json(err));
 });
 
-router.get("/", (req, res) => {
-  res.send("Hello FSW12");
-});
+// router.get("/", (req, res) => {
+//   res.send("Hello FSW12");
+// });
 
 //using query string: http://localhost:9000/users ? sort=asc & field=name
 router.get("/", (req, res) => {
@@ -57,7 +57,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/", (req, res) => {
+router.get("/:id", (req, res) => {
   const id = req.params.id;
 
   db.findById(id)
