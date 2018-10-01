@@ -1,3 +1,5 @@
+// set a port for the server
+const port = "8000";
 // imporer texpress in to the server api
 const express = require("express");
 
@@ -14,3 +16,8 @@ server.post("/api/users", (req, res) => {});
 
 // skeleton for delete user based upon id TODO: fill in logic
 server.delete("/api/users/:id", (req, res) => {});
+
+// listent to port using the server
+server.listen(port, () =>
+  console.log(`\n=== Server listening on port: ${port}`)
+);
