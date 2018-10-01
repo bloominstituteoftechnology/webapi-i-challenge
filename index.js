@@ -48,7 +48,7 @@ server.post("/api/users", (req, res) => {
 /*
   get all users
   -------------
-  
+
   If there's an error in retrieving the users from the database:
     cancel the request.
     respond with HTTP status code 500.
@@ -64,19 +64,41 @@ server.get("/api/users", (req, res) => {
     );
 });
 
-// skeleton for get specific user based upon id TODO: add some status and error handling
+/*
+  get specific user based upon id
+  -------------------------------
+
+  If the user with the specified id is not found:
+    return HTTP status code 404 (Not Found).
+    return the following JSON object: { message: "The user with the specified ID does not exist." }.
+
+  If there's an error in retrieving the user from the database:
+    cancel the request.
+    respond with HTTP status code 500.
+    return the following JSON object: { error: "The user information could not be retrieved." }.
+*/
 server.get("/api/users/:id", (req, res) => {
   db.findById(req.params.id)
     .then(user => {
-      res.json(user);
+      if (user.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+      res.status(200).json(user);
     })
     .catch(err =>
-      res.json({ error: "The user information could not be retrieved." })
+      res
+        .status(500)
+        .json({ error: "The user information could not be retrieved." })
     );
 });
 
 // skeleton for delete user based upon id TODO: fill in logic
 server.delete("/api/users/:id", (req, res) => {});
+
+// skeleton for update user based upon id TODO: fill in logic
+server.put("/api/users/:id", (req, res) => {});
 
 // listent to port using the server
 server.listen(port, () =>
