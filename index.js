@@ -12,6 +12,7 @@ const db = require('./data/db');
   res.send('<h1>Hello FSW13!<h1>');
  });
   
+// GET request to /api/users 
 
  server.get('/api/users', (req, res) => {
   db.find()
@@ -24,6 +25,8 @@ const db = require('./data/db');
   });
  });
  
+// GET request to /api/users/:id
+
  server.get('/api/users/:id', (req, res) => {
    db.findById(req.params.id)
    .then((user) => {
@@ -32,6 +35,7 @@ const db = require('./data/db');
        .status(404)
        .json({message: "The user with the specified ID does not exist."});
      } else
+     console.log(user);
     res.status(200).json(user);
    })
    .catch(err => 
