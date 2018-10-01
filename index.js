@@ -4,17 +4,21 @@ const port = "8000";
 const db = require("./data/db");
 // imporer texpress in to the server api
 const express = require("express");
+// import cors to use local server and react connections
+const cors = require("cors");
 
 const server = express(); // instantiate an express server
 
-// skeleton for get all users TODO: fill in logic
+server.use("cors");
+
+// skeleton for get all users TODO: add some status and error handling
 server.get("/api/users", (req, res) => {
   db.find()
     .then(users => res.json(users))
     .catch(err => res.json(err));
 });
 
-// skeleton for get specific user based upon id TODO: fill in logic
+// skeleton for get specific user based upon id TODO: add some status and error handling
 server.get("/api/users/:id", (req, res) => {
   db.findById(req.params.id)
     .then(user => {
