@@ -1,5 +1,5 @@
 // implement your API here
-const express = require('express');
+const express = require('express'); // builds server
 const cors = require('cors'); // install this package to connect from react
 const db = require('./data/db');
 
