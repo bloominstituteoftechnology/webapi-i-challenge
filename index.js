@@ -16,7 +16,7 @@ const db = require('./data/db');
  server.get('/api/users', (req, res) => {
   db.find()
   .then((users) => {
-    console.log('\n** users **', users)
+    console.log(`** users **`, users)
     res.json(users);
   })
   .catch(() => {
@@ -25,9 +25,9 @@ const db = require('./data/db');
  });
  
  server.get('/api/users/:id', (req, res) => {
-   db.findById(id)
-   .then((users) => {
-    res.json('users' + req.params.id);
+   db.findById(req.params.id)
+   .then((user) => {
+    res.json(`user  ${req.params.id}`);
    })
    .catch(() => {
      res.status(404).json({message: "The user with the specified ID does not exist."})
