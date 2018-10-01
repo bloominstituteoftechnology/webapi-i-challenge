@@ -9,7 +9,7 @@ const cors = require("cors");
 
 const server = express(); // instantiate an express server
 
-server.use("cors");
+server.use(cors);
 
 /* 
   add new user
