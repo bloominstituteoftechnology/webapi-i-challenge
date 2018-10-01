@@ -27,11 +27,17 @@ const db = require('./data/db');
  server.get('/api/users/:id', (req, res) => {
    db.findById(req.params.id)
    .then((user) => {
-    res.json(`user  ${req.params.id}`);
+     if (user.length === 0) {
+       return res
+       .status(404)
+       .json({message: "The user with the specified ID does not exist."});
+     } else
+    res.status(200).json(user);
    })
-   .catch(() => {
-     res.status(404).json({message: "The user with the specified ID does not exist."})
-   })
+   .catch(err => 
+     res.status(404)
+     .json({message: "The user with the specified ID does not exist."})
+   )
  })
 
 
