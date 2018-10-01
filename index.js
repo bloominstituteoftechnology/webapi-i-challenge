@@ -11,26 +11,10 @@ const server = express(); // instantiate an express server
 
 server.use("cors");
 
-// skeleton for get all users TODO: add some status and error handling
-server.get("/api/users", (req, res) => {
-  db.find()
-    .then(users => res.json(users))
-    .catch(err => res.json(err));
-});
-
-// skeleton for get specific user based upon id TODO: add some status and error handling
-server.get("/api/users/:id", (req, res) => {
-  db.findById(req.params.id)
-    .then(user => {
-      res.json(user);
-    })
-    .catch(err =>
-      res.json({ error: "The user information could not be retrieved." })
-    );
-});
-
-// skeleton for add new user TODO: add status and better error handling
 /* 
+  add new user
+  ------------
+  
   If the request body is missing the name or bio property:
     cancel the request.
     respond with HTTP status code 400 (Bad Request).
@@ -55,11 +39,39 @@ server.post("/api/users", (req, res) => {
   db.insert(req.body)
     .then(users => res.status(201).json(users))
     .catch(err =>
+      res.status(500).json({
+        error: "There was an error while saving the user to the database"
+      })
+    );
+});
+
+/*
+  get all users
+  -------------
+  
+  If there's an error in retrieving the users from the database:
+    cancel the request.
+    respond with HTTP status code 500.
+    return the following JSON object: { error: "The users information could not be retrieved." }. 
+*/
+server.get("/api/users", (req, res) => {
+  db.find()
+    .then(users => res.status(200).json(users))
+    .catch(err =>
       res
         .status(500)
-        .json({
-          error: "There was an error while saving the user to the database"
-        })
+        .json({ error: "The users information could not be retrieved." })
+    );
+});
+
+// skeleton for get specific user based upon id TODO: add some status and error handling
+server.get("/api/users/:id", (req, res) => {
+  db.findById(req.params.id)
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err =>
+      res.json({ error: "The user information could not be retrieved." })
     );
 });
 
