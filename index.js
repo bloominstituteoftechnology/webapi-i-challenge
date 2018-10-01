@@ -13,12 +13,29 @@ server.get('/', (req, res) => {
   res.send('<h1>Hellow FSW13!</h1>')
 })
 
+// Get all users
 server.get('/api/users', (req, res) => {
   db.find().then(users => {
     res.json(users);
   })
   .catch(err => res.send(err));
   })
+  server.get("/api/users/:id", (req, res) => {
+    db.findById(req.params.id)
+      .then(user => {
+        if (user.length === 0) {
+          return res
+            .status(404)
+            .json({ message: "This user does not exist." });
+        }
+        res.status(200).json(user);
+      })
+      .catch(err =>
+        res
+          .status(500)
+          .json({ error: "The user information is irretrievable." })
+      );
+  });
 
 // like an adress for servers to run and listen to traffic from network;
 //  watch for traffic in a particular computer port
