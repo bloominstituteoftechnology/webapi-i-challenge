@@ -19,25 +19,28 @@
 		-1px -1px 0 white,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
-		1px 1px 0 #000;
+    1px 1px 0 #000;
+    font-family: 'Notable', sans-serif;
+
  
 }
 
 .listButton {
   height: 40px;
-  width: 200px;
+  width: 250px;
   background-color: #ff4e00;
   background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
   border: none;
   border-radius: 15px;
   box-shadow: 0 3px #999;
   cursor: pointer;
+  font-family: 'Notable', sans-serif;
 
 }
 
 .listButton:focus {outline: none;}
 
-.listButton:hover {background-color:  #ff4e00}
+.listButton:hover {background-color:  #ff4e00;}
 
 .listButton:active {
   background-color: #ff4e00;
