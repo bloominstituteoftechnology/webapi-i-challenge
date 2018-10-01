@@ -6,5 +6,8 @@ const server = express(); // instantiate an express server
 // skeleton for get all users TODO: fill in logic
 server.get("/api/users", (req, res) => {});
 
-// skeleton for get specific user based upon id
+// skeleton for get specific user based upon id TODO: fill in logic
 server.get("/api/users/:id", (req, res) => {});
+
+// skeleton for add new user TODO: fill in logic
+server.post("/api/users", (req, res) => {});
