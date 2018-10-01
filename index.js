@@ -29,8 +29,39 @@ server.get("/api/users/:id", (req, res) => {
     );
 });
 
-// skeleton for add new user TODO: fill in logic
-server.post("/api/users", (req, res) => {});
+// skeleton for add new user TODO: add status and better error handling
+/* 
+  If the request body is missing the name or bio property:
+    cancel the request.
+    respond with HTTP status code 400 (Bad Request).
+    return the following JSON response: { errorMessage: "Please provide name and bio for the user." }.
+
+  If the information about the user is valid:
+    save the new user the the database.
+    return HTTP status code 201 (Created).
+    return the newly created user document.
+
+  If there's an error while saving the user:
+    cancel the request.
+    respond with HTTP status code 500 (Server Error).
+    return the following JSON object: { error: "There was an error while saving the user to the database" }.
+*/
+server.post("/api/users", (req, res) => {
+  if (!req.body.name || !req.body.bio) {
+    return res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
+  db.insert(req.body)
+    .then(users => res.status(201).json(users))
+    .catch(err =>
+      res
+        .status(500)
+        .json({
+          error: "There was an error while saving the user to the database"
+        })
+    );
+});
 
 // skeleton for delete user based upon id TODO: fill in logic
 server.delete("/api/users/:id", (req, res) => {});
