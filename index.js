@@ -11,3 +11,6 @@ server.get("/api/users/:id", (req, res) => {});
 
 // skeleton for add new user TODO: fill in logic
 server.post("/api/users", (req, res) => {});
+
+// skeleton for delete user based upon id TODO: fill in logic
+server.delete("/api/users/:id", (req, res) => {});
