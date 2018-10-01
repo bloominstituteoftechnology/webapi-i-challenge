@@ -5,7 +5,7 @@ import React from 'react';
 function StudentList() {
     return (
       <div className="students">
-      <p>This will be a list of students.</p>
+      <h1>Students:</h1>
       </div>
     );
   }
