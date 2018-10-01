@@ -6,7 +6,11 @@ const express = require("express");
 const server = express(); // instantiate an express server
 
 // skeleton for get all users TODO: fill in logic
-server.get("/api/users", (req, res) => {});
+server.get("/api/users", (req, res) => {
+  db.find()
+    .then(users => res.json(users))
+    .catch(err => res.json(err));
+});
 
 // skeleton for get specific user based upon id TODO: fill in logic
 server.get("/api/users/:id", (req, res) => {});
