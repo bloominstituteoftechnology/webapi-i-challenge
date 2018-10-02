@@ -1,44 +1,88 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./data/db');
+// implement your API here
+// introduce how routing works
 
- const server = express();
+// import express from 'express'; // ES2015 modules > export default someCode;
+const express = require('express'); // CommonJS modules > module.exports = someCode;
+const cors = require('cors'); // install this package to connect from react
 
- server.use(cors());
+const db = require('./data/db.js');
 
- server.get('/', (req, res) => { 
-  res.send('<h1>Hello FSW13!<h1>');
- });
+const server = express(); // creates the server
 
- server.get('/api/users', (req, res) => {
+server.use(cors()); // this neeeded to connect from react
+
+server.use(express.json()); // formatting our req.body obj.
+
+server.get('/', (req, res) => {
+  //< ---- Route Handler ^^^
+  // request/route handler
+  res.send('<h1>Hello FSW13!</h1>');
+});
+
+server.get('/api/about', (req, res) => {
+  res.status(200).send('<h1>About Us</h1>');
+});
+
+server.get('/api/contact', (req, res) => {
+  res
+    .status(200)
+    .send('<div><h1>Contact</h1><input placeholder="email" /></div>');
+});
+
+// #################### USERS #######################
+
+server.get('/api/users', (req, res) => {
   db.find()
-  .then((users) => {
-    console.log(`** users **`, users)
-    res.json(users);
-  })
-  .catch(() => {
-    res.status(500).json({ error: "The users information could not be retrieved."});
-  });
- });
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => res.send(err));
+});
 
- server.get('/api/users/:id', (req, res) => {
-   db.findById(req.params.id)
-   .then((user) => {
-     if (user.length === 0) {
-       return res
-       .status(404)
-       .json({message: "The user with the specified ID does not exist."});
-     } else
-     console.log(user);
-    res.status(200).json(user);
-   })
-   .catch(() => 
-     res.status(404)
-     .json({message: "The user with the specified ID does not exist."})
-   )
- })
+server.post('/api/users', (req, res) => {
+  const { name, bio } = req.body;
+  const newUser = { name, bio };
+  db.insert(newUser)
+    .then(userId => {
+      const { id } = userId;
+      db.findById(id).then(user => {
+        console.log(user);
+        if (!user) {
+          return res
+            .status(422)
+            .send({ Error: `User does not exist by that id ${id}` });
+        }
+        res.status(201).json(user);
+      });
+    })
+    .catch(err => console.error(err));
+});
 
- const port = 8000;
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  db.remove(id)
+    .then(removedUser => {
+      console.log(removedUser);
+      res.status(200).json(removedUser);
+    })
+    .catch(err => console.error(err));
+});
+
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, bio } = req.body;
+  // ALWAYS CHECK YOUR UPDATES AND RESPOND ACCORDINGLY, THIS ENDPOINT ISNT FINISHED
+  const newUser = { name, bio };
+  console.log(newUser);
+  db.update(id, newUser)
+    .then(user => {
+      console.log(user);
+      res.status(200).json(user);
+    })
+    .catch(err => console.error(err));
+});
+
+ const port = 9000;
  server.listen(port, () => 
   console.log(`\n=== API running on ${port} ===\n`)
  );
