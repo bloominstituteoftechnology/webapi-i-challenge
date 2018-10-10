@@ -7,5 +7,5 @@ const express = require('express'); //CommonJS modules
 const server = express(); //creates a server
 
 
-const port = 9000;
-server.listen(port, () => console.log(`API running on port ${port}`));
+const port = 8000;
+server.listen(port, () => console.log(`\n=== API running on port ${port} ===\n`));
