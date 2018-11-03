@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/LambdaSchool/node-express-mini#readme",
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.5"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
     "knex": "^0.15.2",
     "sqlite3": "^4.0.2"
   }
