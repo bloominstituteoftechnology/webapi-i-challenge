@@ -81,8 +81,11 @@ users.post('/', function (request, response, next) {
     database.insert(userData)
     // Inform user of success
     .then(data => {
+        return database.findById(data.id);
+    })
+    .then(userData => {
         response.status(201);
-        response.json(data);
+        response.json(userData);
     })
     // Inform user of failure (database error)
     .catch(error => {
@@ -111,6 +114,7 @@ users.delete('/:id', function (request, response, next) {
         }
     // Respond successfully
         response.status(204);
+        response.end();
     })
     // Inform user of failure (database error)
     .catch(error => {
@@ -124,7 +128,7 @@ users.delete('/:id', function (request, response, next) {
 });
 
 //-- Update a User -------------------------------
-users.post('/:id', function (request, response, next) {
+users.put('/:id', function (request, response, next) {
     // Check for ill-formed request
     if(!request.body.name || !request.body.bio){
         response.status(400);
@@ -152,8 +156,11 @@ users.post('/:id', function (request, response, next) {
             return;
         }
     // Inform of success
+        return database.findById(userId);
+    })
+    .then(updatedUserData => {
         response.status(200);
-        response.json(data);
+        response.json(updatedUserData);
     })
     // Inform user of failure (database error)
     .catch(error => {
