@@ -29,7 +29,7 @@ users.get('/', function (request, response, next) {
 });
 
 //-- Get a User by Id ----------------------------
-users.get('/:id', function (request, response, next) {
+users.get('asdf/:id', function (request, response, next) {
     // GET    /api/users/:id    Returns the user object with the specified id.
     console.log('get by id');
     const userId = request.params.id;
@@ -59,6 +59,7 @@ users.post('/', function (request, response, next) {
     database.insert(userData)
     .then(data => {
         response.status(200);
+        response.json(data);
     })
     .catch(error => {
         response.status(500);
@@ -72,13 +73,12 @@ users.delete('/:id', function (request, response, next) {
     console.log('delete by id');
     const userId = request.params.id;
     database.remove(userId)
-    .then(data => {
-        if(!data){
+    .then(success => {
+        if(!success){
             response.status(404);
             return;
         }
         response.status(200);
-        response.json(data);
     })
     .catch(error => {
         response.status(500);
