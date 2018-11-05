@@ -52,14 +52,38 @@ users.get('/:id', function (request, response, next) {
 users.post('/', function (request, response, next) {
     // POST    /api/users    Creates a user using the information sent inside the request body.
     console.log('post root');
-    next();
+    let userData = {
+        name: request.body.name,
+        bio : request.body.bio ,
+    };
+    database.insert(userData)
+    .then(data => {
+        response.status(200);
+    })
+    .catch(error => {
+        response.status(500);
+    })
+    .finally(() => next());
 });
 
 //-- Delete a User -------------------------------
 users.delete('/:id', function (request, response, next) {
     // DELETE    /api/users/:id    Removes the user with the specified id and returns the deleted user.
     console.log('delete by id');
-    next();
+    const userId = request.params.id;
+    database.remove(userId)
+    .then(data => {
+        if(!data){
+            response.status(404);
+            return;
+        }
+        response.status(200);
+        response.json(data);
+    })
+    .catch(error => {
+        response.status(500);
+    })
+    .finally(() => next());
 });
 
 //-- Update a User -------------------------------
