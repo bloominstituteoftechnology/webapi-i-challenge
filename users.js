@@ -15,89 +15,153 @@ module.exports = users;
 
 //-- Get all Users -------------------------------
 users.get('/', function (request, response, next) {
-    // GET    /api/users    Returns an array of all the user objects contained in the database.
-    console.log('get root');
+    // Retrieve all users from database, then send to user
     database.find()
     .then(data => {
-        response.status(200)
+        response.status(200);
         response.json(data);
     })
+    // Inform user of failure (database error)
     .catch(error => {
         response.status(500);
+        response.json({
+            error: "The users information could not be retrieved.",
+        });
     })
+    // Pass to next middleware
     .finally(() => next());
 });
 
 //-- Get a User by Id ----------------------------
-users.get('asdf/:id', function (request, response, next) {
-    // GET    /api/users/:id    Returns the user object with the specified id.
-    console.log('get by id');
+users.get('/:id', function (request, response, next) {
+    // Attempt to find user-data in database
     const userId = request.params.id;
     database.findById(userId)
     .then(data => {
+    // Inform the user if the requested data was not found
         if(!data){
             response.status(404);
+            response.json({
+                message: "The user with the specified ID does not exist.",
+            });
             return;
         }
+    // Send the requested data
         response.status(200);
         response.json(data);
     })
+    // Inform user of failure (database error)
     .catch(error => {
         response.status(500);
+        response.json({
+            error: "The user information could not be retrieved.",
+        });
     })
+    // Pass to next middleware
     .finally(() => next());
 });
 
 //-- Create a User -------------------------------
 users.post('/', function (request, response, next) {
-    // POST    /api/users    Creates a user using the information sent inside the request body.
-    console.log('post root');
+    // Check for ill-formed request
+    if(!request.body.name || !request.body.bio){
+        response.status(400);
+        response.json({
+            errorMessage: "Please provide name and bio for the user."
+        });
+        response.next();
+        return;
+    }
+    // Construct data from request
     let userData = {
         name: request.body.name,
         bio : request.body.bio ,
     };
+    // Insert new user into database
     database.insert(userData)
+    // Inform user of success
     .then(data => {
-        response.status(200);
+        response.status(201);
         response.json(data);
     })
+    // Inform user of failure (database error)
     .catch(error => {
         response.status(500);
+        response.json({
+            error: "There was an error while saving the user to the database"
+        });
     })
+    // Pass to next middleware
     .finally(() => next());
 });
 
 //-- Delete a User -------------------------------
 users.delete('/:id', function (request, response, next) {
-    // DELETE    /api/users/:id    Removes the user with the specified id and returns the deleted user.
-    console.log('delete by id');
+    // Attempt to remove identified user from database
     const userId = request.params.id;
     database.remove(userId)
+    // Handle situations where specified user does not exist
     .then(success => {
         if(!success){
             response.status(404);
+            response.json({
+                message: "The user with the specified ID does not exist.",
+            });
             return;
         }
-        response.status(200);
+    // Respond successfully
+        response.status(204);
     })
+    // Inform user of failure (database error)
     .catch(error => {
         response.status(500);
+        response.json({
+            error: "The user could not be removed",
+        });
     })
+    // Pass to next middleware
     .finally(() => next());
 });
 
 //-- Update a User -------------------------------
-users.put('/:id', function (request, response) {
-    // PUT    /api/users/:id    Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
-    console.log('put by id');
-    next();
+users.post('/:id', function (request, response, next) {
+    // Check for ill-formed request
+    if(!request.body.name || !request.body.bio){
+        response.status(400);
+        response.json({
+            errorMessage: "Please provide name and bio for the user."
+        });
+        response.next();
+        return;
+    }
+    // Construct data from request
+    let userData = {
+        name: request.body.name,
+        bio : request.body.bio ,
+    };
+    // Attempt to updated user data in database
+    const userId = request.params.id;
+    database.update(userId, userData)
+    .then(success => {
+    // Handle situations where specified user does not exist
+        if(!success){
+            response.status(404);
+            response.json({
+                message: "The user with the specified ID does not exist.",
+            });
+            return;
+        }
+    // Inform of success
+        response.status(200);
+        response.json(data);
+    })
+    // Inform user of failure (database error)
+    .catch(error => {
+        response.status(500);
+        response.json({
+            error: "The user information could not be modified.",
+        });
+    })
+    // Pass to next middleware
+    .finally(() => next());
 });
-
-//-- Methods provided by database ----------------
-/*
-    find()
-    findById(id)
-    insert(user)
-    update(id, user)
-    remove(id)
-*/
