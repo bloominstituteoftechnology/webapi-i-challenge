@@ -32,7 +32,20 @@ users.get('/', function (request, response, next) {
 users.get('/:id', function (request, response, next) {
     // GET    /api/users/:id    Returns the user object with the specified id.
     console.log('get by id');
-    next();
+    const userId = request.params.id;
+    database.findById(userId)
+    .then(data => {
+        if(!data){
+            response.status(404);
+            return;
+        }
+        response.status(200);
+        response.json(data);
+    })
+    .catch(error => {
+        response.status(500);
+    })
+    .finally(() => next());
 });
 
 //-- Create a User -------------------------------
