@@ -22,6 +22,41 @@ server.get('/api/users', (req, res) => {
         })    
 })
 
+server.get('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db.findById(id)
+        .then((user) => {
+            if(user) {
+                res.json(user);
+            } else {
+                res.status(404)
+                    .json({ message: "The user with the specified ID does not exist"})
+            }
 
+        })
+        .catch(err => {
+            res.status(500)
+                .json({ message: "The user information could not be retreived" })
+        })
+})
 
-server.listen(PORT);
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db.remove(id)
+        .then(user => {
+            if(!user) {
+                res.status(404)
+                    .json({ message: "The user with the specified ID does not exist." })
+            } else {
+                res.json("User deleted")
+            }
+        })
+        .catch(err => {
+            res.status(500)
+                .json({ message: "The user could not be removed." })
+        })
+})
+
+server.listen(PORT, () => {
+    console.log(`listening on port ${PORT}`);
+});
