@@ -1,9 +1,11 @@
 // implement your API here
 const express = require('express');
+
 const db = require('./data/db.js');
 const PORT = 3000;
 
 const server = express();
+server.use(express.json());
 
 server.post('/api/users', (req, res) => {
     const user = req.body;
