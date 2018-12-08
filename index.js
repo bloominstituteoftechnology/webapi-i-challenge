@@ -11,8 +11,25 @@ const server = express();
 server.get('/', (req, res) => {
   // express will pass the request and response objects to this function
   // the .send() on the response object can be used to send a response to the client
-  res.send('Hello World');
+  res.send('Hello World!');
 });
+
+//create a brand new endpoint that returns a list of hobbits
+server.get('/hobbits', (req, res) => {
+  const hobbits = [
+    {
+      id:1,
+      name: 'Samwise Gamgee'
+    },
+    {
+      id: 2,
+      name:'Frodo Baggins'
+    }
+  ];
+  //let next developer know that this is a json api, intending to return json
+  //return json by default
+  res.status(200).json(hobbits);
+})
 
 // once the server is fully configured we can have it "listen" for connections on a particular "port"
 // the callback function passed as the second argument will run once when the server starts
