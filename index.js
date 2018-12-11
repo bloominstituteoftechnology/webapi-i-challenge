@@ -15,7 +15,7 @@ server.get('/api/users', (req, res) => {
    .catch(err => {
     res
     .status(500)
-    .json({message: 'Failed to get users'})
+    .json({error: "The users information could not be retrieved."})
    })
 })
 
@@ -29,22 +29,22 @@ server.get('/api/users/:id', (req, res) => {
     else {
      res
      .status(404)
-     .json({message: "User was not found"})
+     .json({error: 'The user with the specified ID does not exist.'})
     }
    })
-   .catch(err => {
+   .catch(() => {
     res
     .status(500)
-    .json({message: 'Failed to get user'})
+    .json({error: "The user information could not be retrieved."})
    })
 })
 
 
 server.post('/api/users', (req, res) => {
- const { name, bio, created_at, updated_at } = req.params
+ // const { name, bio, created_at, updated_at } = req.params
  db.insert(user)
    .then((user) => {
-    if (name, bio, created_at, updated_at) {
+    if (name, bio) {
      res
      .status(201)
      .json(user)
@@ -61,7 +61,11 @@ server.post('/api/users', (req, res) => {
     .status(500)
     .json({error: "There was an error while saving the user to the database."})
    })
+})
 
+server.put('/api/users/:id', (req, res) => {
+ const { id } = req.params
+ db.update(id, user)
 })
 server.listen(PORT, () => {
  console.log(`Server running live on ${PORT}`)
