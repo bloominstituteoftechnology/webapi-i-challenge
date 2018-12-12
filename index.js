@@ -60,11 +60,9 @@ server.post("/api/users", (req, res) => {
         }); //no .catch for 2nd db, because the catch should catch everything
       })
       .catch(err => {
-        res
-          .status(500)
-          .json({
-            error: "There was an error while saving the user to the database"
-          });
+        res.status(500).json({
+          error: "There was an error while saving the user to the database"
+        });
       });
   } else {
     res
@@ -73,19 +71,51 @@ server.post("/api/users", (req, res) => {
   }
 });
 
-server.put("/api/users/:id", (req, res) => {});
+server.put("/api/users/:id", (req, res) => {
+  const user = req.body;
+  const { id } = req.params;
+  if (user.name && user.bio) {
+    db.update(id, user)
+      .then(count => {
+        if (count) {
+          db.findById(id).then(user => {
+            res.json(user);
+          });
+        } else {
+          res
+            .status(404)
+            .json({
+              message: "The user with the specified ID does not exist."
+            });
+        }
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: "The user information could not be modified." });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
+});
 
 server.delete("/api/users/:id", (req, res) => {
   const { id } = req.params;
-  db.remove(id).then(count => {
-    if (count) {
-      res.json({message: 'successfully deleted'})
-    }else {
-      res.status(404).json({message: "The user with the specified ID does not exist."})
-    }
-  }).catch(err => {
-    res.status(500).json({error: "The user could not be removed"})
-  })
+  db.remove(id)
+    .then(count => {
+      if (count) {
+        res.json({ message: "successfully deleted" });
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The user could not be removed" });
+    });
 });
 
 //listening only below this line
