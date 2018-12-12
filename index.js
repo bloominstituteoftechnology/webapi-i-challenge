@@ -4,8 +4,13 @@ const express = require("express"); //express is a function
 const PORT = 8000;
 const db = require("./data/db");
 
+
 // creates an express application using the express module
 const server = express(); //server is an object that contains a bunch of methods we can use
+
+//plug this method in after the server is defined w/ express function AND before endpoints(otherwise it will break), this will return middleware that parses the body
+server.use(express.json());
+
 
 //Endpoints:
 // configures our server to execute a function for every GET request to "/"
@@ -44,7 +49,16 @@ server.get("/api/users/:id", (req, res) => {
     });
 });
 
-server.post("/api/users", (req, res) => {});
+server.post("/api/users", (req, res) => { 
+  const user  = req.body;
+  db.insert(user)
+  .then(user => {
+    res.status(201).json(user) //201 signifies something has been created in a database
+})
+  .catch(err => {
+    res.status(400).json({errorMessage: "Please provide name and bio for the user."})
+  });
+});
 
 server.put("/api/users/:id", (req, res) => {});
 
