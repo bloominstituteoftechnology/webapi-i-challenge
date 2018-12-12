@@ -4,13 +4,13 @@ const express = require("express"); //express is a function
 const PORT = 8000;
 const db = require("./data/db");
 
-
 // creates an express application using the express module
 const server = express(); //server is an object that contains a bunch of methods we can use
 
 //plug this method in after the server is defined w/ express function AND before endpoints(otherwise it will break), this will return middleware that parses the body
+//need this to properly complete the POST request
+//if you don't have this, it means its not being parsed by express correctly
 server.use(express.json());
-
 
 //Endpoints:
 // configures our server to execute a function for every GET request to "/"
@@ -49,15 +49,28 @@ server.get("/api/users/:id", (req, res) => {
     });
 });
 
-server.post("/api/users", (req, res) => { 
-  const user  = req.body;
-  db.insert(user)
-  .then(user => {
-    res.status(201).json(user) //201 signifies something has been created in a database
-})
-  .catch(err => {
-    res.status(400).json({errorMessage: "Please provide name and bio for the user."})
-  });
+server.post("/api/users", (req, res) => {
+  const user = req.body;
+  if (user.name && user.bio) {
+    db.insert(user)
+      .then(idInfo => {
+        db.findById(idInfo.id).then(user => {
+          //this
+          res.status(201).json(user); //201 signifies something has been created in a database
+        }); //no .catch for 2nd db, because the catch should catch everything
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({
+            error: "There was an error while saving the user to the database"
+          });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
 });
 
 server.put("/api/users/:id", (req, res) => {});
