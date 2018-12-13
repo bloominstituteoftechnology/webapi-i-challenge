@@ -7,7 +7,7 @@ const server = express();
 
 const PORT = 4040;
 
-server.get('/api/users', (req, res) => {
+server.get('/api/users/', (req, res) => {
  db.find()
    .then((users) => {
     res
@@ -20,7 +20,7 @@ server.get('/api/users', (req, res) => {
    })
 })
 
-server.get('/api/users/:id', (req, res) => {
+server.get('/api/users/:id/', (req, res) => {
  const { id } = req.params;
  db.findById(id)
    .then(user => {
@@ -41,10 +41,10 @@ server.get('/api/users/:id', (req, res) => {
 })
 
 
-server.post('/api/users', (req, res) => {
- // const { name, bio, created_at, updated_at } = req.params
- db.insert(user)
-   .then((user) => {
+server.post('/api/users/', (req, res) => {
+ const { name, bio } = req.body
+ db.insert(name, bio)
+   .then(user => {
     if (name, bio) {
      res
       .status(201)
@@ -64,9 +64,9 @@ server.post('/api/users', (req, res) => {
    })
 })
 
-server.delete('/api/users/:id', (req, res) => {
- const { id } = req.params
- db.delete(id)
+server.delete('/api/users/:id/', (req, res) => {
+ const { id, user } = req.params
+ db.remove(id)
    .then(() => {
     if (id){
     res
