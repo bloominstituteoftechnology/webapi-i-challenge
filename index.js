@@ -10,12 +10,13 @@ const PORT = 4040;
 server.get('/api/users', (req, res) => {
  db.find()
    .then((users) => {
-    res.json(users)
+    res
+     .json(users)
    })
    .catch(err => {
     res
-    .status(500)
-    .json({error: "The users information could not be retrieved."})
+     .status(500)
+     .json({error: "The users information could not be retrieved."})
    })
 })
 
@@ -28,14 +29,14 @@ server.get('/api/users/:id', (req, res) => {
     }
     else {
      res
-     .status(404)
-     .json({error: 'The user with the specified ID does not exist.'})
+      .status(404)
+      .json({error: 'The user with the specified ID does not exist.'})
     }
    })
    .catch(() => {
     res
-    .status(500)
-    .json({error: "The user information could not be retrieved."})
+     .status(500)
+     .json({error: "The user information could not be retrieved."})
    })
 })
 
@@ -46,26 +47,29 @@ server.post('/api/users', (req, res) => {
    .then((user) => {
     if (name, bio) {
      res
-     .status(201)
-     .json(user)
-     .send(user)
+      .status(201)
+      .json(user)
+      .send(user)
     }
     else {
      res
-     .status(400)
-     .json({errorMessage: "Please provide name and bio for the user"})
+      .status(400)
+      .json({errorMessage: "Please provide name and bio for the user"})
     }
    })
    .catch(() => {
     res
-    .status(500)
-    .json({error: "There was an error while saving the user to the database."})
+     .status(500)
+     .json({error: "There was an error while saving the user to the database."})
    })
 })
 
 server.delete('/api/users/:id', (req, res) => {
  const { id } = req.params
  db.delete(id)
+ if (id){
+
+ }
  .then()
  .catch()
 })
@@ -74,11 +78,17 @@ server.put('/api/users/:id', (req, res) => {
  const { id } = req.params
  db.update(id, user)
  .then((user) => {
-  if (!id) {
+  if (id) {
    res
-   .status(404)
-   .json({message: "The user with specified ID does not exist."})
-
+   res
+    .status(200)
+    .send(user)
+    .json(user)
+  }
+  else {
+   res
+    .status(404)
+    .json({message: "The user with specified ID does not exist."})
   }
   if (!(name || bio)){
    res
@@ -87,9 +97,9 @@ server.put('/api/users/:id', (req, res) => {
   }
   if (id){
    res
-   .status(200)
-   .send(user)
-   .json(user)
+    .status(200)
+    .send(user)
+    .json(user)
   }
  })
  .catch(() => {
