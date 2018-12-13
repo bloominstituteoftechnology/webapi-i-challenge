@@ -5,6 +5,7 @@ const db = require('./data/db')
 
 const server = express();
 
+server.use(express.json())
 const PORT = 4040;
 
 server.get('/api/users/', (req, res) => {
@@ -43,13 +44,13 @@ server.get('/api/users/:id/', (req, res) => {
 
 server.post('/api/users/', (req, res) => {
  const { name, bio } = req.body
- db.insert(name, bio)
-   .then(user => {
+ db.insert({name, bio})
+   .then((user) => {
     if (name, bio) {
      res
       .status(201)
       .json(user)
-      .send(user)
+      .send(response)
     }
     else {
      res
