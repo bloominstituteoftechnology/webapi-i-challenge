@@ -63,9 +63,40 @@ server.post('/api/users', (req, res) => {
    })
 })
 
+server.delete('/api/users/:id', (req, res) => {
+ const { id } = req.params
+ db.delete(id)
+ .then()
+ .catch()
+})
+
 server.put('/api/users/:id', (req, res) => {
  const { id } = req.params
  db.update(id, user)
+ .then((user) => {
+  if (!id) {
+   res
+   .status(404)
+   .json({message: "The user with specified ID does not exist."})
+
+  }
+  if (!(name || bio)){
+   res
+    .status(400)
+    .json({errorMessage: "Please provide name and bio for the user."})
+  }
+  if (id){
+   res
+   .status(200)
+   .send(user)
+   .json(user)
+  }
+ })
+ .catch(() => {
+  res
+   .status(500)
+   .json({error: "The user information could not be modified."})
+ })
 })
 server.listen(PORT, () => {
  console.log(`Server running live on ${PORT}`)
