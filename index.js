@@ -3,9 +3,11 @@ const express = require("express");
 
 const db = require('./data/db')
 
+const cors = require('cors')
+
 const server = express();
 
-server.use(express.json())
+server.use(express.json(), cors())
 const PORT = 4040;
 
 server.get('/api/users/', (req, res) => {
@@ -89,8 +91,9 @@ server.delete('/api/users/:id/', (req, res) => {
 })
 
 server.put('/api/users/:id', (req, res) => {
- const { id } = req.params
- db.update(id, user)
+ const {name, bio } = req.body
+ const { id } = req.params.id
+ db.update(id, {name, bio})
  .then((user) => {
   if (id) {
    res
