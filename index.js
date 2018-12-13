@@ -1,18 +1,42 @@
 const express = require('express');
 
+const db = require('./data/db');
+
 const server = express();
-const PORT = 3000
+const PORT = 4000
 
 
 //endpoints
 
-server.get('/', (req, res) => {
-    res.send({ test: "This is test"});
+server.get('/api/users', (req, res) => {
+    db.find()
+        .then((users) => {
+           res.json(users);
+    })
+        .catch(err => {
+          res
+            .status(500)
+            .json({message: "Failed to get users"});
+    });
 });
 
-server.get('/greet/:name', (req, res) => {
-    const name = req.params.name;
-    res.send(`Hello ${name}`);
+server.get('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db.findById(id)
+      .then(user => {
+        if (user) {
+          res.json(user);
+        } else {
+          res
+              .status(404)
+              .json({message: "user does not exist"})
+        }
+    })
+      .catch(err => {
+        res
+         .status(500)
+         .json({message: "Failed to get user ID"});
+    });
 });
 
 
