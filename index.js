@@ -10,6 +10,9 @@ const server = express();
 server.use(express.json(), cors())
 const PORT = 4040;
 
+
+
+
 server.get('/api/users/', (req, res) => {
  db.find()
    .then((users) => {
@@ -24,6 +27,8 @@ server.get('/api/users/', (req, res) => {
 })
 
 server.get('/api/users/:id/', (req, res) => {
+ // console.log("Request:", req.params.id)
+ // console.log("Response:", res)
  const { id } = req.params;
  db.findById(id)
    .then(user => {
@@ -91,15 +96,21 @@ server.delete('/api/users/:id/', (req, res) => {
 })
 
 server.put('/api/users/:id', (req, res) => {
+ console.log("Request for Id:", req.params.id)
+ console.log("Request for body:", req.body)
  const user = req.body
  const { id } = req.params
- if (user.name && user.body){
+ if (user.name && user.bio){
+  console.log("Success zero.")  
+  
   db
    .update(id, user)
    .then(count => {
+    console.log("Success one.")
     if (count){
      db.findById(id)
        .then(user => {
+        console.log("Success two.")
         res
          .json(user)
        })
@@ -120,4 +131,4 @@ server.put('/api/users/:id', (req, res) => {
 
 server.listen(PORT, () => {
  console.log(`Server running live on ${PORT}`)
-});
+}); 
