@@ -95,7 +95,7 @@ server.put('/api/users/:id', (req, res) => {
 
   server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params
-    db.delete(id)
+    db.remove(id)
       .then(() => {
        if (id){
        res
