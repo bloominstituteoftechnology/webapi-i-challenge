@@ -24,6 +24,7 @@ server.get('/api/users/', (req, res) => {
      .status(500)
      .json({error: "The users information could not be retrieved."})
    })
+
 })
 
 server.get('/api/users/:id/', (req, res) => {
@@ -93,7 +94,12 @@ server.delete('/api/users/:id/', (req, res) => {
      .status(500)
      .json({error: "The user could not be removed."})
   })
-})
+})  
+
+
+
+ 
+
 
 server.put('/api/users/:id', (req, res) => {
  console.log("Request for Id:", req.params.id)
