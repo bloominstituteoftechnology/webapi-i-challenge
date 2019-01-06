@@ -1,11 +1,16 @@
 // implement your API here
 const express = require('express');
+
 const db = require('./data/db');
 
 const server = express();
-const PORT = 4000;
 
 
+const PORT = 5000;
+
+//++++++++++++++++++++++++++++++++++++++++++
+//get endpoints
+//++++++++++++++++++++++++++++++++++++++++++++
 
 server.get('/', (req, res) => {
     res.send('Hello World')
@@ -82,5 +87,13 @@ server.get('/api/users/:id', (req, res) => {
 //     ...props.hobbitsList
 // ]));
 
-server.listen(8000, () => console.log('API Running on 
- 8000'));
+
+//++++++++++++++++++++++++++++++++++++
+//Listener
+//++++++++++++++++++++++++++++++++++++++
+
+// server.listen(8000, () => console.log('API Running on 8000'));
+
+server.listen(PORT, () => {
+    console.log(`The server is listening on Port ${PORT}`);
+});
