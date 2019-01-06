@@ -36,10 +36,7 @@ server.get('/greet/:name', (req, res) => {
     res.send(`Hello There ${name}!`);
 });
 
-server.get('/api/users/:id', (req, res) => {
-    // const theId = req.params.id;
-    // res.status(200).json(`${theId}`);
-})
+
 
 server.get('/api/users', (req, res) => {
     // res.status(200).json(dbs.find())
@@ -47,24 +44,36 @@ server.get('/api/users', (req, res) => {
     db.find()
         .then( users => {
             console.log(`users ${users}`);
+            res.status(200).json(users)
         })
-        .catch(`error`, (req, res) => {
+        .catch(err => {
+            res.status(500).json({message: `failed to get users`});
 
         });
-    const hobbits = [
-        {
-            id: 1,
-            name: 'samwize Gamgee'
-        },
-        {
-            id: 2,
-            name: 'frodo Baggins'
-        }
-    ];
+   
 
-    // res.status(200).send(hobbits);
-    res.status(200).json(hobbits);
+    
 });
+
+server.get('/api/users/:id', (req, res) => {
+    const theId = req.params.id;
+    //const { theId } = req.params; on slightly different format.
+    // res.status(200).json(`${theId}`);
+    db.findById(theId)
+        .then( thisUser => {
+            console.log(`thisUser ${thisUser}`);
+            if (thisUser) {
+                res.status(200).json(thisUser);
+            } else {
+                res.status(404).json({ message: `User does not exist.`})
+
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: `We can't find the hommie, please try again later!` })
+            res.status(500).json({ message: `We can't find the hommie, please try again later!` })
+        });
+})
 
 // server.post()
 
