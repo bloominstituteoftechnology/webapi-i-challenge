@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./data/db.js');
 const server = express();
+const port = 5000;
 
 // middleware
 server.use(cors());
@@ -22,7 +23,7 @@ const fetchUsers = (req, res) => {
 server.get('/users', fetchUsers);
 
 server.get('/users/:id', (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   db.find()
     .then(users => {
       const user = users.find(user => user.id == id);
@@ -57,7 +58,7 @@ server.post('/users', (req, res) => {
 });
 
 server.delete('/users/:id', (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   db.findById(id)
     .then(user => {
       db.remove(id)
@@ -82,7 +83,7 @@ server.put('/users/:id', (req, res) => {
   if (!name || !bio) {
     res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' }).end();
   }
-  const id = req.params.id;
+  const { id } = req.params;
   db.findById(id)
     .then(user => {
       db.update(id, { name, bio })
@@ -102,4 +103,4 @@ server.put('/users/:id', (req, res) => {
     });
 });
 
-server.listen(5000, () => console.log('server listening on port 5000'));
+server.listen(port, () => console.log(`Server listening on port ${port}.`));

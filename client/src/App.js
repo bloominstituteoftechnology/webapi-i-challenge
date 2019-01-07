@@ -14,7 +14,7 @@ class App extends Component {
     fetch('http://localhost:5000/users')
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
-      .catch(err => console.error(err));
+      .catch(console.error);
   }
 
   render() {

@@ -132,7 +132,7 @@ When the client makes a `PUT` request to `/api/users/:id`:
 
 * If the user is found and the new information is valid:
 
-  * update the user document in the database using the new information sent in the `reques body`.
+  * update the user document in the database using the new information sent in the `request body`.
   * return HTTP status code `200` (OK).
   * return the newly updated _user document_.
 
