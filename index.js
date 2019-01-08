@@ -126,12 +126,56 @@ server.post('/api/users', (req, res) => {
     }
 });
 
+
+server.post('/api/users', (req, res) => {
+    const userInfo = req.body;
+    if (user.name && user.bio) {
+        db.insert(user)
+            .then(banana => {
+                res.status(201).json(banana);
+            })
+            .catch(err => res.status(500).json({ error: err }))
+    } else {
+
+    }
+});
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++
+
+server.post('/api/users', (req, res) => {
+    constuserInfo = req.body;
+
+    db.insert(userInfo)
+        .then(result => {
+            db.findById(result.id)
+                .then(user => {
+                    res.status(201).json(user);
+                })
+                .catch(err => {
+                    res.status(500).json({ message: 'the get by id failed', error: err })
+                });
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'thepost failed', error: err})
+        });    
+});
+
+
+// server.get('/user/:first/:last', (req, res) ={
+
+// })
+// server.get('/user/:first/last/:last', (req, res) ={
+    
+// })
+
+
 //++++++++++++++++++++++++++++++++++++++++
 // Day 2 -  delete - sever - method
 //++++++++++++++++++++++++++++++++++++++++
 
 server.delete('/api/users/:id', (req, res) => {
     const id = req.parans.id;
+    console.log(id);
     //const { id } = req.parans;
     db.remove(id)
         .then((deleteCount ) => {
@@ -139,7 +183,7 @@ server.delete('/api/users/:id', (req, res) => {
             // if(count)
             if (count > 0) {
                 // we should like to send back the user, "get request".
-                res.status(204).json({ message: `The user with the id ${id} was successfully deleted`});
+                res.status(204).json({ message: `The user was successfully deleted`});
             } else {
                 res.status(404).json({ message: 'invalid id'});
 
@@ -154,10 +198,80 @@ server.delete('/api/users/:id', (req, res) => {
 
 });
 
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    // or
+    // const id = req.params.id;
+    db.findById(id)
+        .then(user => {
+            if (user) {
+                db.remove(id).then(count =>{
+                    res.status(200).json(user)
+                });
+            } else {
+                res.status(404)
+                    .json({ message: 'This user with the specfied ID does not exist.'})
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        });
+});
+
 
 // res.send([
 //     ...props.hobbitsList
 // ]));
+
+//++++++++++++++++++++++++++++++++++++
+//+++++++  Query string  ++++++++++++
+//++++++++++++++++++++++++++++++++++++++
+
+
+server.get('greet', (req, res) => {
+    const { first, last } = req.query;
+    res.send({ Greeting: `${first} ${last}`});
+
+});
+
+server.get('/user/first/:first/last/;last', (req,res) => {
+    res.send({ hello : `${req.params.first} ${req.params.last}`});
+});
+
+//++++++++++++++++++++++++++++++++++++
+//+++++++  Put  ++++++++++++ with async and awaite
+//++++++++++++++++++++++++++++++++++++++
+
+server.put('api/users/:id', async(req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+
+    const result = await db.update(id, changes)
+    console.log('result', result);
+    res.status(200).json(result);
+})
+
+// how to handle errors with asinc and awaite?????
+//try catch
+server.put('api/users/:id', async(req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+    
+    try {
+        const result = await db.update(id, changes);
+        console.log('result', result);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+//++++++++++++++++++++++++++++++++++++
+//+++++++  Put  ++++++++++++ regular Put
+//++++++++++++++++++++++++++++++++++++++
+
+
 
 
 
