@@ -101,21 +101,57 @@ server.get('/api/users/:id', (req, res) => {
 });
 //++++++++++++++++++++++++++++++++++++++++
 // Day 2 - put post delete stuff here
-//+++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++
 
 // server.post()
 server.post('/api/users', (req, res) => {
     const user = req.body;
-    // const user = req.params.body;
-    console.log('User from body', user);
-    db.insert(user)
-        .then(idInfo => {
-            console.log('User from insert Method', idInfo);
-            res.status(201).json(idInfo);
+    if (user.name && user.bio) {
+        // const user = req.params.body;
+        console.log('User from body', user);
+        db.insert(user)
+            .then( idInfo => {
+                console.log('User from insert Method', idInfo);
+                db.findById(idInfo.id).then(user => {
+                    res.status(201).json(user);
+                });
+            })
+            .catch( (err) => {
+                res.status(500).json({ message: `Failed to insert user into the db`})
+            });
+
+    } else {
+        console.log("++++ERROR missing name or bio!! +++");
+        res.status(400).json({ message: "missing name or bio"});
+    }
+});
+
+//++++++++++++++++++++++++++++++++++++++++
+// Day 2 -  delete - sever - method
+//++++++++++++++++++++++++++++++++++++++++
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.parans.id;
+    //const { id } = req.parans;
+    db.remove(id)
+        .then((deleteCount ) => {
+            console.log(deleteCount);
+            // if(count)
+            if (count > 0) {
+                // we should like to send back the user, "get request".
+                res.status(204).json({ message: `The user with the id ${id} was successfully deleted`});
+            } else {
+                res.status(404).json({ message: 'invalid id'});
+
+            }
+
         })
-        .catch( (err) => {
-            res.status(500).json({ message: `Failed to insert user i the db`})
+        .catch(err => {
+            res.status(500).json({ message: `Your failed to Delete user, please try again.` })
         });
+
+
+
 });
 
 
