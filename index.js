@@ -7,6 +7,16 @@ const server = express();
 
 
 const PORT = 5000;
+const parser = express.json();
+
+//++++++++++++++++++++++++ 
+// middlewear  and addins
+//+++++++++++++++++++++++
+// server.use(express.json());
+
+server.use(parser);
+
+
 
 //++++++++++++++++++++++++++++++++++++++++++
 //get endpoints
@@ -99,13 +109,13 @@ server.post('/api/users', (req, res) => {
     // const user = req.params.body;
     console.log('User from body', user);
     db.insert(user)
-        .then(user => {
-            console.log('User from insert Method', user);
-            res.status(201).json(user);
+        .then(idInfo => {
+            console.log('User from insert Method', idInfo);
+            res.status(201).json(idInfo);
         })
-        .catch( res.status(500).json({ message: `Failed to insert user`})
-
-        );
+        .catch( (err) => {
+            res.status(500).json({ message: `Failed to insert user i the db`})
+        });
 });
 
 
