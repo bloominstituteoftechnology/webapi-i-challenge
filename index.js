@@ -14,6 +14,7 @@ const PORT = 5000;
 
 server.get('/', (req, res) => {
     res.send('Hello World')
+    res.send('<h1>hello there</h1>');
 });
 
 server.get('/hobbits', (req, res) => {
@@ -42,22 +43,30 @@ server.get('/greet/:name', (req, res) => {
 });
 
 
+server.get('/', (req,res)  => {
+    db.find()
+        .then(users => {
+            res.status(418).send(users);
+        })
+        .catch(err => {
+            res.send(err);
+        });
+});
+
 
 server.get('/api/users', (req, res) => {
     // res.status(200).json(dbs.find())
     // res.json();
     db.find()
-        .then( users => {
-            console.log(`users ${users}`);
-            res.status(200).json(users)
-        })
-        .catch(err => {
-            res.status(500).json({message: `failed to get users`});
-
-        });
-   
-
-    
+    .then( users => {
+        console.log(`users ${users}`);
+        res.status(200).json(users)
+    })
+    .catch(err => {
+        res.status(500).json({message: `failed to get users`});
+        
+    });
+     
 });
 
 server.get('/api/users/:id', (req, res) => {
@@ -75,17 +84,38 @@ server.get('/api/users/:id', (req, res) => {
             }
         })
         .catch(err => {
-            res.status(500).json({ message: `We can't find the hommie, please try again later!` })
-            res.status(500).json({ message: `We can't find the hommie, please try again later!` })
+            res.status(500)
+                .json({ message:
+                    `We can't find the hommie, please try again later!` })
+            // res.status(500).json({ message: `We can't find the hommie, please try again later!` })
         });
-})
+});
+
+//++++++++++++++++++++++++++++++++++++++++
+// Day 2 - put post delete stuff here
+//+++++++++++++++++++++++++++++++++++++
 
 // server.post()
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    console.log('user', user);
+    db.insert(user)
+        .then( 
+            user => res.status(201).json(user)
+        )
+        .catch( res.status(500).json({ message: `Failed to insert user`})
+
+        );
+
+});
 
 
 // res.send([
 //     ...props.hobbitsList
 // ]));
+
+
+
 
 
 //++++++++++++++++++++++++++++++++++++
