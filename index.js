@@ -80,7 +80,6 @@ server.get('/api/users/:id', (req, res) => {
                 res.status(200).json(thisUser);
             } else {
                 res.status(404).json({ message: `User does not exist.`})
-
             }
         })
         .catch(err => {
@@ -90,7 +89,6 @@ server.get('/api/users/:id', (req, res) => {
             // res.status(500).json({ message: `We can't find the hommie, please try again later!` })
         });
 });
-
 //++++++++++++++++++++++++++++++++++++++++
 // Day 2 - put post delete stuff here
 //+++++++++++++++++++++++++++++++++++++
@@ -98,15 +96,16 @@ server.get('/api/users/:id', (req, res) => {
 // server.post()
 server.post('/api/users', (req, res) => {
     const user = req.body;
-    console.log('user', user);
+    // const user = req.params.body;
+    console.log('User from body', user);
     db.insert(user)
-        .then( 
-            user => res.status(201).json(user)
-        )
+        .then(user => {
+            console.log('User from insert Method', user);
+            res.status(201).json(user);
+        })
         .catch( res.status(500).json({ message: `Failed to insert user`})
 
         );
-
 });
 
 
