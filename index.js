@@ -71,6 +71,45 @@ server.post('/api/users/', (req, res) => {
     }
 });
 
+server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db.remove(id).then(count => {
+        if (count) {
+           res.json({message: "Successfully deleted"})
+        } else {
+           res
+               .status(404)
+               .json({ message: "Invalid Id"})
+        }
+     }
+    ).catch(err => {
+        res
+            .status(500)
+            .json({ message: "Failed to delete user"})
+    })
+});
+
+server.put('/api/users/:id', (req, res) => {
+    const user = req.body;
+    const { id } = req.params;
+    
+    if (user.name && user.bio) {
+        db.update(id, user).then(count => {
+            console.log(count)
+            if (count == true) {
+                db.findById(id).then(user => {
+                    res.json(user);
+                })
+            } else {
+                res.status(404).json({ message: "invalid id"})
+            }
+        }).catch(err => {
+            res.status(500).json("Failed to update")
+        })
+    } else {
+        res.status(400).json({ message: "Missing name or bio"})
+    }
+})
 
 /*
 listening
