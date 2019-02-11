@@ -68,6 +68,28 @@ server.delete('/api/users/:id', (req, res) => {
         });
 });
 
+// PUT: Updates user with specified id using data from the request body
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    db
+        .update(id, changes)
+        .then(updatedUser => {
+            if (updatedUser){
+                res.status(200).json({ success: true, updatedUser });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: 'This user does not exist',
+                });
+            }
+        })
+        .catch(({ code, message }) => {
+            res.status(code).json({ success: false, message });
+        });
+});
+
 server.listen(4000, () => {
     console.log('\n *** Running on port 4000 *** \n');
 });
