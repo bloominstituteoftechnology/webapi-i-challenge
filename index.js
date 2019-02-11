@@ -20,13 +20,32 @@ server.get("/api/users", (req, res) => {
       res.status(201).json({ success: true, users });
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          error: "There was an error while saving the user to the database"
-        });
+      res.status(500).json({
+        success: false,
+        error: "There was an error while saving the user to the database"
+      });
       res.end();
+    });
+});
+
+server.get("/api/users/:id", (req, res) => {
+  const userId = req.params.id;
+
+  
+
+  db.findById(userId)
+    .then(user => {
+      if (!user) {
+        return res
+          .status(404)
+          .json({ error: "The user with the specified ID does not exist" });
+      } else {
+        res.status(201).json({ success: true, user })
+      }
+      
+    })
+    .catch(err => {
+      res.status(500).json({ success: false, error: "The user information could not be retrieved." })
     });
 });
 
@@ -45,12 +64,10 @@ server.post("/api/users", (req, res) => {
       res.status(201).json({ success: true, user });
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          error: "There was an error while saving the user to the database"
-        });
+      res.status(500).json({
+        success: false,
+        error: "There was an error while saving the user to the database"
+      });
     });
 });
 
