@@ -17,7 +17,6 @@ server.get('/', (req, res) => {
 
 // Project Endpoints
 // GET: returns array of all user objects in the db
-
 server.get('/api/users', (req, res) => {
     db
         .find()
@@ -30,7 +29,6 @@ server.get('/api/users', (req, res) => {
 });
 
 // POST: creates user using info sent inside request body
-
 server.post('/api/users', (req, res) => {
     const user = req.body;
     console.log('user', user);
@@ -41,6 +39,19 @@ server.post('/api/users', (req, res) => {
         })
         .catch(({ code, message }) => {
             res.status(code).json({ success: false, message });
+        });
+});
+
+// GET: returns user object with specified ID
+server.get('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db
+        .findById(id)
+        .then(user => {
+            res.status(200).json({ success: true, user });
+        })
+        .catch(err => {
+            res.status(err.code).json({ success: false, message: err.message });
         });
 });
 
