@@ -31,8 +31,6 @@ server.get("/api/users", (req, res) => {
 server.get("/api/users/:id", (req, res) => {
   const userId = req.params.id;
 
-  
-
   db.findById(userId)
     .then(user => {
       if (!user) {
@@ -40,12 +38,14 @@ server.get("/api/users/:id", (req, res) => {
           .status(404)
           .json({ error: "The user with the specified ID does not exist" });
       } else {
-        res.status(201).json({ success: true, user })
+        res.status(201).json({ success: true, user });
       }
-      
     })
     .catch(err => {
-      res.status(500).json({ success: false, error: "The user information could not be retrieved." })
+      res.status(500).json({
+        success: false,
+        error: "The user information could not be retrieved."
+      });
     });
 });
 
@@ -70,6 +70,36 @@ server.post("/api/users", (req, res) => {
       });
     });
 });
+
+
+
+// DELETE
+
+server.delete("/api/users/:id", (req, res) => {
+  const userId = req.params.id;
+
+  db.remove(userId)
+    .then(user => {
+      if (!user) {
+        return res
+          .status(404)
+          .json({success: false,  message: "The user with the specified ID does not exist" });
+      } else {
+        res.status(204).end();
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ success: false, error: "The user cold not be removed" });
+    });
+});
+
+
+
+
+
+
 
 server.listen(4000, () => {
   console.log("\n*** Running on port 4000 ***\n");
