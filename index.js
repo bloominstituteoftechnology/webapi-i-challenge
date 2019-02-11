@@ -55,6 +55,19 @@ server.get('/api/users/:id', (req, res) => {
         });
 });
 
+// DELETE: removes the user with specified id and returns the deleted user
+server.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    db
+        .remove(userId)
+        .then(deletedUser => {
+            res.status(204).end();
+        })
+        .catch(({ code, message }) => {
+            res.status(code).json({ success: false, message });
+        });
+});
+
 server.listen(4000, () => {
     console.log('\n *** Running on port 4000 *** \n');
 });
