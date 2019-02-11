@@ -6,6 +6,9 @@ const db = require("./data/db");
 
 const server = express();
 
+// middleware
+server.use(express.json());
+
 server.get("/", (req, res) => {
   res.send("<h2>Hello From Local Host</h2>");
 });
@@ -16,8 +19,38 @@ server.get("/api/users", (req, res) => {
     .then(users => {
       res.status(201).json({ success: true, users });
     })
-    .catch(({ code, message }) => {
-      res.status(code).json({ success: false, message });
+    .catch(err => {
+      res
+        .status(500)
+        .json({
+          success: false,
+          error: "There was an error while saving the user to the database"
+        });
+      res.end();
+    });
+});
+
+// POST
+server.post("/api/users", (req, res) => {
+  const { name, bio } = req.body;
+  const newUser = req.body;
+  if (!name || !bio) {
+    return res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
+
+  db.insert(newUser)
+    .then(user => {
+      res.status(201).json({ success: true, user });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({
+          success: false,
+          error: "There was an error while saving the user to the database"
+        });
     });
 });
 
