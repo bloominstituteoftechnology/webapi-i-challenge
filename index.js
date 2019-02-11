@@ -29,6 +29,21 @@ server.get('/api/users', (req, res) => {
         });
 });
 
+// POST: creates user using info sent inside request body
+
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    console.log('user', user);
+    db
+        .insert(user)
+        .then(user => {
+            res.status(201).json({ success: true, user });
+        })
+        .catch(({ code, message }) => {
+            res.status(code).json({ success: false, message });
+        });
+});
+
 server.listen(4000, () => {
     console.log('\n *** Running on port 4000 *** \n');
 });
