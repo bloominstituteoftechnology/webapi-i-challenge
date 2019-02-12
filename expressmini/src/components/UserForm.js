@@ -59,23 +59,20 @@ class UserForm extends React.Component {
     });
   }
 
-  addUser = (e) => {
-    e.preventDefault()
-    const baseUrl = `http://localhost:4000`;
+  submitHandler = (e) => {
+    e.preventDefault();
 
-    axios.post(`${baseUrl}/api/users`, this.state.user)
-    .then(res => {
-      console.log("USER ADDED", res.data)
-      this.setState({
-        user: {
-          name: '',
-          bio: ''
-        }
-      })
+
+    this.props.addUser(this.state.user)
+    this.setState({
+      user: {
+        name: '',
+        bio: ''
+      }
     })
-    .catch(err => console.log(err))
 
-    this.props.history.push('/')
+    this.props.history.push("/");
+    
 
   }
 
@@ -114,7 +111,7 @@ return (
           variant="contained"
           color="primary"
           className={classes.button}
-          onClick={e => this.addUser(e)}
+          onClick={e => this.submitHandler(e)}
         >
           Add
         </Button>

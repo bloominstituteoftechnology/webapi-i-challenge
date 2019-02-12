@@ -7,12 +7,13 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
+import styled from "styled-components";
+
 const styles = {
   card: {
     width: "40%",
     " margin-bottom": "20px",
     " margin-top": "50px"
-
   },
   bullet: {
     display: "inline-block",
@@ -40,8 +41,25 @@ const User = props => {
         </Typography>
         <Typography component="p">{bio}</Typography>
       </CardContent>
+      <ButtonContainer>
+        <Button variant="contained" color="default" size="small">
+          Edit
+        </Button>
+        <Button
+          color="secondary"
+          variant="contained"
+          size="small"
+          onClick={e => props.deleteUser(e, props.user.id)}
+        >
+          Delete
+        </Button>
+      </ButtonContainer>
     </Card>
   );
 };
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
 export default withStyles(styles)(User);
