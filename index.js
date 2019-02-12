@@ -1,13 +1,14 @@
 // implement your API here
 
 const express = require("express");
-
 const db = require("./data/db");
+const cors = require('cors');
 
 const server = express();
 
 // middleware
 server.use(express.json());
+server.use(cors());
 
 server.get("/", (req, res) => {
   res.send("<h2>Hello From Local Host</h2>");
@@ -81,16 +82,31 @@ server.put("/api/users/:id", (req, res) => {
   db.update(id, changes)
     .then(updatedUser => {
       if (!updatedUser) {
-        return res.status(404).json({ success: false, message: "The user with the specified ID does not exist." })
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "The user with the specified ID does not exist."
+          });
       } else if (!changes.name || !changes.bio) {
-        return res.status(400).json({ success: false, message: "Please provide name and bio for the user."})
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Please provide name and bio for the user."
+          });
       } else {
-        res.status(200).json({success: true, changes})
+        res.status(200).json({ success: true, changes });
       }
     })
     .catch(err => {
-      res.status(500).json({ success: false, error: "The user information could not be modified." })
-    })
+      res
+        .status(500)
+        .json({
+          success: false,
+          error: "The user information could not be modified."
+        });
+    });
 });
 
 // DELETE
