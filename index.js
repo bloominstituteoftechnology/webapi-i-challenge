@@ -25,6 +25,18 @@ server.get("/api/users/:id", (req, res) => {
       res.status(err.code).json({ success: false, message: err.message });
     });
 });
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  db.update(id, changes)
+    .then(users => {
+      res.status(200).json({ success: true, users });
+    })
+    .catch(err => {
+      res.status(err.code).json({ success: false, message: err.message });
+    });
+});
 server.post("/api/users", (req, res) => {
   const user = req.body;
   db.insert(user)
