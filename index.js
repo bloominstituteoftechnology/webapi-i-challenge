@@ -47,6 +47,16 @@ server.post("/api/users", (req, res) => {
       res.status(err.code).json({ success: false, message: err.message });
     });
 });
+server.delete("/api/users/:id", (req, res) => {
+  const userId = req.params.id;
+  db.remove(userId)
+    .then(deleted => {
+      res.status(204).end();
+    })
+    .catch(err => {
+      res.status(err.code).json({ success: false, message: err.message });
+    });
+});
 
 server.listen(4000, () => {
   console.log("/n***Listening on port 4000***/n");
