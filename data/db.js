@@ -15,9 +15,18 @@ function find() {
 }
 
 function findById(id) {
-  return db("users")
-    .where({ id: Number(id) })
-    .first();
+  const userID = Number(id);
+
+  if (userID) {
+    return db("users")
+      .where({ id: Number(id) })
+      .first();
+  } else {
+    return Promise.reject({
+      code: 500,
+      message: "The user information could not be retrieved."
+    });
+  }
 }
 
 function insert(user) {
@@ -40,7 +49,16 @@ function update(id, user) {
 }
 
 function remove(id) {
-  return db("users")
-    .where("id", Number(id))
-    .del();
+  const userId = id;
+
+  if (userId) {
+    return db("users")
+      .where("id", Number(id))
+      .del();
+  } else {
+    return Promise.reject({
+      code: 500,
+      message: "The user could not be removed"
+    });
+  }
 }
