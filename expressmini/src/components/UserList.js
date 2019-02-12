@@ -3,6 +3,8 @@ import axios from "axios";
 
 import User from "./User";
 
+import styled from "styled-components"
+import Typography from "@material-ui/core/Typography";
 
 const baseUrl = `http://localhost:4000`;
 
@@ -29,15 +31,28 @@ class UserList extends React.Component {
     
     return (
       <div>
-      <h1>User List</h1>
-        {!this.state.users ? <h2>Loading Data...</h2> : this.state.users.map(user => {
-          return <User key={user.id} user={user} />
-        }) }
+      <Typography variant="h3" align='center'>User List</Typography>
+      <ItemListContainer>
+          {!this.state.users ? <h2>Loading Data...</h2> : this.state.users.map(user => {
+            return <User key={user.id} user={user} />
+          })}
+      </ItemListContainer>
+        
         
       </div>
     )
   }
 }
+
+
+const ItemListContainer = styled.div`
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  
+`
 
 
 
