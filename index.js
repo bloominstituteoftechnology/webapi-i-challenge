@@ -71,8 +71,14 @@ server.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
     database
         .remove(id)
-        .then()
-        .catch()
+        .then(deleted => {
+            res.status(204).end()
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'Delete user not found'
+            })
+        })
 });
 
 server.listen(8000, () => console.log('API running on port 8000'));
