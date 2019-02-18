@@ -44,7 +44,26 @@ server.post('/api/users', (req, res) => {
 
 // Update
 server.put('/api/users/:id', (req, res) => {
-    const {id} = req.params
+    const {id} = req.params;
+    const changes = req.body;
+    database
+        .update(id, changes)
+        .then(updated => {
+            if (updated) {
+                res.status(200).json({
+                    success: true, updated
+                })
+            } else  {
+                res.status(404).json({
+                    success: false
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'Update user not found'
+            })
+        })
 });
 
 // Delete
