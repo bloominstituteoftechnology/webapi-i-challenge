@@ -4,6 +4,9 @@ const database = require('./data/db.js');
 
 const server = express();
 
+// middleWare
+server.use(express.json());
+
 server.get('/', (req, res) => {
     res.send('Hello World');
 });
@@ -26,9 +29,17 @@ server.get('/api/users', (req, res) => {
 server.post('/api/users', (req, res) => {
     const user = req.body;
     database
-        .insert()
-        .then()
-        .catch()
+        .insert(user)
+        .then(user => {
+            res.status(201).json({
+                sucess: true, user
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'Users not found'
+            })
+        })
 });
 
 // Update
