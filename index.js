@@ -20,9 +20,29 @@ server.get('/api/users', (req, res) => {
         })
         .catch(error => {
             res.status(500).json({
-                message: 'Users not found'
+                message: "The information about the users could not be retrieved"
             })
         })
+});
+
+// Read for /users/:id
+server.get('/api/users/:id', (req, res) => {
+    const {id} = req.params;
+    database
+        .findById(id)
+        .then(user => {
+            if (user) {
+                res.status(200).json({
+                    success: true,
+                    user
+                })
+            } else {
+                res.status(404).json({
+                    success: false,
+                })
+            }
+        })
+        .catch()
 });
 
 // Create
@@ -32,12 +52,12 @@ server.post('/api/users', (req, res) => {
         .insert(user)
         .then(user => {
             res.status(201).json({
-                sucess: true, user
+                success: true, user
             })
         })
         .catch(error => {
             res.status(500).json({
-                message: 'Users not found'
+                error: "There was an error while saving the user to the database"
             })
         })
 });
@@ -55,13 +75,14 @@ server.put('/api/users/:id', (req, res) => {
                 })
             } else  {
                 res.status(404).json({
-                    success: false
+                    success: false,
+                    message: "The user with the specified ID does not exist."
                 })
             }
         })
         .catch(error => {
             res.status(500).json({
-                message: 'Update user not found'
+                error: "The user information could not be modified."
             })
         })
 });
@@ -76,9 +97,10 @@ server.delete('/api/users/:id', (req, res) => {
         })
         .catch(error => {
             res.status(500).json({
-                message: 'Delete user not found'
+                message: "The user could not be removed"
             })
         })
 });
+
 
 server.listen(8000, () => console.log('API running on port 8000'));
