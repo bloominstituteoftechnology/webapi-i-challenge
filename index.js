@@ -39,6 +39,20 @@ server.get("/api/users/:id", (req, res) => {
     .catch(error => res.status(500).json({ message: "failed to get user" }));
 });
 
+server.delete("/api/users/:id", (req, res) => {
+  db.remove(req.params.id)
+    .then(numDeleted => {
+      numDeleted
+        ? res.status(200).json({ numDeleted })
+        : res.status(404).json({
+            message: "The user with the specified ID does not exist."
+          });
+    })
+    .catch(error =>
+      res.status(500).json({ error: "The user could not be removed" })
+    );
+});
+
 server.listen(port, () => {
   console.log(`starting server on ${port}`);
 });
