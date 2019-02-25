@@ -1,7 +1,11 @@
 // implement your API here
 const express = require("express");
+const cors = require("cors");
+
 const server = express();
 server.use(express.json());
+server.use(cors());
+
 const port = 8000;
 
 const db = require("./data/db");
@@ -43,7 +47,7 @@ server.put("/api/users/:id", (req, res) => {
   const { id } = req.params;
   const { name, bio } = req.body;
 
-  //if the name no the bio does not exist
+  //if the name or the bio does not exist
   !name || !bio
     ? res
         .status(400)
