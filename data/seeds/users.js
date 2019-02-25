@@ -1,16 +1,18 @@
 exports.seed = function(knex) {
-  return knex('users')
+  return knex("users")
     .truncate()
     .then(function() {
-      return knex('users').insert([
+      return knex("users").insert([
         {
-          name: 'Samwise Gamgee',
-          bio: 'Gardener and poet. Married to Rose Cotton',
+          name: "Samwise Gamgee",
+          bio: "Gardener and poet. Married to Rose Cotton",
+          password: "test"
         },
         {
-          name: 'Frodo Baggins',
-          bio: 'The ring bearer',
-        },
+          name: "Frodo Baggins",
+          bio: "The ring bearer",
+          password: "ringdog"
+        }
       ]);
     });
 };
