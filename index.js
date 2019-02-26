@@ -87,6 +87,30 @@ server.delete("/api/users/:id", (req, res) => {
     );
 });
 
+//query string notes
+server.get("/hobbits", (req, res) => {
+  // query string parameters get added to req.query
+  console.log(req.query); //localhost:8000/hobbits?sortby=name {sortby:name}
+  const sortField = req.query.sortby || "id";
+  const hobbits = [
+    {
+      id: 1,
+      name: "Samwise Gamgee"
+    },
+    {
+      id: 2,
+      name: "Frodo Baggins"
+    }
+  ];
+
+  // apply the sorting
+  const response = hobbits.sort((a, b) =>
+    a[sortField] < b[sortField] ? -1 : 1
+  );
+
+  res.status(200).json(response);
+});
+
 server.listen(port, () => {
   console.log(`starting server on ${port}`);
 });
