@@ -1,0 +1,10 @@
+.chat-window {
+  height: 500px;
+  border: 1px solid black;
+}
+.chat-output {
+  height: 400px;
+  width: 60%;
+  border: 1px solid black;
+  margin: 0 auto;
+}
