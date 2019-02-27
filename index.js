@@ -33,3 +33,14 @@ server.get('/api/users/:id', (req, res) => {
     )
     .catch(({ code, message }) => res.status(code).json({ err: message }))
 })
+
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params
+  db.remove(id)
+    .then(user =>
+      user
+        ? res.status(200).json({ err: 'Removed user at id: ' + id })
+        : res.status(404).json({ err: 'User not found' })
+    )
+    .catch(({ code, message }) => res.status(code).json({ err: message }))
+})
