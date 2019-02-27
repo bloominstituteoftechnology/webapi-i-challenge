@@ -20,45 +20,65 @@ server.get('/api/users', (req, res) => {
                 res.status(500).json({ message: "The users information could not be retrieved." })
             }
         })
-        .catch(err => {
-            res.status(500).res.json(err)
+        .catch(({code, errorMessage}) => {
+            res.status(code).res.json({err: errorMessage})
         }) 
 });
 
 // Fetch a User 
 
-server.get('/api/users/:userid', (req, res) => {
-    const id = req.params.userid;
+server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
     db.findById(id)
-        .then(user => {
-            if(user) {
-                res.status(200).json(user);
-            }
-            else {
-                res.status(404).json({ message: "The user with the specified ID does not exist." })
-            }
-        })
-        .catch(err => res.status(500).json(err));
+    .then(user => {
+        if(user) {
+            res.status(200).json(user);
+        }
+        else {
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
+        }
+    })
+    .catch(({code, errorMessage}) => res.status(code).json({err: errorMessage}));
 })
 
 // Post a User
 
 server.post('/api/users', (req, res) => {
     const user = req.body;
-    if (user.name && user.bio) {
-        db.insert(user)
-            .then(idInfo => {
-                db.findById(idInfo.id).then(user => {
-                    res.status(201).json(user);
-                });
+    
+    db.insert(user)
+    .then(idInfo => {
+        if (user.name && user.bio) {
+            db.findById(idInfo.id).then(user => {
+                res.status(201).json(user);
             })
-            .catch(err => res.status(500).json({
-                message: 'Failed to insert user in db'
-            }));
-    }
-    else {
-        res.status(400).json({ message: "Please provide name and bio for the user." })
-    }
+        }
+        else {
+            res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+        }
+    })
+    .catch(({code, errorMessage}) => res.status(code).json({
+        err: errorMessage
+    }));
+    
 })
+
+server.put('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    const updatedUser = req.body;
+    db.update(id, updatedUser)
+        .then(user => {
+            if (user) {
+                res.status(201).json(user).json('hihihi');
+            }
+            else {
+                res.status(400).json({ err: 'User unavailable' });
+            }
+        })
+    
+        .catch(({ code, message }) => {
+            res.status(code).json({ err: message})
+        });
+});
 
 server.listen(8000, () => console.log('Api is running on port 8000'))
