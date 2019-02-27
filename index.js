@@ -1,13 +1,13 @@
 // implement your API here
 const express = require('express');
-const db = require('./data/db.js')
-
+const db = require('./data/db.js');
 const server = express();
+server.use(express.json());
 
 // Fetch all Users
 
 server.get('/', (req, res) => {
-    res.send('Hello database afficionados!!');
+    res.json('Hello Database Afficionados!!');
 });
 
 server.get('/api/users', (req, res) => {
@@ -41,5 +41,24 @@ server.get('/api/users/:userid', (req, res) => {
         .catch(err => res.status(500).json(err));
 })
 
+// Post a User
+
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    if (user.name && user.bio) {
+        db.insert(user)
+            .then(idInfo => {
+                db.findById(idInfo.id).then(user => {
+                    res.status(201).json(user);
+                });
+            })
+            .catch(err => res.status(500).json({
+                message: 'Failed to insert user in db'
+            }));
+    }
+    else {
+        res.status(400).json({ message: "Please provide name and bio for the user." })
+    }
+})
 
 server.listen(8000, () => console.log('Api is running on port 8000'))
