@@ -69,16 +69,32 @@ server.put('/api/users/:id', (req, res) => {
     db.update(id, updatedUser)
         .then(user => {
             if (user) {
-                res.status(201).json(user).json('hihihi');
+                res.status(201).json(user);
             }
             else {
-                res.status(400).json({ err: 'User unavailable' });
+                res.status(400).json({ message: 'User unavailable' });
             }
         })
     
         .catch(({ code, message }) => {
             res.status(code).json({ err: message})
         });
+});
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    db.remove(id)
+        .then(user => {
+            if (user) {
+                res.status(201).json(user)
+            }
+            else {
+                res.status(404).json({ message: 'The user could not be removed' })
+            }
+        })
+        .catch(({code, message}) => {
+            res.status(code).json({ err: message })
+        })
 });
 
 server.listen(8000, () => console.log('Api is running on port 8000'))
