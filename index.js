@@ -1,11 +1,14 @@
 const express = require('express')
 const server = express()
 const parser = express.json()
+const cors = require('cors')
+
+server.use(parser)
+server.use(cors())
 
 const db = require('./data/db.js')
 const PORT = '8888'
 
-server.use(parser)
 server.listen(PORT, _ => console.log(`listening on http://localhost:${PORT}`))
 
 server.post('/api/users', (req, res) => {
