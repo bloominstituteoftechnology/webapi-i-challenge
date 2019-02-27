@@ -20,17 +20,37 @@ server.get('/api/users', (req, res) => {
 
 server.post('/api/users', (req, res) => {
     const newUser = req.body;
-
+    
     if(newUser.name && newUser.bio) {
         db.insert(newUser)
-          .then(stuff => {
-              res.status(201).json(stuff)
+          .then(user => {
+              res.status(201).json(user)
           })
           .catch(err => {
             res.status(500).json({ error: "There was an error while saving the user to the database" });
           })
     } else {
-        res.status(400).message({ errorMessage: "Please provide name and bio for the user." })
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    }
+})
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+
+    if(id >= 0) {
+        db.remove(id)
+        .then(user => {
+            if(user) {
+                res.json(req.body);
+            } else {
+                res.status(404).json({ message: "The user with the specified ID does not exist." }) 
+            }
+        })
+        .catch(err =>
+            res.status(500).json({ error: "The user could not be removed" })
+        );
+    } else {
+        res.status(500).json({ error: "The user could not be removed" })
     }
 })
 
