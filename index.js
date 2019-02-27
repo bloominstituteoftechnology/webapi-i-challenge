@@ -15,6 +15,21 @@ server.get('/api/users', (req, res) => {
     .then(users => {
         res.status(200).json(users)
     })
+    .catch(err => {
+        res.status(500).json({ message: "The users information could not be retrieved." })
+    }) 
+})
+
+server.get('/api/users/:id', (req, res) => {
+    let {id} = req.params
+    database.findById(id)
+    .then(user => { 
+        if(user) {
+            res.status(200).json(user)
+        } else {
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
+        }        
+    })
 })
 
 server.listen(8000, () => console.log('API port 8000'))
