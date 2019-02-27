@@ -20,8 +20,8 @@ server.get('/api/users', (req, res) => {
                 res.status(500).json({ message: "The users information could not be retrieved." })
             }
         })
-        .catch(({code, errorMessage}) => {
-            res.status(code).res.json({err: errorMessage})
+        .catch(({code, message}) => {
+            res.status(code).res.json({err: message})
         }) 
 });
 
@@ -38,7 +38,7 @@ server.get('/api/users/:id', (req, res) => {
             res.status(404).json({ message: "The user with the specified ID does not exist." })
         }
     })
-    .catch(({code, errorMessage}) => res.status(code).json({err: errorMessage}));
+    .catch(({code, message}) => res.status(code).json({err: message}));
 })
 
 // Post a User
@@ -54,11 +54,11 @@ server.post('/api/users', (req, res) => {
             })
         }
         else {
-            res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+            res.status(400).json({ message: "Please provide name and bio for the user." })
         }
     })
-    .catch(({code, errorMessage}) => res.status(code).json({
-        err: errorMessage
+    .catch(({code, message}) => res.status(code).json({
+        err: message
     }));
     
 })
