@@ -11,11 +11,10 @@ const PORT = '9090';
 // parses the body and adds it to req.body
 server.use(express.json()); // important to have
 
+
+// endpoints
 server.get('/api/users', (req, res) => {
     const name = req.params.name;
-
-    //express will pass the request and response objects to this function 
-    // the .send() on response object can be used to send a response to the client
     db.find()
     .then(users => {
         res.json(users);
@@ -25,6 +24,24 @@ server.get('/api/users', (req, res) => {
     })
 });
 
+server.get('/api/users/:id', (req, res) => {
+    // gets a specific user by the id 
+    // send an error message if the id is invalid
+
+    const { id } = req.params;
+
+    db.findById(id) 
+    .then(user => {
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({err: 'The user with the specified ID does not exist'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({message: 'Failed to get user ID'});
+    })
+});
 
 
 
