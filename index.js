@@ -2,6 +2,8 @@
 const express = require('express')
 
 const server = express()
+
+// defines the body. must use to allow post request to work
 server.use(express.json())
 
 const database = require('./data/db.js')
@@ -29,6 +31,20 @@ server.get('/api/users/:id', (req, res) => {
         } else {
             res.status(404).json({ message: "The user with the specified ID does not exist." })
         }        
+    }).catch(err => {
+        res.status(500).json({ message:"The users information could not be retrieved." })
+    })
+})
+
+server.post('/api/users', (req, res) => {
+    const user = req.body
+
+    database.insert(user)
+    .then(users => {
+        res.status(201).json(users)
+    })
+    .catch(err => {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
     })
 })
 
