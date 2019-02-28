@@ -9,7 +9,7 @@ const server = express();
 const PORT = "9090";
 
 // parses the body and adds it to req.body
-// important to have
+// important to have can have unique name
 server.use(express.json());
 
 // endpoints
@@ -72,8 +72,23 @@ server.post("/api/users", (req, res) => {
   }
 });
 
-server.delete("/", (req, res) => {
+server.delete("/api/users/:id", (req, res) => {
   // deletes a user by a specified ID from the database
+
+  const { id } = req.params;
+  db.remove(id)
+    .then(count => {
+      if (count) {
+        res.json({ message: "Successfully deleted" });
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ err: "The user could not be removed" });
+    });
 });
 
 server.put("/api/users/:id", (req, res) => {
