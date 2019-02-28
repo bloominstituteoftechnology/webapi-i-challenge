@@ -8,7 +8,7 @@ export default function App() {
   const [users, useUsers] = useState([])
   const [error, useError] = useState('')
   useEffect(_ => {
-    fetchUsers()
+    users.length < 1 && fetchUsers()
   })
   async function fetchUsers() {
     try {
