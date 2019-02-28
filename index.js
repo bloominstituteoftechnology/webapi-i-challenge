@@ -1,33 +1,48 @@
 // implement your API here
-// how to import / export code between files
-// introduce how routing works
-// import express from 'express'; // ES2015 modules > export default someCode;
-const express = require('express'); // CommonJS modules > module.exports = someCode;
-const cors = require('cors'); // install this package to connect from React
+
+const express = require('express'); 
+
 const db = require('./data/db.js');
 
 const server = express(); // Creates the server
+const PORT = 9000;
 
-server.use(cors()); //this needed to connect from React
+server.use(express.json()); // parses body and adds it to req object
 
-server.get('/', (req, res) => { 
-	//request/route handler
-	res.send('<h1>Hello Erin!</h1>');
+// CREATE - POST
+
+server.post('/api/users', (req, res) => {
 
 });
 
+// READ - GET
+
 server.get('/api/users', (req, res) => {
+	const name = req.params.name;
 	db.find()
-	.then(users => {
-		console.log('\n** users **', users);
-		res.json(users)})
-	.catch(err => res.send(err))
+		.then(users => {
+			res.json(users);
+		})
+		.catch(err => {
+			res.status(500)
+				.json({ err: "The users information could not be retrieved." })
+		})
+});
+
+server.get('/api/users/:id', (req, res) => {
+
+});
+
+
+// UPDATE - PUT
+
+server.put
+// DELETE
+
+server.delete('/api/users/:id', (req, res) => {
+	const { id } = req.params;
+	db
 });
 
 // Watch for traffic in a particular port
-// Implement nodemon in package.json file under the "scripts"
-const port = 9000;
-server.listen(port, () => console.log(`API running on port ${port}`));
-
-// http://localhost:3000 > the 3000 is the port
-// 80: http, 443: https, 25: email servers, standard industry ports
+server.listen(PORT, () => console.log(`API running on port ${PORT}`));
