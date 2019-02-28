@@ -12,6 +12,11 @@ const PORT = "9090";
 // important to have can have unique name
 server.use(express.json());
 
+const sendUserError = (status, message, res) => {
+  // helper method that we can use for sending errors when issues come up
+  res.status(status).json({ err: message });
+};
+
 // endpoints
 
 server.get("/api/users", (req, res) => {
@@ -98,9 +103,39 @@ server.put("/api/users/:id", (req, res) => {
   // else send back a 404 error with the message The user with the specified ID does not exist
   // if there is an error updating the user send a 400 error with the message Please provide name and bio for the user
 
-  
+  const { id } = req.params;
+  const { name, bio } = req.body;
+  if (!name || !bio) {
+    sendUserError(400, "Must provide name and bio", res);
+    return;
+  }
+  db.update(id, { name, bio })
+    .then(response => {
+      if (response == 0) {
+        sendUserError(
+          404,
+          "The user with the specified ID does not exist.",
+          res
+        );
+        return;
+      }
+      db.findById(id)
+        .then(user => {
+          if (user.length === 0) {
+            sendUserError(404, "User with that id not found", res);
+            return;
+          }
+          res.json(user);
+        })
+        .catch(error => {
+          sendUserError(500, "Error looking up user", res);
+        });
+    })
+    .catch(error => {
+      sendUserError(500, "Something bad happened in the database", res);
+      return;
+    });
 });
-
 // should be last in the codebase
 server.listen(PORT, () => {
   console.log(`Our Server is listenning on port ${PORT}`);
