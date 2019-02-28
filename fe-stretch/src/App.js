@@ -3,7 +3,7 @@ import User from './components/User';
 import UserForm from './components/UserForm';
 
 import axios from 'axios';
-import './App.css';
+import './css/index.css';
 
 class App extends Component {
   constructor(props) {
