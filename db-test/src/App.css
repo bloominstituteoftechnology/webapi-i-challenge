@@ -27,11 +27,16 @@
 }
 
 .card_delete,
-.card_edit {
+.card_edit,
+.card_check {
     color: rgb(174, 174, 190);
     margin: 0 0.25rem;
 }
 
 .card_delete {
     color: rgb(199, 83, 83);
+}
+
+.card_check {
+    color: rgb(83, 199, 83);
 }
