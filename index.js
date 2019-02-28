@@ -20,7 +20,7 @@ server.get('/api/users', (req, res) => {
         res.json(users);
     })
     .catch(err => {
-        res.status(500).json({ err: 'User not found in the database'});
+        res.status(500).json({ err: 'The users information could not be retrieved.'});
     })
 });
 
@@ -39,9 +39,17 @@ server.get('/api/users/:id', (req, res) => {
         }
     })
     .catch(err => {
-        res.status(500).json({message: 'Failed to get user ID'});
+        res.status(500).json({message: 'The user information could not be retrieved.'});
     })
 });
+
+server.post('/', (req, res) => {
+
+})
+
+server.delete('/', (req, res) => {
+    
+})
 
 
 
