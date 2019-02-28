@@ -45,7 +45,7 @@ server.get('/api/users/:id', (req, res) => {
 
 server.post('/', (req, res) => { // creates a new user with a unique ID in the database
     // insert a user with a unique ID into the database
-    // else send an error message that says Please provide name and bio for the user with a 404 request if the bio or name is missing 
+    // else send an error message that says Please provide name and bio for the user with a 400 request if the bio or name is missing 
 });
 
 server.delete('/', (req, res) => {  // deletes a user by a specified ID from the database
