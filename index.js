@@ -43,15 +43,21 @@ server.get('/api/users/:id', (req, res) => {
     })
 });
 
-server.post('/', (req, res) => {
+server.post('/', (req, res) => { // creates a new user with a unique ID in the database
+    // insert a user with a unique ID into the database
+    // else send an error message that says Please provide name and bio for the user with a 404 request if the bio or name is missing 
+});
 
+server.delete('/', (req, res) => {  // deletes a user by a specified ID from the database
+
+});
+
+server.put('/api/users/:id', (req, res) => { // updates any information for the user with the specified ID
+// check if ID is valid within the database
+// if ID is valid perform an update on the information that you enter 
+// else send back a 404 error with the message The user with the specified ID does not exist
+// if there is an error updating the user send a 400 error with the message Please provide name and bio for the user
 })
-
-server.delete('/', (req, res) => {
-    
-})
-
-
 
 // should be last in the codebase
 server.listen(PORT, () => {
