@@ -65,14 +65,18 @@ server.post('/api/users', (req, res) => {
 
 server.put('/api/users/:id', (req, res) => {
     const id = req.params.id;
-    const updatedUser = req.body;
-    db.update(id, updatedUser)
+    const newUser = req.body;
+    db.update(id, newUser)
         .then(user => {
             if (user) {
-                res.status(201).json(user);
+                db.findById(id)
+                    .then(foo => {
+                        res.status(201).json(foo);
+                        console.log('Item Updated');
+                    })  
             }
             else {
-                res.status(400).json({ message: 'User unavailable' });
+                res.status(400).json({ message: 'The user could not be found' });
             }
         })
     
@@ -86,10 +90,10 @@ server.delete('/api/users/:id', (req, res) => {
     db.remove(id)
         .then(user => {
             if (user) {
-                res.status(201).json(user)
+                res.json('Item deleted');
             }
             else {
-                res.status(404).json({ message: 'The user could not be removed' })
+                res.status(404).json({ message: 'The user could not be found' })
             }
         })
         .catch(({code, message}) => {
