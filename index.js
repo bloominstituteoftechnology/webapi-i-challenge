@@ -95,7 +95,7 @@ server.put('/api/users/:id', (req, res) => {
 	
 });
 
-// DELETE()
+// DELETE
 
 server.delete('/api/users/:id', (req, res) => {
 	const { id } = req.params;
