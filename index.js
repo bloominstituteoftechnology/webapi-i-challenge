@@ -53,7 +53,7 @@ server.post('/api/users', (req, res) => {
 server.put('/api/users/:id', (req, res) => {
     const id = req.params.id;
     const updatedUser = req.body;
-    console.log(id, updatedUser)
+
     if(updatedUser.name && updatedUser.bio) {
         db.update(id, updatedUser)
         .then(user => {
@@ -73,12 +73,12 @@ server.put('/api/users/:id', (req, res) => {
 
 server.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
-
+    console.log(req)
     if(id >= 0) {
         db.remove(id)
         .then(user => {
             if(user) {
-                res.json(req.body);
+                res.json(res.body);
             } else {
                 res.status(404).json({ message: "The user with the specified ID does not exist." }) 
             }
