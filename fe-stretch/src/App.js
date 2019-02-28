@@ -34,6 +34,26 @@ class App extends Component {
           });
 }
 
+  addUser = newUser => {
+    axios.post('http://localhost:5000/api/users', newUser)
+         .then(res => {
+          this.getUsers();
+         })
+         .catch(err => {
+           console.log(err)
+         })
+  }
+
+  updateUser = (update, id) => {
+    axios.put(`http://localhost:5000/api/users/${id}`, update)
+        .then(res => {
+          this.getUsers();
+        })
+        .catch(err => {
+          console.log(err)
+        });
+  }
+
   deleteUser = id => {
     console.log(id)
     axios.delete(`http://localhost:5000/api/users/${id}`)
@@ -53,7 +73,7 @@ class App extends Component {
     console.log(this.state)
     return (
       <div className="App">
-        <UserForm />
+        <UserForm addHandler={this.addUser} updateHandler={this.updateUser} users={this.state.users}/>
         <button onClick={this.getUsers}>Clear</button>
         {this.state.users.map(user => <User key={Math.random()}
                                             user={user} 
