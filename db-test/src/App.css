@@ -10,7 +10,8 @@
     flex-direction: column;
     padding: 1rem;
     margin: 1rem;
-    border: 1px solid black;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid white;
     border-radius: 5px;
 }
 
@@ -27,10 +28,10 @@
 
 .card_delete,
 .card_edit {
-    color: rgb(83, 83, 105);
+    color: rgb(174, 174, 190);
     margin: 0 0.25rem;
 }
 
 .card_delete {
-    color: rgb(255, 83, 83);
+    color: rgb(199, 83, 83);
 }
