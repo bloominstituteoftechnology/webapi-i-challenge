@@ -65,12 +65,28 @@ server.get('/api/users/:id', (req, res) => {
 
 // UPDATE - PUT
 
-server.put
+server.put('/api/users/:id', (req, res) => {
+
+});
+
 // DELETE
 
 server.delete('/api/users/:id', (req, res) => {
 	const { id } = req.params;
-	db
+	db.remove(id)
+		.then(user => {
+			if (user) {
+				res.json({ message: "Deletion completed. "});
+			}
+			else {
+				res.status(404)
+					.json({ message: "The user with the specified ID does not exist." });
+			}
+		})
+		.catch(err => {
+			res.status(500)
+				.json({ error: "The user could not be removed" });
+		})
 });
 
 // Watch for traffic in a particular port
