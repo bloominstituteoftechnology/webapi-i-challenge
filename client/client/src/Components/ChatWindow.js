@@ -28,19 +28,20 @@ class ChatWindow extends React.Component {
     //    score: state.score - 1
     //   }
     //  });
-    this.ws.onmessage = ({ data }) => {
-      const message = JSON.parse(data);
+    this.ws.onmessage = msg => {
+      const { payload, type } = JSON.parse(msg.data);
       //  here I need to use a switch statement
       //  as a conditional for the type of message
       // console.log(message);
-      switch (message.type) {
+      switch (type) {
         case "interval":
-          console.log(message.payload);
+          console.log(payload);
           break;
         case "chatMessage":
+          console.log(payload);
           this.setState(state => {
             return {
-              chatMessages: [...state.chatMessages, message.payload.message]
+              chatMessages: [...state.chatMessages, payload]
             };
           });
           break;
@@ -50,13 +51,15 @@ class ChatWindow extends React.Component {
     };
   }
 
-  sendMessage = (msg, username) => {
+  sendMessage = (msg, user) => {
+    console.log(msg, user);
     this.ws.send(
       JSON.stringify({
         type: "chatMessage",
         payload: {
           message: msg,
-          username: username
+          username: user,
+          timeStamp: Date.now()
         }
       })
     );
@@ -67,11 +70,12 @@ class ChatWindow extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="chat-window">
         <div className="chat-output">
-          {this.state.chatMessages.map(message => (
-            <p key={message.timeStamp}>{message.data}</p>
+          {this.state.chatMessages.map(msgObj => (
+            <p key={msgObj.timeStamp}>{msgObj.message}</p>
           ))}
         </div>
         <form action="">
@@ -99,7 +103,7 @@ class ChatWindow extends React.Component {
           <button
             onClick={e => {
               e.preventDefault();
-              this.sendMessage(this.state.message, this.state.username);
+              this.sendMessage(this.state.chatInput, this.state.username);
             }}
           >
             Submit
