@@ -14,9 +14,12 @@ export default function App() {
   const [currentId, useCurrentId] = useState(null)
   const [currentName, useCurrentName] = useState('')
   const [currentBio, useCurrentBio] = useState('')
-  useEffect(_ => {
-    users.length < 1 && fetchUsers()
-  })
+  useEffect(
+    _ => {
+      fetchUsers()
+    },
+    [users.length < 1]
+  )
   async function fetchUsers() {
     try {
       const response = await fetch('http://localhost:8888/api/users')
@@ -38,20 +41,25 @@ export default function App() {
       useError(e.message)
     }
   }
-  function submit() {
-    axios
-      .put('http://localhost:8888/api/users/' + currentId, {
-        name: currentName,
-        bio: currentBio
+  async function submit() {
+    try {
+      const res = await axios.put(
+        'http://localhost:8888/api/users/' + currentId,
+        {
+          name: currentName,
+          bio: currentBio
+        }
+      )
+      const body = res.data
+      const id = res.data.id
+      const newUsers = users.map(user => {
+        return user.id.toString() === id ? body : user
       })
-      .then(res => {
-        const newUsers = users.map(user => {
-          return user.id === Number(res.data.id) ? res.data : user
-        })
-        useUsers(newUsers)
-        useEditing(false)
-      })
-      .catch(err => useError(err))
+      useUsers(newUsers)
+      useEditing(false)
+    } catch (err) {
+      useError(err)
+    }
   }
   const edit = (id, name, bio) => {
     useCurrentId(id)
