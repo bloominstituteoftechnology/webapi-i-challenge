@@ -25,30 +25,36 @@ const messageTypes = {
 wss.on("connection", function connection(ws, req) {
   const ip = req.connection.remoteAddress;
   console.log(ip);
-  wss.on("open", () => {
-    console.log("connected");
-    wss.send(Date.now());
-  });
 
-  ws.on("message", function incoming(message) {
-    console.log("received: %s", message);
-    ws.send("ECHO: " + message);
-  });
+  ws.on("message", function incoming(msg) {
+    console.log("received: %s", msg);
+    const message = JSON.parse(msg);
 
-  setInterval(() => {
     wss.clients.forEach(client => {
       client.OPEN
-        ? ws.send(
+        ? client.send(
             JSON.stringify({
-              type: "interval",
-              payload: {
-                time: Date.now().toString()
-              }
+              ...message
             })
           )
         : null;
     });
-  }, 1000);
+  });
+
+  // setInterval(() => {
+  //   wss.clients.forEach(client => {
+  //     client.OPEN
+  //       ? ws.send(
+  //           JSON.stringify({
+  //             type: "interval",
+  //             payload: {
+  //               time: Date.now().toString()
+  //             }
+  //           })
+  //         )
+  //       : null;
+  //   });
+  // }, 1000);
 });
 
 // if (client !== ws && client.readyState === WebSocket.OPEN) {
