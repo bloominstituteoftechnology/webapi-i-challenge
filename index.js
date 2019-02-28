@@ -12,7 +12,22 @@ server.use(express.json()); // parses body and adds it to req object
 // CREATE - POST
 
 server.post('/api/users', (req, res) => {
-
+	const user = req.body; 
+	if (user.name && user.bio) {
+		db.insert(user)
+			.then(user => {
+				res.status(201)
+					.json(user);
+			})
+			.catch(err => {
+				res.status(500)
+					.json({ error: "There was an error while saving the user to the database" });
+			})
+	}
+	else {
+		res.status(400)
+			.json({ errorMessage: "Please provide name and bio for the user." });
+	}
 });
 
 // READ - GET
