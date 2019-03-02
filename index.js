@@ -1,15 +1,18 @@
 // implement your API here
 const express = require('express')
+const cors = require('cors')
 
 const server = express()
+const port = process.env.PORT || 8000
 
 // defines the body. must use to allow post request to work
 server.use(express.json())
+server.use(cors())
 
 const database = require('./data/db.js')
 
 server.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World with cors!')
 })
 
 server.get('/api/users', (req, res) => {
@@ -72,6 +75,7 @@ server.put('/api/users/:id', (req, res) => {
     const { id } = req.params
     const { name, bio } = req.body
     console.log(id, name, bio)
+
     if (!name || !bio) {
         res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
     }
@@ -88,4 +92,4 @@ server.put('/api/users/:id', (req, res) => {
     })
 })
 
-server.listen(8000, () => console.log('API port 8000'))
+server.listen(port, () => console.log(`Listening on port ${port}`))
