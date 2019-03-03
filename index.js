@@ -55,24 +55,27 @@ server.delete("/api/users/:id",(req,res)=>{
         })
 
         .catch(error=>{
-         res.status(500).json({message: "The user with the specified ID does not exist."})
+         res.status(500).json({message: "The server can't delete the api."})
 
 
         })
 })
 server.put("/api/users/:id",(req,res)=>{
+    console.log("-------------------------------");
+    console.log(req.params)
+    console.log("-------------------------------");
       const {id}=req.params;
       const updateUser=req.body;
-    //   if(!id){
+      if(!id){
 
-    //     res.status(404).json({message: "The user with the specified ID does not exist." })
-    //  }
-    //   if(updateUser.name && updateUser.bio){
-    //     res.status(201).json(updateUser);
-    //   }else{
-    //      res.status(400).json({errorMessage:"Please provide name and bio for the user."  })
-    //      return;
-    //  }   
+         res.status(404).json({message: "The user with the specified ID does not exist." })
+      }
+       if(updateUser.name && updateUser.bio){
+        res.status(201).json(updateUser);
+       }else{
+         res.status(400).json({errorMessage:"Please provide name and bio for the user."  })
+      return;   
+      }   
       db.update(id,updateUser)
       .then(updated=>{
         res.status(201).json(updated);
