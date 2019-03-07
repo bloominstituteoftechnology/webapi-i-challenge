@@ -3,7 +3,7 @@
 // Import Express
 const express = require('express');
 
-// Import db Functions
+// Import db
 const db = require('./data/db.js');
 
 // Initialize Express
@@ -24,7 +24,13 @@ server.post('/api/users', (req, res) => {
 
 // READ
 server.get('/api/users', (req, res) => {
-    res.send('get users');
+    db.find()
+        .then(users => {
+            res.status(200).json(users)
+        })
+        .catch(err => {
+            res.status(500).json({ success: false, message: err.message })
+        });
 });
 
 server.get('/api/users/:id', (req, res) => {
