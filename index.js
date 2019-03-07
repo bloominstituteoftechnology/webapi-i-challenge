@@ -9,16 +9,23 @@ const db = require('./data/db.js');
 // Initialize Express
 const server = express();
 
-
-// HOME
-server.get('/', (req, res) => {
-    res.send('Home');
-});
+// Middleware
+server.use(express.json());
 
 
 // CREATE
 server.post('/api/users', (req, res) => {
-    res.send('post user');
+    const { name, bio, created_at, updated_at } = req.body;
+    if(!name || !bio) {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    }
+    db.insert({ name, bio, created_at, updated_at })
+        .then(user => {
+            res.status(201).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({ error: "There was an error while saving the user to the database" })
+        })
 });
 
 
@@ -26,7 +33,7 @@ server.post('/api/users', (req, res) => {
 server.get('/api/users', (req, res) => {
     db.find()
         .then(users => {
-            res.status(200).json(users)
+            res.status(200).json({ success: true, users })
         })
         .catch(err => {
             res.status(500).json({ success: false, message: err.message })
