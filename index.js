@@ -1,15 +1,12 @@
 // implement your API here
-const http = require('http');
+const express = require('express');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const server = express();
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World from Node');
+server.get('/', (req, res) => {
+    res.send('Hello from Express');
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}`);
+server.listen(3000, () => {
+    console.log(`Server running.`);
 });
