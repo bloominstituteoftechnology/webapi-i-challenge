@@ -1,8 +1,72 @@
+
+## introduce node.js and Express.
+ #what is node.js, what can it do? what can’t it do?
+ node is what enables js to be developed outside of the browser and larger program languages such as c++ Jave Python ect.
+ Some of the advantages of using node.js is the ability to use it on server side and removes the requirements of swithchin between front end and back end programming. Node is far more efficient in its lack of complexity and its adaptability.
+
+ In addition, Node.js runs Asynchronous allowing for more robust programs on the end users proccessor side. Npm modules are available to implement repetitive task enabling developers to focus on more complex tasks. 
+
+
+ # what is Express? why use it?
+ # relationship between Express and node.js.
+
+
+# see a high level overview of the main features of Express.
+#learn how to manually test our Web API using a tool called Postman.services.
+#create our first CRUD Web API.
+
+## At the end of this module, you should be able to:
+   #explain what Node.js is and it's core features.
+    node is what enables js to be developed outside of the browser and larger program languages such as c++ Jave Python ect.
+ Some of the advantages of using node.js is the ability to use it on server side and removes the requirements of swithchin between front end and back end programming. Node is far more efficient in its lack of complexity and its adaptability.
+
+ In addition, Node.js runs Asynchronous allowing for more robust programs on the end users proccessor side. Npm modules are available to implement repetitive task enabling developers to focus on more complex tasks. 
+
+ # disadvantages
+It run Javascript on the server and can be difficult and rescource intesive to us different tools that are not js enabled
+Javascript is single threaded and cannot implement or tale advantage of multiple threads on the server.
+
+Developers whom are not js savvy or compatible may be challenged by its asycrhounous flow where most languages readily available require a syncrouhnous style developnent,
+
+having the vast amounts of available npm registies security vulnerabilities could arise and understanding dependencies to the inexperieced devaloper could be cumbersome. 
+
+
+#useage
+
+Node can be developed inside the terminal. with this you use the console object of the terminal rather than the window object of the browser. Both are javascript objects. There are several features not available on the terminal object such as Alert() and several others. 
+
+# a simple server with Node
+
+sub objectives 
+
+use Node's http module diminish the need for complex network operations. 
+
+write a single request handler function that will handle all request. 
+
+The request handlers receives request of action from the client and responds 
+
+The handler takes in two arguments an object for requisition and an object and one representing a responce.
+
+// server? What is a server?
+// The server is a place on a computer that is listening for traffic and when it receives that traffic it knows what to do with said traffic
+
+
+
+
+
+
+   #explain what Express is and it's core features.
+   #create an API that can respond to GET requests.
+   #use postman to manually test Web APIs.
+
+
 # Building RESTful APIs with Node.js and Express Mini
 
 ## Topics
 
 - Building a RESTful API.
+
+
 - Performing CRUD operations.
 - Writing API endpoints.
 
