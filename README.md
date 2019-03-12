@@ -104,15 +104,53 @@ some of helpers found in these objects ar methods such as response.redirect(), r
 
 Express can provide ways to dynamically render HTML on the server using different languages that render to the users request. 
 
+# 3rd video notes 
+Agenda 
+
+Add Express to a node.js App
+Use Express to create a web Api
+Add endpoints that can respond to get request
+Return json and correct http status codes
+
+Api is a server software that provides endpoints that can be used by clients to manage resources.
+
+an endpoints are the contacts wich make communication possible. In web applications the url is the reference to the location of data on a server. 
+
+resources are the things application care about such as users products orders clients and returns
+
+
+
+
    #create an API that can respond to GET requests.
 
+// The '/' slash in the get request is the root of out api 
+// This function is often refferred to and understood as the request handler function and can be in es6 arrow or plain function format
+ as noted earlier the first paramatar is a request object that is being passed in.
 
 
-   
+server.get('/', (req, res) =>{
+res.send('Hello world from express!');
+});
+
+ functionality can be verified by going to the port in the computers browser for example port 5000 can be viewed by entering http://localhost:5000/
+
+ when dependencies or yarn add express is implemented several assets are added one of which is 
+  "server": "nodemon index.js" this allows for saves to be updated realtime rather than stopping and restarting the server. 
+
+
    #use postman to manually test Web APIs.
+Postman is a client that can be used as a tool to test api's
+It is a flexible gui that gives developers the abilities to test api's in ways a developing app may not be able too.
 
 
 # Building RESTful APIs with Node.js and Express Mini
+// implement your API here
+const express = require ('express');
+// this is the equivilant in importing a package similar to react. 
+const server = express();
+// by calling express and assigning it to server it creates a server that is powered by express.
+
+
 
 ## Topics
 
