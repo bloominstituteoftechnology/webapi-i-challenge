@@ -4,52 +4,50 @@ const express = require ('express');
 const server = express();
 const port = 5000;
 // by calling express and assigning it to server it creates a server that is powered by express.
-const addjson = express.json()
+server.use (express.json())
 // use the require to import db.js function set. 
-const dbjs = require ('./data/db');
-// set server to use json by default
-server.use(express.json());
+const db = require ('./data/db');
+// use find() to retrieve database
 
-server.post('/api/users',(req, res)=>{
+server.get ("/api/users",(req,res)=>{
+  db
 
+  .find()
+
+  .then(user=> res.status(200).json({success:true,user}))
+
+  .catch(({code, message}) =>{
+    res.status(code).json({success:false,message})
+  })
 })
 
-server.get('/api/users',(req, res)=>{
-dbjs.find()  
-// find is brought in from the dbjs 
-// the return will go through a promise .then and .catch with the user being the paramater
-.then((user)=>res.json(user))
-.catch (err => {
-  res.status(500).json({error:"Server failed to return anything"})
-})
-})
-// returns an array of all users on the database
-server.get('/api/users/:id',(req, res)=>{
+// handle create 
 
+server.post("/api/users",(req,res) =>{
+  const use = req.body;
+  console.log(use.bio)
+
+  if(use.name && use.bio){return(
+db
+
+.insert(use)
+
+.then(user=>res.status(201).json({success:true,user}))
+
+.catch(({code, message}) =>{
+  res.status(500).json({success:false,message})
+})
+  )}else{return(
+  res.status(400).json({success:false, message:'Please provide name and bio for the user.'})
+  )}
 })
 
-server.delete('/api/users/:id',(req, res)=>{
 
-})
 
-server.put('/api/users/:id',(req, res)=>{
-  
-})
 
-//first we will assign a variable that calls the find function
-// server.get('/hobbits', (req, res) => {
-//   res.send ('welcome to Hobbiton')
-//     // status code for 200 means o
-//   })
-//   server.post('/hobbits', (req,res)=>{
-//   res.status(201).json({url:'/hobbits', operation: 'POST'})
-//   })
-//   server.put('/hobbits', (req,res)=>{
-//     res.status(200).json({url:'/hobbits', operation: 'PUT'})
-//   })
-//   server.delete('/hobbits', (req,res)=>{
-//     res.sendStatus(204)
-//   })
+
+
+
   server.listen (port, () => {
     console.log(`server listening on port: ${port}`);
   });
