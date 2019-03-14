@@ -93,11 +93,10 @@ server.get("/api/users/:id", (req, res) => {
     });
 });
 
-//TODO:
 // Removes the user with the specified id and returns the deleted user.
 // When the client makes a DELETE request to /api/users/:id:
 server.delete("/api/users/:id", (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   db.users
     .remove(id)
     .then(user => {
@@ -121,27 +120,48 @@ server.delete("/api/users/:id", (req, res) => {
     });
 });
 
-//TODO:
 //Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
 // When the client makes a PUT request to /api/users/:id:
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
 
-//     If the user with the specified id is not found:
-//         return HTTP status code 404 (Not Found).
-//         return the following JSON object: { message: "The user with the specified ID does not exist." }.
+  //     If the request body is missing the name or bio property:
+  //         cancel the request.
+  //         respond with HTTP status code 400 (Bad Request).
+  //         return the following JSON response: { errorMessage: "Please provide name and bio for the user." }.
+  if (!changes.name || !changes.bio) {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
+  db.users
+    .update(id, changes)
+    .then(updatedUser => {
+      //     If the user is found and the new information is valid:
+      //         update the user document in the database using the new information sent in the reques body.
+      //         return HTTP status code 200 (OK).
+      //         return the newly updated user document.
+      if (updatedUser) {
+        res.status(200).json(changes);
 
-//     If the request body is missing the name or bio property:
-//         cancel the request.
-//         respond with HTTP status code 400 (Bad Request).
-//         return the following JSON response: { errorMessage: "Please provide name and bio for the user." }.
+        //     If the user with the specified id is not found:
+        //         return HTTP status code 404 (Not Found).
+        //         return the following JSON object: { message: "The user with the specified ID does not exist." }
+      } else {
+        res
+          .status(404)
+          .json({ error: "The user information could not be modified." });
+      }
+    })
 
-//     If there's an error when updating the user:
-//         cancel the request.
-//         respond with HTTP status code 500.
-//         return the following JSON object: { error: "The user information could not be modified." }.
-
-//     If the user is found and the new information is valid:
-//         update the user document in the database using the new information sent in the reques body.
-//         return HTTP status code 200 (OK).
-//         return the newly updated user document.
-
-server.put("/api/users/:id", () => {});
+    //     If there's an error in retrieving the user from the database:
+    //         cancel the request.
+    //         respond with HTTP status code 500.
+    //         return the following JSON object: { error: "The user information could not be retrieved." }.
+    .catch(error => {
+      res
+        .status(500)
+        .json({ error: "The user information could not be retrieved." });
+    });
+});
