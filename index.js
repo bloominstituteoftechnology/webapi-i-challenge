@@ -1,8 +1,9 @@
 const express = require("express");
 const server = express();
+const morgan = require("morgan");
 port = 8000;
 const db = require("./data/db");
-server.use(express.json());
+server.use(express.json()).use(morgan("dev"));
 
 //sets up server and shows it's running
 server.get("/", (req, res) => {
@@ -63,10 +64,7 @@ server.get("/api/users", (req, res) => {
     });
 });
 
-//TODO:
 // GET	/api/users/:id	Returns the user object with the specified id.
-// DELETE	/api/users/:id	Removes the user with the specified id and returns the deleted user.
-// PUT	/api/users/:id	Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
 
 // When the client makes a GET request to /api/users/:id:
 
@@ -78,6 +76,17 @@ server.get("/api/users", (req, res) => {
 //         cancel the request.
 //         respond with HTTP status code 500.
 //         return the following JSON object: { error: "The user information could not be retrieved." }.
+server.get("/api/users/:id", (req, res) => {
+  db.users
+    .findById(id)
+    .then()
+    .catch();
+});
+
+//TODO:
+
+// DELETE	/api/users/:id	Removes the user with the specified id and returns the deleted user.
+// PUT	/api/users/:id	Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
 
 // When the client makes a DELETE request to /api/users/:id:
 
