@@ -59,7 +59,19 @@ server.put('/api/users/:id',(req,res) =>{
   })
 })
 
+server.delete('/api/users/:id',(req,res) =>{
+  const {id}= req.params;
 
+  db
+
+  .remove(id)
+
+  .then(delId =>{res.status(200).json(delId);})
+
+  .catch(({code, message}) =>{
+    res.status(code).json({success:false,message})
+  })
+})
 // When the client makes a `DELETE` request to `/api/users/:id`:
 
 // - If the _user_ with the specified `id` is not found:
