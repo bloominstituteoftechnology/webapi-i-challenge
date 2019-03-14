@@ -45,14 +45,21 @@ server.post("/api/users", (req, res) => {
 });
 
 // GET	/api/users	Returns an array of all the user objects contained in the database.
+// When the client makes a GET request to /api/users:
 server.get("/api/users", (req, res) => {
   db.users
     .find()
     .then(users => {
       res.status(200).json({ success: true, users });
     })
-    .catch(({ code, message }) => {
-      res.status(code).json({ message });
+    //     If there's an error in retrieving the users from the database:
+    //         cancel the request.
+    //         respond with HTTP status code 500.
+    //         return the following JSON object: { error: "The users information could not be retrieved." }.
+    .catch(error => {
+      res
+        .status(500)
+        .json({ error: "The users information could not be retrieved." });
     });
 });
 
@@ -60,13 +67,6 @@ server.get("/api/users", (req, res) => {
 // GET	/api/users/:id	Returns the user object with the specified id.
 // DELETE	/api/users/:id	Removes the user with the specified id and returns the deleted user.
 // PUT	/api/users/:id	Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
-
-// When the client makes a GET request to /api/users:
-
-//     If there's an error in retrieving the users from the database:
-//         cancel the request.
-//         respond with HTTP status code 500.
-//         return the following JSON object: { error: "The users information could not be retrieved." }.
 
 // When the client makes a GET request to /api/users/:id:
 
