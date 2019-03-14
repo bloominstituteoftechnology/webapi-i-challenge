@@ -39,7 +39,7 @@ server.post("/api/users",(req,res) =>{
       res.status(400).json({success:false, message:'Please provide name and bio for the user.'})
   )}
 })
-////  put 
+//handle put actions
 server.put('/api/users/:id',(req,res) =>{
   const { id } = req.params;
   const updates = req.body;
@@ -59,6 +59,8 @@ server.put('/api/users/:id',(req,res) =>{
   })
 })
 
+//handle delete actions
+
 server.delete('/api/users/:id',(req,res) =>{
   const {id}= req.params;
 
@@ -72,17 +74,24 @@ server.delete('/api/users/:id',(req,res) =>{
     res.status(code).json({success:false,message})
   })
 })
-// When the client makes a `DELETE` request to `/api/users/:id`:
+server.get('/api/users/:id',(req,res) =>{
+  const { id } = req.params;
+  const user = req.body;
 
-// - If the _user_ with the specified `id` is not found:
+  db
+  
+  .findById(id,user)
 
-//   - return HTTP status code `404` (Not Found).
-//   - return the following JSON object: `{ message: "The user with the specified ID does not exist." }`.
+  .then (use =>{
+    console.log (use)
+    user?res.status(200).json({success:true,use})
+    : res.status(404).json({success:false, message:'invalid hub does not exist as requested'})
+  }) // checks to see if reffered data is an existing entree
 
-// - If there's an error in removing the _user_ from the database:
-//   - cancel the request.
-//   - respond with HTTP status code `500`.
-//   - return the following JSON object: `{ error: "The user could not be removed" }`.
+  .catch(({ }) =>{
+    res.status(500).json({success:false,message:'server timeout or error'})
+  })
+})
 
   server.listen (port, () => {
     console.log(`server listening on port: ${port}`);
