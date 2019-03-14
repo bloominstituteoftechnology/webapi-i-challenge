@@ -15,7 +15,7 @@ server.get ("/api/users",(req,res)=>{
   .find()
   .then(user=> res.status(200).json({success:true,user}))
   .catch(({ }) =>{
-    res.status(500).json({success:false,message:'server timeout or error'})
+    res.status(500).json({success:false,error: "The users information could not be retrieved." })
   })
 })
 
@@ -36,34 +36,38 @@ server.post("/api/users",(req,res) =>{
 )}else{
     return(
   
-      res.status(400).json({success:false, message:'Please provide name and bio for the user.'})
+      res.status(400).json({success:false, error: "There was an error while saving the user to the database"})
   )}
 })
 //handle put actions
 server.put('/api/users/:id',(req,res) =>{
   const { id } = req.params;
   const updates = req.body;
-
-  db
+  if (id){ 
+    if (updates.name && updates.bio){
   
+  db
   .update(id,updates)
-
+  console.log (updates)
   .then (upd =>{
-    console.log (upd)
-    upd?res.status(200).json({success:true,upd})
-    : res.status(404).json({success:false, message:'invalid hub does not exist as requested'})
-  }) // checks to see if reffered data is an existing entree
-
+    res.status(200).json({success:true,updates})
+    })
+ // checks to see if reffered data is an existing entree
   .catch(({ }) =>{
-    res.status(500).json({success:false,message:'server timeout or error'})
-  })
+    res.status(500).json({success:false, error: "The user information could not be modified." })
+  })}else{
+    res.status(400).json({success:false, errorMessage: "Please provide name and bio for the user."})
+  }
+}else{
+  res.status(404).json({success:false, message: "The user with the specified ID does not exist."})
+}
 })
 
 //handle delete actions
 
 server.delete('/api/users/:id',(req,res) =>{
   const {id}= req.params;
-
+if(id){
   db
 
   .remove(id)
@@ -71,9 +75,13 @@ server.delete('/api/users/:id',(req,res) =>{
   .then(delId =>{res.status(200).json(delId);})
 
   .catch(({code, message}) =>{
-    res.status(code).json({success:false,message})
-  })
+    res.status(500).json({success:false,error: "The user could not be removed"})
+  })}else{
+    res.status(404).json({success:false, message: "The user with the specified ID does not exist."})
+  }
 })
+
+// handle the find by id action
 server.get('/api/users/:id',(req,res) =>{
   const { id } = req.params;
   const user = req.body;
@@ -85,11 +93,11 @@ server.get('/api/users/:id',(req,res) =>{
   .then (use =>{
     console.log (use)
     user?res.status(200).json({success:true,use})
-    : res.status(404).json({success:false, message:'invalid hub does not exist as requested'})
+    : res.status(404).json({success:false, message: "The user with the specified ID does not exist."})
   }) // checks to see if reffered data is an existing entree
 
   .catch(({ }) =>{
-    res.status(500).json({success:false,message:'server timeout or error'})
+    res.status(500).json({success:false,error: "The user information could not be retrieved."})
   })
 })
 
