@@ -82,4 +82,31 @@ server.delete('/api/users/:id', (req, res) => {
     });
 });
 
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedUser = req.body;
+
+  if (updatedUser.name && updatedUser.bio) {
+    db.update(id, updatedUser)
+      .then(user => {
+        if (user) {
+          res.status(200).json(user);
+        } else {
+          res.status(404).json({
+            message: 'The user with the specified ID does not exist.',
+          });
+        }
+      })
+      .catch(error => {
+        res
+          .status(500)
+          .json({ error: 'The user information could not be modified.' });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+  }
+});
+
 server.listen(port, () => console.log(`Server is listening at port ${port}`));
