@@ -8,6 +8,7 @@ module.exports = {
   insert,
   update,
   remove,
+  removeByMe
 };
 
 function find() {
@@ -36,4 +37,9 @@ function remove(id) {
   return db('users')
     .where('id', Number(id))
     .del();
+}
+function removeByMe(user_id){
+  return db('posts')
+  .where('user_id', user_id)
+  .del();
 }
