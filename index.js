@@ -28,8 +28,8 @@ server.get('/api/users', (req, res) => {
 
 // Fetches a user:
 server.get('/api/users/:id', (req, res) => {
-  const user = req.params.id;
-  db.findById(user)
+  const id = req.params.id;
+  db.findById(id)
     .then(user => {
       if (user) {
         res.status(200).json(user);
@@ -85,6 +85,33 @@ server.delete('/api/users/:id', (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ message: 'error deleting user' });
+    });
+});
+
+// Updates a user:
+server.put('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const user = req.body;
+  const name = req.body.name;
+  const bio = req.body.bio;
+  db.update(id, user)
+    .then(userEdit => {
+      if (!id) {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      } else if (!name || !bio) {
+        res
+          .status(400)
+          .json({ errorMessage: 'Please provide name and bio for the user.' });
+      } else {
+        res.status(200).json(user);
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: 'The user information could not be modified.' });
     });
 });
 
