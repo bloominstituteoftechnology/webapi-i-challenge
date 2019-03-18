@@ -36,11 +36,29 @@ server.get('/api/users', (req, res) => {
 
 // get user by id
 server.get('/api/users/:id', (req, res) => {
-  const id = req.params.id
-  console.log(`id: `, id)
+  const id = req.params.id;
+
   db.findById(id)
     .then(user => {
       res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'error retrieving users' });
+    });
+});
+
+// update user
+server.post('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+
+  db.update(id, changes)
+    .then(updated => {
+      if (updated) {
+        res.status(200).json(updated);
+      } else {
+        res.status(404).json({ message: 'user not found' });
+      }
     })
     .catch(err => {
       res.status(500).json({ message: 'error retrieving users' });
