@@ -49,7 +49,7 @@ server.get('/api/users/:id', (req, res) => {
 
 // update user
 server.put('/api/users/:id', (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const changes = req.body;
 
   db.update(id, changes)
@@ -59,6 +59,18 @@ server.put('/api/users/:id', (req, res) => {
       } else {
         res.status(404).json({ message: 'user not found' });
       }
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'error retrieving users' });
+    });
+});
+
+// delete user
+server.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  db.remove(id)
+    .then(deleted => {
+      res.status(204).end();
     })
     .catch(err => {
       res.status(500).json({ message: 'error retrieving users' });
