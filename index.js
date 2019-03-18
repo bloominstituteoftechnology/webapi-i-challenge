@@ -35,7 +35,12 @@ server.get('/api/users/:id', (req, res) => {
 });
 
 server.post('/api/users', (req, res) => {
-  console.log(req.body);
+  if (!req.body.name || !req.body.bio) {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+    return;
+  }
 
   db.insert(req.body)
     .then(insertedUser => {
