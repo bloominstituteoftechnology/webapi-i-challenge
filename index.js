@@ -4,7 +4,7 @@ const server = express()
 const port = 5000
 
 server.use(express.json())
-const users = require('./data/db')
+const db = require('./data/db')
 
 server.get('/', (req, res) => {
   res.send(`I'm inside the server!`)
@@ -13,8 +13,7 @@ server.get('/', (req, res) => {
 // ENDPOINTS
 // Get all users
 server.get('/api/users', (req, res) => {
-  users
-    .find()
+  db.find()
     .then(users => {
       res.status(200).json(users)
     })
@@ -29,15 +28,16 @@ server.get('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
   const { id } = req.params
 
-  users
-    .findById(id)
-    .then(user =>
-      user
-        ? res.status(200).json(user)
-        : res
-            .status(404)
-            .json({ message: 'The user with the specified ID does not exist.' })
-    )
+  db.findById(id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user)
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' })
+      }
+    })
     .catch(() =>
       res
         .status(500)
@@ -50,17 +50,14 @@ server.post('/api/users', (req, res) => {
   const user = req.body
 
   if (user.name && user.bio) {
-    users
-      .insert(user)
+    db.insert(user)
       .then(user => {
         res.status(201).json(user)
       })
-      .catch(
-        res
-          .status(500)
-          .json({
-            error: 'There was an error while saving the user to the database'
-          })
+      .catch(() =>
+        res.status(500).json({
+          error: 'There was an error while saving the user to the database'
+        })
       )
   } else {
     res
@@ -70,7 +67,23 @@ server.post('/api/users', (req, res) => {
 })
 
 // Delete user by id
-server.delete('/api/users/:id', (req, res) => {})
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params
+
+  db.remove(id)
+    .then(user => {
+      if (user) {
+        res.status(200).json({ message: 'The use was sucessfully deleted' })
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' })
+      }
+    })
+    .catch(() =>
+      res.status(500).json({ error: 'The user could not be removed' })
+    )
+})
 
 // Put user by id
 server.put('/api/users/:id', (req, res) => {})
