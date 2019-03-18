@@ -26,7 +26,24 @@ server.get('/api/users', (req, res) => {
 })
 
 // Get user by id
-server.get('/api/users/:id', (req, res) => {})
+server.get('/api/users/:id', (req, res) => {
+  const { id } = req.params
+
+  users
+    .findById(id)
+    .then(user =>
+      user
+        ? res.status(200).json(user)
+        : res
+            .status(404)
+            .json({ message: 'The user with the specified ID does not exist.' })
+    )
+    .catch(() =>
+      res
+        .status(500)
+        .json({ error: 'The user information could not be retrieved.' })
+    )
+})
 
 // Post new user
 server.post('/api/users', (req, res) => {})
