@@ -35,7 +35,8 @@ server.get('/api/users/:id', (req, res) => {
 });
 
 server.post('/api/users', (req, res) => {
-  if (!req.body.name || !req.body.bio) {
+  const { name, bio } = req.body;
+  if (!name || !bio) {
     res
       .status(400)
       .json({ errorMessage: 'Please provide name and bio for the user.' });
@@ -67,6 +68,36 @@ server.delete('/api/users/:id', (req, res) => {
       res
         .status(500)
         .json({ message: 'The users informaton can not be retrived ' });
+    });
+});
+
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, bio } = req.body;
+
+  if (!name || !bio) {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+    return;
+  }
+
+  db.update(id, { name, bio })
+    .then(user => {
+      db.findById(id).then(id => {
+        if (!id) {
+          res.status(404).json({
+            message: 'The user with the specified ID does not exist.'
+          });
+        } else {
+          res.status(200).json(user);
+        }
+      });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: 'The user information could not be modified.' });
     });
 });
 
