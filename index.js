@@ -64,9 +64,6 @@ server.post('/api/users', (req, res) => {
           .json({ errorMessage: 'Please provide name and bio for the user.' });
       }
     })
-    // .then(user => {
-    //   res.status(201).json(user);
-    // })
     .catch(err => {
       res.status(500).json({ message: 'error adding user' });
     });
@@ -77,7 +74,7 @@ server.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   db.remove(id)
     .then(user => {
-      if (user) {
+      if (id) {
         // Sends general 'success' code, then ends the transmission (I forgot the proper name) since there is no need to send any other information.
         res.status(200).json(user);
       } else {
