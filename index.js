@@ -1,14 +1,15 @@
 const express = require('express'); // CommonJS Modules
 // the same as import express from 'express'; // ES2015 Modules
 
-const db = require('./data/db.js'); // added this line ***********
+const db = require('./data/db');
 
 const server = express();
+const port = 4000;
 
-server.use(express.json()); // *** add this to make POST and PUT work ***
+server.use(express.json());
 
 server.get('/', (req, res) => {
-  res.send('Hello Web XVII');
+  res.send('api: /now, /users');
 });
 
 // write a GET /now endpoint that returns current date and time as a string
@@ -19,8 +20,7 @@ server.get('/now', (req, res) => {
 
 // the R in CRUD
 server.get('/hubs', (req, res) => {
-  db.hubs
-    .find()
+  db.find()
     .then(hubs => {
       // 2XX success
       // 3XX redirect
@@ -35,52 +35,101 @@ server.get('/hubs', (req, res) => {
 });
 
 // the C in CRUD
-server.post('/hubs', (req, res) => {
-  const hubInfo = req.body;
-  console.log('hub information', hubInfo);
+server.post('/users', (req, res) => {
+  const newUser = req.body;
 
-  db.hubs
-    .add(hubInfo)
-    .then(hub => {
-      res.status(201).json(hub);
+  if (newUser.name && newUser.bio) {
+    db.insert(newUser)
+      .then(newUser => {
+        res.status(201).json(newUser);
+      })
+      .catch(error => {
+        res.status(500).json({
+          error: 'There was an error while saving the user to the database',
+        });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+  }
+});
+
+server.get('/users', (req, res) => {
+  db.find()
+    .then(users => {
+      res.status(200).json(users);
     })
     .catch(error => {
-      res.status(500).json({ message: 'error creating the hub' });
+      res.status(500).json({
+        error: 'The users information could not be retrieved.',
+      });
     });
 });
 
-server.delete('/hubs/:id', (req, res) => {
-  const id = req.params.id;
-
-  db.hubs
-    .remove(id)
-    .then(deleted => {
-      res.status(204).end(); // tells the client the request is done
-    })
-    .catch(error => {
-      res.status(500).json({ message: 'error deleting the hub' });
-    });
-});
-
-server.put('/hubs/:id', (req, res) => {
+server.get('/users/:id', (req, res) => {
   const { id } = req.params;
-  const changes = req.body;
 
-  db.hubs
-    .update(id, changes)
-    .then(updated => {
-      if (updated) {
-        res.status(200).json(updated);
+  db.findById(id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
       } else {
-        res.status(404).json({ message: 'hub not found' });
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
       }
     })
     .catch(error => {
-      res.status(500).json({ message: 'error updating the hub' });
+      res
+        .status(500)
+        .json({ error: 'The user information could not be retrieved.' });
     });
 });
 
-server.listen(4000, () => {
-  console.log('\n** API up and running on port 4000 **');
+server.delete('/users/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.remove(id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'The user could not be removed' });
+    });
 });
 
+server.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedUser = req.body;
+
+  if (updatedUser.name && updatedUser.bio) {
+    db.update(id, updatedUser)
+      .then(user => {
+        if (user) {
+          res.status(200).json(user);
+        } else {
+          res.status(404).json({
+            message: 'The user with the specified ID does not exist.',
+          });
+        }
+      })
+      .catch(error => {
+        res
+          .status(500)
+          .json({ error: 'The user information could not be modified.' });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+  }
+});
+
+server.listen(port, () => console.log(`Server is listening at port ${port}`));
