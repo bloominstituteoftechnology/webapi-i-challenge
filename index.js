@@ -6,6 +6,7 @@ const db = require('./data/db');
 const server = express();
 
 server.use(express.json());
+server.user(cors());
 
 server.get('/', (req, res) => {
   res.send('API is working')
