@@ -42,4 +42,16 @@ server.get('/api/users/:id', (req, res) => {
           .json({ error: 'The user information could not be retrieved.' });
       });
   });
+
+server.post('/api/users', (req, res) => {
+    const user = req.body
+    db
+      .insert(user)
+      .then(users => {
+           res.status(201).json(users)
+      })
+     .catch(err => {
+        res.status(400).json({ message: "Please provide name and bio for the user." })
+     })
+})
 server.listen(port, () => console.log(`Server is listening at port ${port}`));
