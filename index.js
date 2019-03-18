@@ -39,8 +39,8 @@ server.post('/api/users', (req, res) => {
 server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params;
     db.remove(id)
-    .then(user => {
-        res.status(200).json(user);
+    .then(deleted => {
+        res.status(204).end();
     })
     .catch(err => {
 
@@ -51,8 +51,12 @@ server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
     const userInfo = req.body
     db.update(id, userInfo)
-    .then(user => {
-        res.status(200).json(user)
+    .then(updated => {
+        if (updated) {
+            res.status(200).json(updated)
+        } else {
+            res.status(404).json({ message: "User not found"})
+        }
     })
     .catch(err => {
 
