@@ -48,7 +48,7 @@ server.get('/api/users/:id', (req, res) => {
 });
 
 // update user
-server.post('/api/users/:id', (req, res) => {
+server.put('/api/users/:id', (req, res) => {
   const id = req.params.id;
   const changes = req.body;
 
