@@ -51,7 +51,23 @@ server.post('/api/users', (req, res) => {
            res.status(201).json(users)
       })
      .catch(err => {
-        res.status(400).json({ message: "Please provide name and bio for the user." })
+        res.status(400).json({ message: "Provide name and bio for the user." })
      })
+})
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id
+    db
+      .remove(id)
+      .then(users => {
+        if (users) {
+            res.json(users)
+        } else {
+            res.status(404).json({ message: "This user does not exist." })
+        }
+     })
+     .catch(err => {
+        res.status(500).json({ error: "Something wrong" })
+    })
 })
 server.listen(port, () => console.log(`Server is listening at port ${port}`));
