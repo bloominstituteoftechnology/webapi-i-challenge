@@ -1,4 +1,5 @@
 const express = require('express'); // CommonJS Modules
+const cors = require('cors');
 // the same as import express from 'express'; // ES2015 Modules
 
 const db = require('./data/db');
@@ -7,6 +8,7 @@ const server = express();
 const port = 4000;
 
 server.use(express.json());
+server.use(cors());
 
 server.get('/', (req, res) => {
   res.send('api: /now, /users');
@@ -55,6 +57,7 @@ server.post('/users', (req, res) => {
   }
 });
 
+// the R in CRUD
 server.get('/users', (req, res) => {
   db.find()
     .then(users => {
@@ -67,6 +70,7 @@ server.get('/users', (req, res) => {
     });
 });
 
+// the R in CRUD
 server.get('/users/:id', (req, res) => {
   const { id } = req.params;
 
@@ -77,7 +81,7 @@ server.get('/users/:id', (req, res) => {
       } else {
         res
           .status(404)
-          .json({ message: 'The user with the specified ID does not exist.' });
+          .json({ message: 'Specified ID does not exist.' });
       }
     })
     .catch(error => {
@@ -87,6 +91,7 @@ server.get('/users/:id', (req, res) => {
     });
 });
 
+// the D in CRUD
 server.delete('/users/:id', (req, res) => {
   const { id } = req.params;
 
@@ -97,7 +102,7 @@ server.delete('/users/:id', (req, res) => {
       } else {
         res
           .status(404)
-          .json({ message: 'The user with the specified ID does not exist.' });
+          .json({ message: 'Specified ID does not exist.' });
       }
     })
     .catch(error => {
@@ -105,6 +110,7 @@ server.delete('/users/:id', (req, res) => {
     });
 });
 
+// the U in CRUD
 server.put('/users/:id', (req, res) => {
   const { id } = req.params;
   const updatedUser = req.body;
@@ -116,7 +122,7 @@ server.put('/users/:id', (req, res) => {
           res.status(200).json(user);
         } else {
           res.status(404).json({
-            message: 'The user with the specified ID does not exist.',
+            message: 'Specified ID does not exist.',
           });
         }
       })
@@ -132,4 +138,4 @@ server.put('/users/:id', (req, res) => {
   }
 });
 
-server.listen(port, () => console.log(`Server is listening at port ${port}`));
+server.listen(port, () => console.log(`Server is listening on port ${port}`));
