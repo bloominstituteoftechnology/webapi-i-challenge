@@ -1,7 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const server = express();
 const morgan = require("morgan");
-port = 8000;
+const port = process.env.PORT || 5000;
 const db = require("./data/db");
 server.use(express.json()).use(morgan("dev"));
 
@@ -10,7 +11,7 @@ server.get("/", (req, res) => {
   res.status(200).send("Hello");
 });
 server.listen(port, () => {
-  console.log("server is listening");
+  console.log(`\n*** Server Running on http://localhost:${port} ***\n`);
 });
 
 // Creates a user using the information sent inside the request body.
