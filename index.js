@@ -36,7 +36,7 @@ server.get("/api/users", (req, res) => {
 //GET ID
 
 server.get("/api/users/:id", (req, res) => {
-  const id = req.param.id;
+  const id = req.params.id;
   db.findById(id)
     .then(user => {
       if (user) {
