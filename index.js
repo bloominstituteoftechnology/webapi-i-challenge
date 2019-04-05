@@ -117,5 +117,5 @@ server.put('/api/users/:id', (req, res) => {
   .catch(err => {
     res.status(500).json({error: 'The user information could not be modified.'})
   })
-
+})
 server.listen(8000, () => console.log("API running on port 8000"));
