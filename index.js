@@ -79,7 +79,7 @@ server.post("/api/users", (req, res) => {
 
 //DEL
 
-server.delete('/api/user/:id', (req, res) => {
+server.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   db.remove(id)
   .then(user => {
