@@ -26,19 +26,33 @@ server.get('/api/users', (req, res) => {
     })
 })
 
-server.post('/api/users'), (req, res) => {
-    const newUser = req.body
-    console.timeLog('request body : ', newUser)
+server.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id
 
     db
-      .insert(newuser)
+    .findById(userId)
+    .then(user => {
+        res.json(user)
+    })
+    .catch(err => {
+        res.json({ error: err, message: 'Something broke'})
+    })
+})
+
+server.post('/api/users', (req, res) => {
+    const newUser = req.body
+    console.log('request body : ', newUser)
+
+    db
+      .insert(newUser)
       .then(user => {
           res.status(201).json(user)
       })
       .catch(err => {
-          res.status
+          res.status(500).json({ error: err, message: 'Error adding user' })
       })
-}
+    
+})
 
 server.delete('/api/users/:id', (req, res) => {
     const userId = req.params.id 
@@ -50,4 +64,12 @@ server.delete('/api/users/:id', (req, res) => {
       .catch(err => {
           res.status(500).json({ error: err, message: 'The user could not be removed.'})
       })
+})
+
+server.put('/api/users/:id', (req, res) => {
+    const userId = req.body.id
+
+
+    db
+      .update(userId, )
 })
