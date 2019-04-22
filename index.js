@@ -35,8 +35,12 @@ server.post('/api/users', (req, res) => {
 server.get('/api/users', (req, res) => {
     db
         .find()
-        .then()
-        .catch()
+        .then(db => {
+            res.status(200).json(db)
+        })
+        .catch(err => {
+            res.json({ error: err, message: 'Cannot find users'})
+        })
 })
 
 
@@ -44,10 +48,16 @@ server.get('/api/users', (req, res) => {
 // Get /api/users/:id
 
 server.get('/api/users/:id', (req, res) => {
+    const getId = req.params.id
+
     db
-        .findById()
-        .then()
-        .catch()
+        .findById(getId)
+        .then(user => {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err, message: 'Could not find the specified user' })
+        })
 })
 
 
@@ -75,9 +85,10 @@ server.delete('/api/users/:id', (req, res) => {
 
 server.put('/api/users/:id', (req, res) => {
     const updateId = req.params.id
+    const userToUpdate = req.body
 
     db
-        .update(updateId)
+        .update(updateId, userToUpdate)
         .then(updated => {
             res.status(200).json(updated)
         })
