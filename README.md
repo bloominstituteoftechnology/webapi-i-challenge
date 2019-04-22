@@ -13,7 +13,11 @@ Use Node.js and Express to build an API that performs CRUD operations on users.
 ### Download Project Files and Install Dependencies
 
 - **Fork** and **Clone** this repository.
+done
+
 - **CD into the folder** where you cloned the repository.
+done
+
 - Type `yarn` or `npm install` to download all dependencies listed inside `package.json`.
 
 ### Database access
