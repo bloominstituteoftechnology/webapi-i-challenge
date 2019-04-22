@@ -54,8 +54,20 @@ server.post('/api/users', (req, res) => {
     });
 });
 
-//
-
+//DELETE REQUEST for api/users/:id
+server.delete('/api/users/:id', (req, res) => {
+    //axios.delete(...url/${id})
+    const userId = req.params.id; //req.params has the url parameters
+    db 
+    .remove(userId)
+    .then(deleted => {
+        //res.status(200).json(deleted);
+        res.status(204).end(); //sends back a response to the client w/o sending data 
+    })
+    .catch(error => {
+        res.status(404).json({ error: err, message: "The user with the specified ID does not exist." })
+    })
+})
 
 
 
