@@ -7,10 +7,25 @@ const db = require('./data/db.js'); //add this line
 const server = express(); //creates express app using express module
 
 
-//GET REQUEST FOR USERS
+//GET REQUEST IS WORKING 
 server.get('/', (req, res) => {
     res.send('Get request is working')
 });
+
+//GET USERS /api/users
+server.get('/api/users', (req, res) => {
+    db  //doesn't need a .name b/c it doesn't have one 
+      .find()
+      .then(users => {
+          res.status(200).json(users);
+      })
+      .catch(err => {
+          res.status(500).json({ error: err, message:  "The users information could not be retrieved."})
+      })
+})
+
+
+
 
 
 
