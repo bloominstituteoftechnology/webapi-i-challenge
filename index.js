@@ -67,9 +67,15 @@ server.delete('/api/users/:id', (req, res) => {
 })
 
 server.put('/api/users/:id', (req, res) => {
-    const userId = req.body.id
-
+    const userId = req.params.id
+    const user = req.body
 
     db
-      .update(userId, )
+      .update(userId, user)
+      .then(user => {
+          res.status(200).json(user)
+      })
+      .catch(err => {
+          res.status(500).json({ error: err, message: "The user information could not be modified."})
+      })
 })
