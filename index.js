@@ -6,6 +6,7 @@ const db = require('./data/db.js'); //add this line
 
 const server = express(); //creates express app using express module
 
+server.use(express.json()); //add this fro POST 
 
 //GET REQUEST IS WORKING 
 server.get('/', (req, res) => {
@@ -24,7 +25,25 @@ server.get('/api/users', (req, res) => {
       })
 })
 
+//GET REQUEST FOR /api/users/:id
 
+
+
+
+//POST REQUEST for /api/users
+server.post('/api/users', (req, res) => {
+    const userInformation = req.body;
+    console.log('request body:', userInformation);
+
+    db
+    .insert(userInformation)
+    .then(user => {
+        res.status(200).json(user);
+    })
+    .catch(err => {
+        res.status(400).json({ error: err, message: "Please provide name and bio for the user."})
+    });
+});
 
 
 
