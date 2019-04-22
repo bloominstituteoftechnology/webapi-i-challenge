@@ -37,6 +37,28 @@ server.get('/api/users/:id', (req, res) => {
         })
 });
 
+server.post('/api/users', (req, res) => {
+    const { name, bio } = req.body;
+    console.log('user info: \n', req.body);
+
+    if (name && bio) {
+        console.log('req.body contains a name and bio');
+        db
+            .insert({ name, bio })
+            .then(user => { res.status(201).json(user) })
+            .catch(err => {
+                console.log('Error posting to /api/users ', err);
+                res.status(500).json({
+                    message: err,
+                    error: "There was an error while saving the user to the database"
+                })
+            })
+    }
+    else {
+        res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' });
+    }
+});
+
 server.listen(5000, () => {
     console.log('\n Server running on localhost:5000 \n');
 });
