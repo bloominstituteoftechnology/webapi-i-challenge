@@ -27,6 +27,9 @@ server.get('/api/users', (req, res) => {
 
 //GET REQUEST FOR /api/users/:id
 server.get('/api/users/:id', (req, res) => {
+// if (user.length === 0) {
+//     sendError(404, '')
+// }
     db 
     .findById()
     ,then(users => {
@@ -43,6 +46,10 @@ server.get('/api/users/:id', (req, res) => {
 server.post('/api/users', (req, res) => {
     const userInformation = req.body;
     console.log('request body:', userInformation);
+if (!name || !bio) {
+    sendError(400, "Please provide name and bio for the user", res);
+      return
+}
 
     db
     .insert(userInformation)
@@ -50,7 +57,7 @@ server.post('/api/users', (req, res) => {
         res.status(201).json(user);
     })
     .catch(err => {
-        res.status(400).json({ error: err, message: "Please provide name and bio for the user."})
+        res.status(500).json({ error: err, message: "Please provide name and bio for the user."})
     });
 });
 
@@ -69,7 +76,23 @@ server.delete('/api/users/:id', (req, res) => {
     })
 })
 
+//PUT REQUEST for /api/users/:id
+//need to put hte url in as 'http://localhost:5000/api/users/1 or any # id that you want to access//
+server.put('/api/users/:id', (req, res) => {
+    const userInformation = req.body;
+    console.log('request body:', userInformation);
 
+    const userId = req.params.id
+
+    db
+    .update(userId, userInformation)
+    .then(user => {
+        res.status(201).json(user)
+    })
+    .catch(error => {
+        res.status(400).json({ error: err, message: "Please provide name and bio for the user."})
+    })
+})
 
 
 
