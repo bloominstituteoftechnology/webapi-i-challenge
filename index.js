@@ -13,28 +13,29 @@ server.get('/api/users', (req, res) => {
             res.status(200).json(users)
         })
         .catch(err => {
-            res.status(500).json({
-                error: "The users information could not be retrieved.",
-                message: err
-            })
+            res
+                .status(500)
+                .json({
+                    error: "The users information could not be retrieved.",
+                    message: err
+                })
         })
 });
 
 server.get('/api/users/:id', (req, res) => {
     const userId = req.params.id;
+    const message404 = { message: "The user with the specified ID does not exist." };
+    const errorMessage = { error: "The users information could not be retrieved." };
 
     db
         .findById(userId)
         .then(user => {
-            res.status(200).json(user);
-
+            console.log('user ', user);
+            user.length === 0 ?
+                res.status(404).json(message404)
+                : res.status(200).json(user);
         })
-        .catch(err => {
-            res.status(404).json({
-                error: err,
-                message: "The user with the specified ID does not exist."
-            })
-        })
+        .catch(err => { res.status(500).json(errorMessage) })
 });
 
 server.post('/api/users', (req, res) => {
@@ -48,14 +49,18 @@ server.post('/api/users', (req, res) => {
             .then(user => { res.status(201).json(user) })
             .catch(err => {
                 console.log('Error posting to /api/users ', err);
-                res.status(500).json({
-                    message: err,
-                    error: "There was an error while saving the user to the database"
-                })
+                res
+                    .status(500)
+                    .json({
+                        message: err,
+                        error: "There was an error while saving the user to the database"
+                    })
             })
     }
     else {
-        res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' });
+        res
+            .status(400)
+            .json({ errorMessage: 'Please provide name and bio for the user.' });
     }
 });
 
