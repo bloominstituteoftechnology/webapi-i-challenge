@@ -4,12 +4,14 @@ import axios from 'axios'
 import '../App.css'
 import User from './User';
 import AddUser from './AddUser'
+import UpdateUsers from './UpdateUsers';
 
 export default class Users extends Component {
   constructor() {
       super();
       this.state = {
-          users: []
+          users: [],
+          refreshing: true
       }
   }
   
@@ -26,19 +28,29 @@ export default class Users extends Component {
         .catch(err => console.log(err))
   }
 
+
+
   componentDidUpdate(prevProps, prevState) {
-    // if ( prevState.users !== this.state.users ) {
-    //     axios
-    //     .get(`http://localhost:5000/api/users`)
-    //     .then(res => {
-    //         console.log(res.data)
-    //         this.setState({
-    //             users: res.data
-    //         })
-    //     })
-    //     .catch(err => console.log(err))
-    // }
+    if ( prevState.refreshing !== this.state.refreshing ) {
+        axios
+        .get(`http://localhost:5000/api/users`)
+        .then(res => {
+            console.log(res.data)
+            this.setState({
+                users: res.data
+            })
+        })
+        .catch(err => console.log(err))
+    }
   }
+
+  refreshPage = event => {
+    console.log('refreshing')
+    this.setState({
+        refreshing: !this.state.refreshing
+    })
+}
+
 
   removeUser = (event, id) => {
     event.preventDefault();
@@ -56,6 +68,7 @@ export default class Users extends Component {
     return (
       <div>
           <AddUser />
+          <button id="button" onClick={(event) => this.refreshPage(event)}>Update Users</button>
           {this.state.users.map(eachUser => {
             return (
                 <div className="userCards">

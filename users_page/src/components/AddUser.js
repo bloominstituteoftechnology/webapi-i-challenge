@@ -20,6 +20,13 @@ export default class AddUser extends Component {
         })
     }
 
+    refreshPage = e => {
+        // console.log('refreshing')
+        this.setState({
+            refreshing: !this.state.refreshing
+        })
+    }
+
     handleChange = e => {
         this.setState({
             newUser: {
@@ -93,6 +100,7 @@ export default class AddUser extends Component {
     return (
       <div>
           <button id="button" onClick={this.popUpToggle}>Add a New User</button>
+          
         {this.state.isClicked ? popUp : null }
       </div>
     )
