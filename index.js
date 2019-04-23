@@ -30,35 +30,26 @@ server.get('/api/users/:id', (req, res) => {
         .findById(userId)
         .then(user => {
             user.length === 0 ?
-                res.status(404).json(message404)
-                : res.status(200).json(user);
+                res.status(404).json(message404) :
+                res.status(200).json(user);
         })
         .catch(err => { res.status(500).json(message500) })
 });
 
 server.post('/api/users', (req, res) => {
     const { name, bio } = req.body;
-    console.log('user info: \n', req.body);
+    const errorMessage500 = { error: "There was an error while saving the user to the database" }
+    const errorMessage400 = { errorMessage: 'Please provide name and bio for the user.' }
 
     if (name && bio) {
         console.log('req.body contains a name and bio');
         db
             .insert({ name, bio })
             .then(user => { res.status(201).json(user) })
-            .catch(err => {
-                console.log('Error posting to /api/users ', err);
-                res
-                    .status(500)
-                    .json({
-                        message: err,
-                        error: "There was an error while saving the user to the database"
-                    })
-            })
+            .catch(err => { res.status(500).json(errorMessage500) })
     }
     else {
-        res
-            .status(400)
-            .json({ errorMessage: 'Please provide name and bio for the user.' });
+        res.status(400).json(errorMessage400);
     }
 });
 
@@ -76,6 +67,27 @@ server.delete('/api/users/:id', (req, res) => {
         .catch(error => {
             res.status(500).json(message500);
         });
+});
+
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, bio } = req.body;
+    const updateError = { error: "The user information could not be modified." };
+    const removeError = { error: "The user could not be removed" }
+
+    if (name === '' || bio === '') {
+        res.status(404).json(removeError);
+    }
+    else {
+        db
+            .update(id, { name, bio })
+            .then(response => {
+                response === 0 ?
+                    res.status(404).json(message404) :
+                    res.status(200).json(response)
+            })
+            .catch(error => { res.status(500).json(updateError) });
+    }
 });
 
 server.listen(5000, () => {
