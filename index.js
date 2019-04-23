@@ -23,7 +23,7 @@ server.post('/api/users', (req, res) => {
             res.status(201).json(user)
         })
         .catch(err => {
-            res.json({ error: err, message: "Failed to Post" })
+            res.status(400).json({ error: err, message: "Please provide name and bio for the user." })
         })
 })
 
@@ -39,7 +39,7 @@ server.get('/api/users', (req, res) => {
             res.status(200).json(db)
         })
         .catch(err => {
-            res.json({ error: err, message: 'Cannot find users'})
+            res.status(500).json({ error: err, message: 'There was an error while saving the user to the database.'})
         })
 })
 
@@ -50,13 +50,18 @@ server.get('/api/users', (req, res) => {
 server.get('/api/users/:id', (req, res) => {
     const getId = req.params.id
 
+
     db
         .findById(getId)
         .then(user => {
-            res.status(200).json(user)
+            if ( user ) {
+                res.status(200).json(user)
+            } else {
+                res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
         })
         .catch(err => {
-            res.status(500).json({ error: err, message: 'Could not find the specified user' })
+            res.status(404).json({ error: err, message: 'The user information could not be retrieved.' })
         })
 })
 
@@ -70,7 +75,11 @@ server.delete('/api/users/:id', (req, res) => {
     db
         .remove(userId)
         .then(deleted => {
-            res.status(200).json(deleted)
+            if ( deleted ) {
+                res.status(200).json(deleted)
+            } else {
+                res.status(404).json({ message: "The user with the specified ID does not exist." })
+            }
         })
         .catch(err => {
             res.status(500).json({ error: err, message: 'Error deleting the user' })
@@ -87,13 +96,20 @@ server.put('/api/users/:id', (req, res) => {
     const updateId = req.params.id
     const userToUpdate = req.body
 
+    if ( !userToUpdate.name || !userToUpdate.bio ) {
+        res.status(400).json("Must Provide Name and Bio")
+    }
+
     db
         .update(updateId, userToUpdate)
         .then(updated => {
-            res.status(200).json(updated)
+            if ( updated ) {
+                res.status(200).json(updated)
+            } else {
+            res.status(404).json({ message: "The user with the specified ID does not exist." })}
         })
         .catch(err => {
-            res.status(500).json({ error: err, message: `Can't find that ID to update`})
+            res.status(500).json({ error: err, message: `The user information could not be modified.` })
         })
 })
 

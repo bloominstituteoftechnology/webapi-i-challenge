@@ -103,6 +103,20 @@ When the client makes a `GET` request to `/api/users/:id`:
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The user information could not be retrieved." }`.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 When the client makes a `DELETE` request to `/api/users/:id`:
 
 - If the _user_ with the specified `id` is not found:
@@ -114,6 +128,14 @@ When the client makes a `DELETE` request to `/api/users/:id`:
   - cancel the request.
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The user could not be removed" }`.
+
+
+
+
+
+
+
+
 
 When the client makes a `PUT` request to `/api/users/:id`:
 
@@ -127,6 +149,9 @@ When the client makes a `PUT` request to `/api/users/:id`:
   - cancel the request.
   - respond with HTTP status code `400` (Bad Request).
   - return the following JSON response: `{ errorMessage: "Please provide name and bio for the user." }`.
+
+
+  DONE
 
 - If there's an error when updating the _user_:
 
