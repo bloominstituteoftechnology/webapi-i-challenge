@@ -6,6 +6,10 @@ const server = express();
 
 server.use(express.json());
 
+const message404 = { message: "The user with the specified ID does not exist." };
+const message500 = { error: "The users information could not be retrieved." };
+
+
 server.get('/api/users', (req, res) => {
     db
         .find()
@@ -15,27 +19,21 @@ server.get('/api/users', (req, res) => {
         .catch(err => {
             res
                 .status(500)
-                .json({
-                    error: "The users information could not be retrieved.",
-                    message: err
-                })
+                .json(message500)
         })
 });
 
 server.get('/api/users/:id', (req, res) => {
     const userId = req.params.id;
-    const message404 = { message: "The user with the specified ID does not exist." };
-    const errorMessage = { error: "The users information could not be retrieved." };
 
     db
         .findById(userId)
         .then(user => {
-            console.log('user ', user);
             user.length === 0 ?
                 res.status(404).json(message404)
                 : res.status(200).json(user);
         })
-        .catch(err => { res.status(500).json(errorMessage) })
+        .catch(err => { res.status(500).json(message500) })
 });
 
 server.post('/api/users', (req, res) => {
@@ -62,6 +60,22 @@ server.post('/api/users', (req, res) => {
             .status(400)
             .json({ errorMessage: 'Please provide name and bio for the user.' });
     }
+});
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    const messageSuccess = { success: `User with id: ${id} removed from system` };
+
+    db
+        .remove(id)
+        .then(response => {
+            response === 0 ?
+                res.status(404).json(message404)
+                : res.json(messageSuccess);
+        })
+        .catch(error => {
+            res.status(500).json(message500);
+        });
 });
 
 server.listen(5000, () => {
