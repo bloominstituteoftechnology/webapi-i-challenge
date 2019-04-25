@@ -27,18 +27,21 @@ server.get('/api/users', (req, res) => {
 
 //GET REQUEST FOR /api/users/:id
 server.get('/api/users/:id', (req, res) => {
-// if (user.length === 0) {
-//     sendError(404, '')
-// }
+const userId = req.params.id;
     db 
-    .findById()
-    ,then(users => {
-        res.status(200).json(users);
+    .findById(userId)
+    .then(user => {
+        if(user.length === 0) {
+         res.status(404).json({ error: err, message: 'The user with the specified ID does not exist'});
+             return;
+        } 
+            res.status(201).end();
     })
     .catch(err => {
-        res.status(404).json({ error: err, message: "The user information could not be retrieved."})
+        res.status(500).json({ error: err, message: "The user information could not be retrieved."})
     })
 })
+
 
 
 
@@ -46,11 +49,10 @@ server.get('/api/users/:id', (req, res) => {
 server.post('/api/users', (req, res) => {
     const userInformation = req.body;
     console.log('request body:', userInformation);
-if (!name || !bio) {
-    sendError(400, "Please provide name and bio for the user", res);
+if (!req.body.name || !req.body.bio) {
+    res.status(400).json({ error: "Please provide name and bio for the user" });
       return
 }
-
     db
     .insert(userInformation)
     .then(user => {
@@ -81,16 +83,23 @@ server.delete('/api/users/:id', (req, res) => {
 server.put('/api/users/:id', (req, res) => {
     const userInformation = req.body;
     console.log('request body:', userInformation);
-
     const userId = req.params.id
+
+    if (!req.body.name || !req.body.bio) {
+        res.status(400).json({ error: "Please provide name and bio for the user" });
+          return
+    }
 
     db
     .update(userId, userInformation)
-    .then(user => {
-        res.status(201).json(user)
+    .then(response => {
+        if(response == 0) {
+            res.status(404).json({error: err, message: 'The user with the specified ID does not exist'});
+        }
+        res.status(200).json(user)//success 
     })
     .catch(error => {
-        res.status(400).json({ error: err, message: "Please provide name and bio for the user."})
+        res.status(500).json({ error: err, message: "The user information could not be modified."})
     })
 })
 
@@ -100,4 +109,5 @@ server.put('/api/users/:id', (req, res) => {
 
 server.listen(5000, () => {
     console.log('\n*** API running on port 5K ***\n')
-})
+});
+
