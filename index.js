@@ -1,3 +1,4 @@
+require("dotenv").config();
 const cors = require("cors");
 
 // implement your API here
@@ -13,7 +14,7 @@ const server = express();
 
 // Middleware
 server.use(express.json());
-// server.use(cors());
+server.use(cors());
 
 // CREATE
 server.post("/api/users", (req, res) => {
@@ -105,7 +106,9 @@ server.delete("/api/users/:id", (req, res) => {
     });
 });
 
+const port = process.env.port || 5000;
+
 // Run Server
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log(`Server running.`);
 });
