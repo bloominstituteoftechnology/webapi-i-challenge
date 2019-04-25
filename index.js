@@ -1,4 +1,6 @@
 // implement your API here
+const envReader = require('dotenv');
+envReader.config();
 
 const express = require('express'); //import
 
@@ -106,8 +108,8 @@ server.put('/api/users/:id', (req, res) => {
 
 
 
-
-server.listen(5000, () => {
+const port = process.env.PORT || 5000
+server.listen(port, () => {
     console.log('\n*** API running on port 5K ***\n')
 });
 
