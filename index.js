@@ -8,25 +8,6 @@ const server = express();
 server.use(express.json());
 
 
-
-//Read or GET
-server.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
-server.get('/api/users', (req, res) => {
-    db.find()
-    .then( allUsers => {
-        if(allUsers) {
-            res.json(allUsers)
-        } else {
-            res.status(500).json({error: "The users information could not be retrieved."})
-        }
-        
-    })
-})
-
-
 //Create or POST
 server.post('/api/users', (req, res) => {
     const newUser = req.body;
@@ -49,5 +30,33 @@ server.post('/api/users', (req, res) => {
 
 })
 
+//Read or GET
+server.get('/', (req, res) => {
+    res.send('Hello World!')
+})
+
+server.get('/api/users', (req, res) => {
+    db.find()
+    .then( allUsers => {
+        if(allUsers) {
+            res.json(allUsers)
+        } else {
+            res.status(500).json({error: "The users information could not be retrieved."})
+        }
+        
+    })
+})
+
+//GET by ID
+server.get('/api/users/:id', (req, res) => {
+    const {id} = req.params
+    db.findById(id) 
+        .then( foundUser => {
+            res.status(200).json(foundUser)
+        })
+        .catch(err =>{ res.status(500).json({error: "The user information could not be retrieved." })
+    })
+    
+})
 
 server.listen(3333, () => console.log(`Listening on port 3333`))
