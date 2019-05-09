@@ -1,12 +1,12 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import UserContainer from './components/UserContainer';
+import UserContainer from "./components/UserContainer";
 
 function App() {
   return (
     <div className="App">
-        <UserContainer />
+      <UserContainer />
     </div>
   );
 }

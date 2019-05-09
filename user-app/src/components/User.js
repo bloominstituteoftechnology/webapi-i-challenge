@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
 
 const User = props => {
-    return <div>This is a user</div>
-}
+  return (
+    <div>
+      <div>{props.name}</div>
+      <div>{props.bio}</div>
+    </div>
+  );
+};
 
 export default User;
