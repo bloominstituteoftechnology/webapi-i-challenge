@@ -31,6 +31,19 @@ server.post('/api/users', (req, res) => {
     });
 })
 
+server.get('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    db.findById(id).then(user => {
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ err: 'incorrect id'});
+        };
+    })
+    .catch(({code, message}) => {
+        res.status(code).json({err: message});
+    })
+})
 
 
 server.listen(9000, () => {
