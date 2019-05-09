@@ -48,5 +48,7 @@ export default UserContainer;
 
 const ContainerWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
   margin: 25px auto;
 `;

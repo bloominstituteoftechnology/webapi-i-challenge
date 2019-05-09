@@ -19,6 +19,7 @@ const UserWrapper = styled.div`
   justify-content: space-between;
   height: 200px;
   width: 300px;
+  max-width: 300px;
   margin: 10px;
   border-radius: 15px;
   align-items: flex-start;

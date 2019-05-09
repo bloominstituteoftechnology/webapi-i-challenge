@@ -19,10 +19,12 @@ class UserForm extends Component {
     axios
       .post(USER_API, { name, bio })
       .then(res => {
+        // callback updates the users object on the state
+        // of the container component
         this.props.cb();
         this.setState({ name: "", bio: "" });
       })
-      .catch(err => console.log);
+      .catch(err => console.log(err));
   };
   render() {
     return (
