@@ -28,7 +28,7 @@ class UserForm extends Component {
   };
   render() {
     return (
-      <form onSubmit={e => this.handleSubmit(e)}>
+      <form style={{ margin: "15px " }} onSubmit={e => this.handleSubmit(e)}>
         <input
           type="text"
           name="name"
