@@ -20,6 +20,19 @@ server.get('/api/users', (req, res) => {
     })
 });
 
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    console.log('request body: ', user);
+
+    db.insert(user).then(user => {
+        res.status(201).json(user)
+    }).catch(({ code, message}) => {
+        res.status(code).json({err: message});
+    });
+})
+
+
+
 server.listen(9000, () => {
     console.log('Listening on port 9000');
 })
