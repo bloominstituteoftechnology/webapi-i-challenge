@@ -26,8 +26,8 @@ server.post("/api/users", (req, res) => {
         res.status(400).json({errorMessage: "Please provide name and bio for the user."})
     } else
     db.insert(req.body)
-        .then(result => res.json(result))
-        .catch(err => res.json(err))
+        .then(newUser => res.status(201).json(newUser))
+        .catch(err => res.status(500).json({error: "There was an error while saving the user to the database."}))
 })
 
 server.delete("/api/users/:id", (req, res) => {
