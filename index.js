@@ -6,31 +6,33 @@ const db = require('./data/db.js');
 
 server.use(express.json());
 
-server.get("/data/", (req, res) => {
+server.get("/api/users/", (req, res) => {
     //console.log(res)
     db.find()
-        .then(result => {
-            console.log(result);
-            res.send(result);
-        })
-        .catch(err => res.send(err));
+        .then(result => res.json(result))
+        .catch(err => res.json(err));
 })
 
-server.get("/data/:id", (req, res) => {
+server.get("/api/users/:id", (req, res) => {
     const { id } = req.params;
 
     db.findById(id)
-        .then(result => res.send(result))
-        .catch(err => res.send(err));
+        .then(result => res.json(result))
+        .catch(err => res.json(err));
 })
 
-server.post("/data/", (req, res) => {
+server.post("/api/users", (req, res) => {
     db.insert(req.body)
-        .then(result => {
-            console.log(result);
-            res.send(result);
-        })
-        .catch(err => res.send(err))
+        .then(result => res.json(result))
+        .catch(err => res.json(err))
+})
+
+server.delete("/api/users/:id", (req, res) => {
+    const { id } = req.params;
+
+    db.remove(id)
+        .then(result => res.json(result))
+        .catch(err => res.json(err))
 })
 
 server.listen(8080, () => {
