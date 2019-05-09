@@ -32,7 +32,7 @@ class UserContainer extends Component {
   render() {
     return (
       <>
-        <UserForm />
+        <UserForm cb={this.updateUsers} />
         <ContainerWrapper>
           {this.state.users &&
             this.state.users.map(user => (
