@@ -22,6 +22,9 @@ server.get("/api/users/:id", (req, res) => {
 })
 
 server.post("/api/users", (req, res) => {
+    if (!req.body.name || !req.body.bio) {
+        res.status(400).json({errorMessage: "Please provide name and bio for the user."})
+    } else
     db.insert(req.body)
         .then(result => res.json(result))
         .catch(err => res.json(err))
@@ -31,6 +34,14 @@ server.delete("/api/users/:id", (req, res) => {
     const { id } = req.params;
 
     db.remove(id)
+        .then(result => res.json(result))
+        .catch(err => res.json(err))
+})
+
+server.put("/api/users/:id", (req, res) =>{
+    const { id } = req.params;
+
+    db.update(id, req.body)
         .then(result => res.json(result))
         .catch(err => res.json(err))
 })
