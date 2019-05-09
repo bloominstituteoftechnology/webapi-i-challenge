@@ -10,7 +10,7 @@ server.get("/api/users/", (req, res) => {
     //console.log(res)
     db.find()
         .then(result => res.json(result))
-        .catch(err => res.json(err));
+        .catch(err => res.status(500).json({ error: "The user information could not be retrieved."}));
 })
 
 server.get("/api/users/:id", (req, res) => {
