@@ -17,11 +17,19 @@ server.get('/api/users', (req, res) => {
   })
 })
 
-/* server.get('/api/users/:id', (req, res) => {
+  server.get('/api/users/:id', (req, res) => {
+   const { id } = req.params;
 
+   db.findById(id)
+   .then(userId => {
+     res.json(userId);
+   })
+   .catch(err => {
+     res.status(500).send(err);
+   })
 })
 
-*/
+
 server.post('/api/users', (req, res) => {
   const newUser = req.body
 
@@ -49,7 +57,6 @@ server.delete('/api/users/:id', (req, res) => {
     res.status(400).send(err);
   })
 })
-*/
 
 server.listen(5000, () => {
   console.log(`Listening on port 5000`)
