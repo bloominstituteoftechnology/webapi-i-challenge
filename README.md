@@ -53,9 +53,9 @@ Inside `index.js` add the code necessary to implement the following _endpoints_:
 
 | Method | URL            | Description                                                                                                                       |
 | ------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | /api/users     | Creates a user using the information sent inside the `request body`.                                                              |
-| GET    | /api/users     | Returns an array of all the user objects contained in the database.                                                               |
-| GET    | /api/users/:id | Returns the user object with the specified `id`.                                                                                  |
+| X POST   | /api/users     | Creates a user using the information sent inside the `request body`.                                                              |
+X| GET    | /api/users     | Returns an array of all the user objects contained in the database.                                                               |
+X| GET    | /api/users/:id | Returns the user object with the specified `id`.                                                                                  |
 | DELETE | /api/users/:id | Removes the user with the specified `id` and returns the deleted user.                                                            |
 | PUT    | /api/users/:id | Updates the user with the specified `id` using data from the `request body`. Returns the modified document, **NOT the original**. |
 
@@ -65,20 +65,20 @@ When the client makes a `POST` request to `/api/users`:
 
 - If the request body is missing the `name` or `bio` property:
 
-  - cancel the request.
-  - respond with HTTP status code `400` (Bad Request).
-  - return the following JSON response: `{ errorMessage: "Please provide name and bio for the user." }`.
+  X- cancel the request.
+  X- respond with HTTP status code `400` (Bad Request).
+ X - return the following JSON response: `{ errorMessage: "Please provide name and bio for the user." }`.
 
 - If the information about the _user_ is valid:
 
-  - save the new _user_ the the database.
-  - return HTTP status code `201` (Created).
-  - return the newly created _user document_.
+X  - save the new _user_ the the database.
+ X - return HTTP status code `201` (Created).
+ X - return the newly created _user document_.
 
-- If there's an error while saving the _user_:
+X- If there's an error while saving the _user_:
   - cancel the request.
   - respond with HTTP status code `500` (Server Error).
-  - return the following JSON object: `{ error: "There was an error while saving the user to the database" }`.
+  X- return the following JSON object: `{ error: "There was an error while saving the user to the database" }`.
 
 When the client makes a `GET` request to `/api/users`:
 
