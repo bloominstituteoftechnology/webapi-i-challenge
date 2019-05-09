@@ -41,11 +41,24 @@ server.post('/api/users', (req, res) => {
     res.status(500).send(err);
   })
 })
-/*
-server.put('/api/users/:id', (req, res) => {
 
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  db.update(id, changes)
+  .then(updatedInfo => {
+    if (updatedInfo) {
+      res.json(updatedInfo);
+    } else {
+      res.status(404).json({ err: 'incorrect id'})
+    }
+  })
+  .catch(err => {
+    res.status(404).send(err);
+  })
 })
-*/
+
 server.delete('/api/users/:id', (req, res) => {
   const { id } = req.params;
 
