@@ -15,7 +15,7 @@ server.post('/api/users', (req, res) => {
     if(!name || !bio)
         res
             .status(400)
-            .json({error: `Read the damn instructions!`})
+            .json({error: `Please provide name and bio for the user.`})
     const now = new Date().toISOString()
     db
         .insert({
@@ -61,12 +61,14 @@ server.get('/api/users/:id', (req, res) => {
 })
 //U
 server.put('/api/users/:id', (req, res) => {
-    const id = req.params
+    console.log(req.body)
+    console.log(req.params)
+    const {id} = req.params
     const {name, bio, created_at, updated_at} = req.body
     if(!name || !bio)
         res
             .status(400)
-            .json({error: 'who now?'})
+            .json({error: 'Please provide name and bio for the user.'})
     const now = new Date().toISOString()
     const updatedUser = {
         name,
@@ -74,7 +76,6 @@ server.put('/api/users/:id', (req, res) => {
         created_at,
         updated_at: now
     }
-    // console.log(id, user)
     db.update(id, updatedUser) 
         .then(response => 
             response
@@ -83,11 +84,11 @@ server.put('/api/users/:id', (req, res) => {
                     .json(response)
             :   res
                     .status(404)
-                    .json({error: 'Thou has not found user'}))
+                    .json({error: 'The user with the specified ID does not exist.'}))
         .catch(err =>
             res
                 .status(500)
-                .json({error: `Thou info shall not be modified: ${err}`}))
+                .json({error: `The user information could not be modified.`}))
 })
 //D
 server.delete('/api/users/:id', (req, res) => {
