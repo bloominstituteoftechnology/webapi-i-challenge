@@ -13,6 +13,17 @@ export default class User extends Component {
         }
     }
 
+
+// IF YOU WANT TO HAVE COMPONENT DID MOUNT RUN AND AN AXIOS UPDATE CALL!!!
+// functionBoss(event){
+//     event.preventDefault();
+//     return (
+//    this.updateAFriend(event),
+//    this.props.updatedState(event)
+//    )
+//   }
+
+
     popUpToggle = e => {
         e.preventDefault();
         this.setState({
