@@ -4,7 +4,11 @@
   "description": "Express Demo",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "concurrently \"npm run server\" \"npm run user-app\"",
+    "user-app": "npm run start --prefix user-app",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix user-app && npm run build --prefix user-app"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,7 @@
     "nodemon": "^1.19.0"
   },
   "dependencies": {
+    "concurrently": "^4.1.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "knex": "^0.16.3",
