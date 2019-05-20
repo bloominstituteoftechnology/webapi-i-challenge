@@ -1,5 +1,6 @@
 // implement your API here
 const express = require('express');
+//const cors = require('cors');
 
 const db = require('./data/db.js');
 
@@ -7,7 +8,7 @@ const server = express();
 const port = 5000;
 
 server.use(express.json());
-server.use(cors());
+//server.use(cors());
 
 server.get('/api/users', (req, res) => {
 
@@ -19,7 +20,7 @@ server.get('/api/users', (req, res) => {
     .catch(err => {
         res
         .status(500)
-        .json({message: 'The users information could not be retrieved.' });
+        .json({message: 'The users information could not be retrieved.' }).end();
     });
 });
 
@@ -40,11 +41,9 @@ server.get('/api/users/:id', (req, res) => {
 server.post('/api/users', (req, res) => {
     const userInfo = req.body;
     if (userInfo.name && userInfo.bio) {
-    console.log('request body: ', userInfo);
     db
     .insert(userInfo)
     .then(user => {
-        console.log('user from insert method')
         res
         .status(201)
         .json(user);
@@ -52,12 +51,12 @@ server.post('/api/users', (req, res) => {
     .catch(err => {
         res
         .status(500)
-        .json({message: 'Please provide name and bio for the user.'});
+        .json({message: 'There was an error while saving the user to the database'}).end();
     });
     } else {
         res
         .status(400)
-        .json({message: 'missing name or bio'})
+        .json({message: 'Please provide name and bio for the user.'}).end();
     }
     
 });
@@ -93,12 +92,12 @@ server.put('/api/users/:id', (req, res) => {
     .then(count => {
         if(count) {
             db.findById(userId).then(user => {
-                res.json(user);
+                res.status(201).json(user);
             });
         } else {
             res
             .status(404)
-            .json({message: 'Invalid Id'});
+            .json({message: 'Invalid Id'}).end();
         }
     }).catch(err => {
         res
@@ -107,7 +106,7 @@ server.put('/api/users/:id', (req, res) => {
     });
     } else {
         res.status(400)
-        .json({message: 'Missing name or bio'})
+        .json({message: 'Missing name or bio'}).end();
     }
 });
 
