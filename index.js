@@ -66,6 +66,20 @@ server.post("/api/users", (req, res) => {
   }); 
 })
 
+server.delete("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.remove(id)
+  .then(removedUser => {
+    res.status(201).json(removedUser)
+  })
+  .catch(err => {
+    res
+      .status(501)
+      .send({ error: "The users information could not be added." });
+  }); 
+
+})
 
 
 server.listen(8000, () => console.log("API running on port 8000"));
