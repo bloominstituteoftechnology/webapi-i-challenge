@@ -111,7 +111,7 @@ Inside `index.js` add the code necessary to implement the following _endpoints_:
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The user could not be removed" }`.
 
-* [ ] When the client makes a `PUT` request to `/api/users/:id`:
+* [ x ] When the client makes a `PUT` request to `/api/users/:id`:
 
 - If the _user_ with the specified `id` is not found:
 
