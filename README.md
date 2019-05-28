@@ -80,7 +80,7 @@ Inside `index.js` add the code necessary to implement the following _endpoints_:
   - respond with HTTP status code `500` (Server Error).
   - return the following JSON object: `{ error: "There was an error while saving the user to the database" }`.
 
-[] When the client makes a `GET` request to `/api/users`:
+[x] When the client makes a `GET` request to `/api/users`:
 
 - If there's an error in retrieving the _users_ from the database:
   - cancel the request.
