@@ -1,7 +1,7 @@
 // implement your API here
 // require the express npm module, needs to be added to the project using "yarn add" or "npm install"
 const express = require('express');
-const db = require('/data/db.js')
+const db = require('./data/db.js')
 
 // creates an express application using the express module
 const server = express();
@@ -15,15 +15,23 @@ server.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-server.post('/api/users', (req, res) => {
-
-})
-
 server.get('/api/users', (req, res) => {
-
-})
+    db.find()
+    .then(users => {
+        res.status(200).json(users)
+    })
+    .catch(err => {
+        res.status(500).json({
+             error: "The users information could not be retrieved." 
+        });
+    });
+});
 
 server.get('/api/users/:id', (req, res) => {
+
+})
+
+server.post('/api/users', (req, res) => {
 
 })
 
