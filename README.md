@@ -61,7 +61,7 @@ Inside `index.js` add the code necessary to implement the following _endpoints_:
 
 #### Endpoint Specifications
 
-[] When the client makes a `POST` request to `/api/users`:
+[x] When the client makes a `POST` request to `/api/users`:
 
 - If the request body is missing the `name` or `bio` property:
 
