@@ -15,19 +15,26 @@ server.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-server.get('/hobbits', (req, res) => {
-    const hobbits = [
-        {
-            id: 1,
-            name: 'Samwise Gamgee'
-        },
-        {
-            id: 2,
-            name: 'Frodo Baggins'
-        }
-    ];
-    res.status(200).json(hobbits);
+server.post('/api/users', (req, res) => {
+
 })
+
+server.get('/api/users', (req, res) => {
+
+})
+
+server.get('/api/users/:id', (req, res) => {
+
+})
+
+server.delete('/api/users/:id', (req, res) => {
+
+})
+
+server.put('/api/users/:id', (req, res) => {
+
+})
+
 
 // once the server is fully configured we can have it "listen" for connections on a particular "port"
 // the callback function passed as the second argument will run once when the server starts
