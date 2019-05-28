@@ -5,6 +5,13 @@ const db = require('./data/db.js')
 
 // creates an express application using the express module
 const server = express();
+server.use(express.json());
+
+const sendUserError = (status, message, res) => {
+    // This is just a helper method that we'll use for sending errors when things go wrong.
+    res.status(status).json({ errorMessage: message });
+    return;
+  };
 
 // configures our server to execute a function for every GET request to "/"
 // the second argument passed to the .get() method is the "Route Handler Function"
@@ -48,8 +55,25 @@ server.get('/api/users/:id', (req, res) => {
 })
 
 server.post('/api/users', (req, res) => {
-
+    const {name, bio} = req.body;
+    const userInfo = req.body;
+    if (!name || !bio ) {
+        res.status(400).json({ 
+            errorMessage: "Please provide name and bio for the user." 
+        })
+    }
+    else {
+    db.insert(userInfo)
+    .then(users => {
+            res.status(201).json(users)
+        })
+    .catch(err => {
+        res.status(500).json({
+             error: "There was an error while saving the user to the database" 
+        })
+    })}
 })
+
 
 server.delete('/api/users/:id', (req, res) => {
     const {id } = req.params
