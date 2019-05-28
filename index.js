@@ -68,6 +68,7 @@ server.post("/api/users", (req, res) => {
 
 server.delete("/api/users/:id", (req, res) => {
   const { id } = req.params;
+  console.log('req.body', req.body);
 
   db.remove(id)
   .then(removedUser => {
@@ -81,5 +82,25 @@ server.delete("/api/users/:id", (req, res) => {
 
 })
 
+
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  db.update(id, updates)
+  .then(updatedUser => {
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ err: "incorrect id" });
+    }
+  })
+  .catch(err => {
+    res
+      .status(501)
+      .send({ error: "The users information could not be added." });
+  }); 
+
+})
 
 server.listen(8000, () => console.log("API running on port 8000"));
