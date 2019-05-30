@@ -2,6 +2,7 @@
 // require the express npm module, needs to be added to the project using "yarn add" or "npm install"
 const express = require('express');
 const db = require('./data/db.js')
+require('dotenv').config();
 
 // creates an express application using the express module
 const server = express();
@@ -123,7 +124,7 @@ server.put('/api/users/:id', (req, res) => {
     
 })
 
-
+const port = process.env.PORT || 4000;
 // once the server is fully configured we can have it "listen" for connections on a particular "port"
 // the callback function passed as the second argument will run once when the server starts
-server.listen(8000, () => console.log('API running on port 8000'));
+server.listen(port, () => console.log('API running on port 8000'));
