@@ -8,11 +8,19 @@ const Hub = require('./data/db');
 //Config the express app
 server.use(express.json());
 
-//Create endpoints
+//Create endpoints with 
 server.get('/api/users', (req, res) => {
     Hub.find()
     .then(data => {
-        console.log('happy');
+        res.status(200).json(data)
+    })
+})
+
+server.get('/api/users/:id', (req, res) => {
+
+const id = req.params.id
+    Hub.findById(id)
+    .then(data => {
         res.status(200).json(data)
     })
 })
