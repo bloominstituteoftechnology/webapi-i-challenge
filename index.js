@@ -6,29 +6,36 @@ const server = express();
 server.use(express.json());
 
 
-//Server.Get
-server.get('/', (req, res) => {
+//Server.Get users
+server.get('/api/users', (req, res) => {
 
 
   res.send('Hello World');
 });
 
+//Server.Get id
+server.get('/api/users/:id', (req, res) => {
+
+
+    res.send('Hello World');
+  });
+
 //Server.post
-server.post('/', (req, res) => {
+server.post('/api/users', (req, res) => {
 
 
     res.send('Hello World');
   });
   
 //Server.put
-server.put('/', (req, res) => {
+server.put('/api/users/:id', (req, res) => {
 
 
     res.send('Hello World');
   });
 
   //Server.delete
-server.delete('/', (req, res) => {
+server.delete('/api/users/:id', (req, res) => {
 
 
     res.send('Hello World');
