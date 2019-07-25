@@ -14,7 +14,7 @@ server.get('/', (request, response) => {
 //POST
 
 server.post('/api/users', (request, response) => {
-  const newUser = request.body;
+  const { newUser } = request.body;
   if (!newUser.name && !newUser.bio) {
     response.status(400).json({
       success: false,
@@ -49,10 +49,34 @@ server.get('/api/users', (request, response) => {
 });
 
 server.get('/api/users/:id', (request, response) => {
-  Users.findById(req.params.id)
+  Users.findById(request.params.id)
     .then(user => {
       if (user) {
         response.status(200).json(user);
+      } else {
+        response.status(404).json({
+          success: false,
+          error: 'The user with the specified ID does not exist.'
+        });
+      }
+    })
+    .catch(() => {
+      response.status(500).json({
+        success: false,
+        error: 'The user information could not be retrieved.'
+      });
+    });
+});
+
+//DELETE
+
+server.delete('/api/users/:id', (request, response) => {
+  Users.remove(req.params.id)
+    .then(deleted => {
+      if (deleted) {
+        response.status(200).json({
+          message: 'The user was deleted.'
+        });
       } else {
         response
           .status(404)
@@ -65,14 +89,9 @@ server.get('/api/users/:id', (request, response) => {
     .catch(() => {
       response
         .status(500)
-        .json({
-          success: false,
-          error: 'The user information could not be retrieved.'
-        });
+        .json({ success: false, error: 'The user could not be removed' });
     });
 });
-
-//DELETE
 
 //PUT
 
