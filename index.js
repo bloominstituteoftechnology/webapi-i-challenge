@@ -81,6 +81,35 @@ server.get('/users/:id', (req, res) => {
     });
 });
 
+// DELETE /users/:id
+
+server.delete('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  db.remove(userId)
+    .then(deleted => {
+      if (deleted) {
+        res.status(204).end();
+      } else {
+        res
+          .status(404)
+          .json({
+            success: false,
+            error: err,
+            message: 'The user with the specified ID does not exist.'
+          });
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({
+          success: false,
+          error: err,
+          message: 'The user could not be removed.'
+        });
+    });
+});
+
 const port = process.env.PORT || 9090;
 server.listen(port, () => {
   console.log(`\n*** Listening on port ${port} ***\n`);
