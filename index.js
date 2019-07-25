@@ -18,7 +18,7 @@ server.post('/api/users', (request, response) => {
   if (!newUser.name && !newUser.bio) {
     response.status(400).json({
       success: false,
-      error: 'Please providfe name and bio for the user'
+      error: 'Please provide name and bio for the user.'
     });
   } else {
     Users.insert(newUser)
@@ -35,7 +35,42 @@ server.post('/api/users', (request, response) => {
 });
 
 //GET
-server.get('/api/users', (request, response) => {});
+server.get('/api/users', (request, response) => {
+  Users.find()
+    .then(users => {
+      response.send(users);
+    })
+    .catch(err => {
+      response.status(500).json({
+        success: false,
+        error: 'The users information could not be retrieved.'
+      });
+    });
+});
+
+server.get('/api/users/:id', (request, response) => {
+  Users.findById(req.params.id)
+    .then(user => {
+      if (user) {
+        response.status(200).json(user);
+      } else {
+        response
+          .status(404)
+          .json({
+            success: false,
+            error: 'The user with the specified ID does not exist.'
+          });
+      }
+    })
+    .catch(() => {
+      response
+        .status(500)
+        .json({
+          success: false,
+          error: 'The user information could not be retrieved.'
+        });
+    });
+});
 
 //DELETE
 
