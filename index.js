@@ -82,31 +82,55 @@ server.get('/users/:id', (req, res) => {
 });
 
 // DELETE /users/:id
-
 server.delete('/users/:id', (req, res) => {
-  const userId = req.params.id;
-  db.remove(userId)
+  const { id } = req.params.id;
+  db.remove(id)
     .then(deleted => {
       if (deleted) {
         res.status(204).end();
       } else {
-        res
-          .status(404)
-          .json({
-            success: false,
-            error: err,
-            message: 'The user with the specified ID does not exist.'
-          });
+        res.status(404).json({
+          success: false,
+          error: err,
+          message: 'The user with the specified ID does not exist.'
+        });
       }
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({
-          success: false,
-          error: err,
-          message: 'The user could not be removed.'
-        });
+      res.status(500).json({
+        success: false,
+        error: err,
+        message: 'The user could not be removed.'
+      });
+    });
+});
+
+// PUT /users/:id
+server.put('/users/:id', (req, res) => {
+  // const { id } = req.params;
+  const updated = req.body;
+  console.log(updated);
+
+  db.update(req.params.id, updated)
+    .then(updatedUser => {
+      if (updatedUser) {
+        res.status(200).json({ success: true, updatedUser });
+      } else if (!user.name && !user.bio) {
+        res
+          .status(400)
+          .json({ message: 'Please provide name and bio for the user.' });
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        error: err,
+        message: 'The user information could not be modified.'
+      });
     });
 });
 
