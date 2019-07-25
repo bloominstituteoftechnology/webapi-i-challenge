@@ -12,7 +12,15 @@ cancel the request.
 respond with HTTP status code 500.
 return the following JSON object: { error: "The users information could not be retrieved." }.
 */
-  res.send("Hello World");
+  Users.find()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(() => {
+      res.status(500).json({
+        errorMessage: "The users information could not be retrieved."
+      });
+    });
 });
 
 //Server.Get id
@@ -28,7 +36,21 @@ cancel the request.
 respond with HTTP status code 500.
 return the following JSON object: { error: "The user information could not be retrieved." }.
     */
-  res.send("Hello World");
+  Users.findById(req.params.id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .json({ errorMessage: "The user information could not be retrieved." });
+    });
 });
 
 //Server.post
@@ -39,6 +61,16 @@ save the new user the the database.
 return HTTP status code 201 (Created).
 return the newly created user document.
 */
+    Users.insert(req.body)
+      .then(user => {
+        res.status(201).json(user);
+      })
+      .catch(() => {
+        res.status(500).json({
+          errorMessage:
+            "There was an error while saving the user to the database"
+        });
+      });
   } else {
     /*cancel the request.
 respond with HTTP status code 400 (Bad Request).
@@ -48,18 +80,55 @@ cancel the request.
 respond with HTTP status code 500 (Server Error).
 return the following JSON object: { error: "There was an error while saving the user to the database" }.
 */
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
   }
-  res.send("Hello World");
 });
 
 //Server.put
 server.put("/api/users/:id", (req, res) => {
-  res.send("Hello World");
+  const { name, bio } = req.body;
+
+  if (name && bio) {
+    Users.update(req.params.id, req.body)
+      .then(user => {
+        if (user) {
+          res.status(200).json(user);
+        } else {
+          res.status(404).json({
+            message: "The user with the specified ID does not exist."
+          });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({
+          errorMessage: "The user information could not be modified."
+        });
+      });
+  } else {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  }
 });
 
-//Server.delete
 server.delete("/api/users/:id", (req, res) => {
-  res.send("Hello World");
+  Users.remove(req.params.id)
+    .then(count => {
+      if (count && count > 0) {
+        res.status(200).json({
+          message: "the user was deleted."
+        });
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(() => {
+      res.status(500).json({ errorMessage: "The user could not be removed" });
+    });
 });
 
 server.listen(8000, () => console.log("API running on port 8000"));
