@@ -1,7 +1,9 @@
 const express = require('express');
 const server = express();
 
-server.post('/api/users');
+server.post('/api/users', (req, res) => {
+	res.statusCode = 400;
+});
 server.get('/api/users');
 server.get('/api/users/:id');
 server.delete('/api/users/:id');
