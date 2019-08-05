@@ -99,12 +99,12 @@ When the client makes a `POST` request to `/api/users`:
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The user information could not be retrieved." }`. -->
 
-When the client makes a `DELETE` request to `/api/users/:id`:
+<!-- When the client makes a `DELETE` request to `/api/users/:id`:
 
 - If the _user_ with the specified `id` is not found:
 
   - return HTTP status code `404` (Not Found).
-  - return the following JSON object: `{ message: "The user with the specified ID does not exist." }`. -->
+  - return the following JSON object: `{ message: "The user with the specified ID does not exist." }`. --> -->
 
 <!-- - If there's an error in removing the _user_ from the database:
   - cancel the request.
@@ -112,6 +112,12 @@ When the client makes a `DELETE` request to `/api/users/:id`:
   - return the following JSON object: `{ error: "The user could not be removed" }`.
 
 <!-- When the client makes a `PUT` request to `/api/users/:id`:
+
+
+
+
+
+
 
 - If the _user_ with the specified `id` is not found:
 
@@ -128,13 +134,18 @@ When the client makes a `DELETE` request to `/api/users/:id`:
 
   - cancel the request.
   - respond with HTTP status code `500`.
-  - return the following JSON object: `{ error: "The user information could not be modified." }`. -->
+  - return the following JSON object: `{ error: "The user information could not be modified." }`. 
 
 <!-- - If the user is found and the new information is valid:
 
   - update the user document in the database using the new information sent in the `request body`.
   - return HTTP status code `200` (OK).
-  - return the newly updated _user document_. -->
+  - return the newly updated _user document_. 
+
+
+
+
+
 
 ## Stretch Problems
 
