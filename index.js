@@ -13,6 +13,8 @@ server.get("/", (req, res) => {
 // POST /api/users
 server.post("/api/users", (req, res) => {
   const { name, bio } = req.body;
+  // const changes = req.body
+  // if (!changes.name || !changes.bio)
 
   if (!name || !bio) {
     res
@@ -90,6 +92,8 @@ server.put("/api/users/:id", (req, res) => {
   const { id } = req.params;
   const { name, bio } = req.body;
   let changes = { name, bio };
+  // const changes = req.body
+  // if (!changes.name || !changes.bio)
 
   if (!name || !bio) {
     res
