@@ -34,6 +34,10 @@ router.get("/users/:id", (req, res) => {
 router.post("/users", (req, res) => {
   const accInformation = req.body;
 
+  if (!accInformation.bio || !accInformation.name) {
+   return res.status(400).json({ errorMessage: "Please provide name and bio for the user." });
+  }
+
   Acc.insert(accInformation)
     .then(acc => {
       res.status(201).json(acc);
