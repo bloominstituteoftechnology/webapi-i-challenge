@@ -2,6 +2,7 @@
 
 //Libraries
 const express = require("express");
+const cors = require("cors")
 
 //Database
 const db = require("./data/db.js");
