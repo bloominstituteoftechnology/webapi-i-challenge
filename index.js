@@ -11,6 +11,7 @@ const server = express();
 
 //Middleware
 server.use(express.json());
+server.use(cors())
 
 //Request Handlers
 
