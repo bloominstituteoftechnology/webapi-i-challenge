@@ -22,7 +22,7 @@ server.get('/api/users', (req, res) => {
 // POST request to path'/api/users'
 server.post('/api/users', (req, res) => {
     const {name, bio} = req.body;
-    db.insert(name, bio)
+    db.insert(req.body)
         .then(user => {
             if(user) {
                 res.status(201).json(user);
@@ -46,7 +46,7 @@ server.delete('/api/users/:id', (req, res) => {
     db.remove(id)
         .then(deletedUser => {
             if(deletedUser) {
-                res.json(deletedUser);
+                res.status(200).json(deletedUser);
             } else {
                 res.status(404).json({
                     message: 'The user with the specified ID does not exist.'
