@@ -10,7 +10,7 @@ server.get("/", (request, response) => {
   response.send("TEST RESPONSE!");
 });
 
-//Get Users
+// GET Users
 server.get("/api/users", (request, response) => {
   Database.find()
     .then(users => {
@@ -20,6 +20,28 @@ server.get("/api/users", (request, response) => {
       response
         .status(500)
         .json({ error: "The users information could not be retrieved." });
+    });
+});
+
+// GET User by ID
+server.get("/api/users/:id", (request, response) => {
+  const { id } = request.params;
+  const databaseInformation = request.body;
+
+  Database.findById(id, databaseInformation)
+    .then(user => {
+      if (user) {
+        response.status(200).json(user);
+      } else {
+        response
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(error => {
+      response
+        .status(500)
+        .json({ error: "The user information could not be retrieved." });
     });
 });
 
