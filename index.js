@@ -47,6 +47,19 @@ server.post('/users', (req, res) => {
 
 })
 
+//delete a user by id = /user/4
+server.delete('/users/:id', (req, res) => {
+  const userId = req.params.id;
+
+  Users.remove(userId)
+      .then(hobbit => {
+        res.status(200).json( {message: 'hobbit deletion successful'} );
+      })
+      .catch( err => {
+        res.status(500).json({message: 'error removing hobbit'})
+    })
+})
+
 
 const port = 5000;
 server.listen(port, () => console.log(`API running on port ${port}`));
