@@ -16,7 +16,7 @@ server.get('/', (req, res) => {
 
 
 //CHALLENGE: Create endpoints that gets/adds/deletes/updates the list of users stored in a database
-server.get('/users', (req, res) => {
+server.get('/api/users', (req, res) => {
   Users.find()
     .then(users => {
       res.status(200).json(users);
@@ -29,7 +29,7 @@ server.get('/users', (req, res) => {
 });
 
 //add/insert a user to database
-server.post('/users', (req, res) => {
+server.post('/api/users', (req, res) => {
   const { name, bio } = req.body;
 
   if (!name || !bio) {
@@ -48,7 +48,7 @@ server.post('/users', (req, res) => {
 })
 
 //delete a user by id = /user/4
-server.delete('/users/:id', (req, res) => {
+server.delete('/api/users/:id', (req, res) => {
   const userId = req.params.id;
 
   Users.remove(userId)
