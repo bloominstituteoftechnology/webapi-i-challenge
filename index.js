@@ -16,6 +16,8 @@ server.get('/', (req, res) => {
 
 
 //CHALLENGE: Create endpoints that gets/adds/deletes/updates the list of users stored in a database
+
+// Find user
 server.get('/api/users', (req, res) => {
   Users.find()
     .then(users => {
@@ -27,6 +29,26 @@ server.get('/api/users', (req, res) => {
       });
     });
 });
+
+//find user by id
+server.get('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+
+  Users.findById(userId)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(400).json( { message: "The user with the specified ID does not exist." } )
+      }
+    })
+    .catch(() => {
+      res.status(500).json({
+        errorMessage: 'The users information could not be retrieved'
+      });
+    });
+});
+
 
 //add/insert a user to database
 server.post('/api/users', (req, res) => {
@@ -41,7 +63,7 @@ server.post('/api/users', (req, res) => {
         res.status(201).json(user);
       })
       .catch(err => {
-        res.status(500).json({ message: 'error adding the user to database', err })
+        res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
       })
   }
 
@@ -52,11 +74,11 @@ server.delete('/api/users/:id', (req, res) => {
   const userId = req.params.id;
 
   Users.remove(userId)
-      .then(hobbit => {
-        res.status(200).json( {message: 'hobbit deletion successful'} );
-      })
-      .catch( err => {
-        res.status(500).json({message: 'error removing hobbit'})
+    .then(hobbit => {
+      res.status(200).json({ message: 'hobbit deletion successful' });
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'error removing hobbit' })
     })
 })
 
