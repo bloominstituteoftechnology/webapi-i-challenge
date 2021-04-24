@@ -9,7 +9,7 @@ server.use(express.json());
 
 server.get('/', (req,res) => {
     res.status(200);
-    res.send('Welcome To ExpressJS')
+    res.send('Welcome To ExpressJS');
 });
 
 server.get('/users', (req, res)=>{
@@ -24,6 +24,9 @@ server.get('/users', (req, res)=>{
 server.get('/users/:id', (req, res) => {
     const idVar = req.params.id;
     console.log(idVar);
+    database.findById(idVar).then(user => {
+        res.status(200).json(user)
+    }).catch(err => res.status(500).json({message: err.message}))
 })
 
 
