@@ -43,14 +43,33 @@ server.post('/users', (req, res)=> {
 
     console.log(newUser.name, newUser.bio);
 
-    database.insert(newUser)
+    if(!newUser.name || !newUser.bio){
+        res.status(500).json({message: "User name and Bio reqiured"})
+    } else{
+        database.insert(newUser)
         .then(user => {
             res.status(201).json(user)
         })
         .catch(err => {
-            res.status(500).json({message: err.message})
+            res.status(500).json({
+                message: err.message
+            })
         })
+    }
+})
 
+server.put('/users/:id', (req, res)=>{
+    const {id} = req.params;
+    const changes = req.body;
+
+    database.update(id, changes)
+        .then(id => {
+            res.status(200).json(changes)
+        })
+        .catch(err => res.status(500).json({
+            message: err.message
+        }))
+    
 })
 
 module.exports = server;
