@@ -38,4 +38,19 @@ server.get('/users/:id', (req, res) => {
 })
 
 
+server.post('/users', (req, res)=> {
+    const newUser = req.body;
+
+    console.log(newUser.name, newUser.bio);
+
+    database.insert(newUser)
+        .then(user => {
+            res.status(201).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({message: err.message})
+        })
+
+})
+
 module.exports = server;
