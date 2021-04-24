@@ -72,4 +72,19 @@ server.put('/users/:id', (req, res)=>{
     
 })
 
+server.delete('/users/:id', (req, res)=> {
+
+    const {id} = req.params;
+
+    database.remove(id)
+        .then(id => {
+            res.status(200).json(id)
+        })
+        .catch(err => {
+            res.status(500).json({message: err.message})
+        })
+     
+})
+
+
 module.exports = server;
