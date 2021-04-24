@@ -23,10 +23,18 @@ server.get('/users', (req, res)=>{
 
 server.get('/users/:id', (req, res) => {
     const idVar = req.params.id;
-    console.log(idVar);
-    database.findById(idVar).then(user => {
-        res.status(200).json(user)
-    }).catch(err => res.status(500).json({message: err.message}))
+
+    database.findById(idVar)
+        .then(user => {
+            if(!user){
+                res.status(404).json({message: 'user does not exists'})
+            }else {
+                res.status(200).json(user)
+            }
+        })
+        .catch(err => 
+            {res.status(500).json({message: err.message})
+        })
 })
 
 
