@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "knex": "^2.4.2",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.5"
   }
 }
